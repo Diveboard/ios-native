@@ -23,10 +23,10 @@
     self = [super init];
     if (self) {
         if (![data isEqual:[NSNull null]]) {
-            self.address            = getStringValue([data objectForKey:@"address"]);
+            self.address            = ([data objectForKey:@"address"]);
             self.alias              = getStringValue([data objectForKey:@"alias"]);
             self.birthday           = getStringValue([data objectForKey:@"birthday"]);
-            self.birthPlace         = getStringValue([data objectForKey:@"birthplace"]);
+            self.birthPlace         = ([data objectForKey:@"birthplace"]);
             self.certificationLevel = getStringValue([data objectForKey:@"certif_level"]);
             self.cigarette          = getStringValue([data objectForKey:@"cigarette"]);
             self.citizenShip        = getStringValue([data objectForKey:@"citizenship"]);
@@ -37,16 +37,16 @@
             self.dives5y            = getStringValue([data objectForKey:@"dives_5y"]);
             self.email              = getStringValue([data objectForKey:@"email"]);
             self.firstCertif        = getStringValue([data objectForKey:@"first_certif"]);
-            self.hegihts            = getStringValue([data objectForKey:@"height"]);
+            self.heights            = ([data objectForKey:@"height"]);
             self.language           = getStringValue([data objectForKey:@"language"]);
-            self.licenses           = getStringValue([data objectForKey:@"license"]);
+            self.licenses           = ([data objectForKey:@"license"]);
             self.medications        = getStringValue([data objectForKey:@"medications"]);
             self.mother             = getStringValue([data objectForKey:@"mother"]);
-            self.names              = getStringValue([data objectForKey:@"name"]);
-            self.phoneHomes         = getStringValue([data objectForKey:@"phone_home"]);
-            self.phoneWorks         = getStringValue([data objectForKey:@"phone_work"]);
+            self.names              = ([data objectForKey:@"name"]);
+            self.phoneHomes         = ([data objectForKey:@"phone_home"]);
+            self.phoneWorks         = ([data objectForKey:@"phone_work"]);
             self.sex                = getStringValue([data objectForKey:@"sex"]);
-            self.weight             = getStringValue([data objectForKey:@"weight"]);
+            self.weight             = ([data objectForKey:@"weight"]);
             
         } else {
             self.address            = [[NSArray alloc] init];
@@ -63,7 +63,7 @@
             self.dives5y            = @"";
             self.email              = @"";
             self.firstCertif        = @"";
-            self.hegihts            = [[NSArray alloc] init];
+            self.heights            = [[NSArray alloc] init];
             self.language           = @"";
             self.licenses           = [[NSArray alloc] init];
             self.medications        = @"";
@@ -219,8 +219,8 @@
         if (![data isEqual:[NSNull null]]) {
             self.about          = getStringValue([data objectForKey:@"about"]);
             self.adAlbumID      = getStringValue([data objectForKey:@"ad_album_id"]);
-            self.advertisements = getStringValue([data objectForKey:@"advertisements"]);
-            self.allDiveIDs     = [data objectForKey:@"all_dive_ids"];
+            self.advertisements = ([data objectForKey:@"advertisements"]);
+            self.allDiveIDs     = [[NSMutableArray alloc] initWithArray:[data objectForKey:@"all_dive_ids"]];
             self.autoPublic     = getStringValue([data objectForKey:@"auto_public"]);
             self.city           = getStringValue([data objectForKey:@"city"]);
             self.class_         = getStringValue([data objectForKey:@"class"]);

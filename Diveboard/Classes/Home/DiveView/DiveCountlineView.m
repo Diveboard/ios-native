@@ -8,7 +8,8 @@
 
 #import "DiveCountlineView.h"
 
-#define rulerPixelWidth     3.5f
+#define rulerPixelWidth (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 7.0f : 3.5f)
+//#define rulerPixelWidth     3.5f
 #define rulerPixelHeight    rulerPixelWidth * 4.7
 
 @interface DiveCountlineView()
@@ -27,13 +28,18 @@
 
 - (id)initWithFrame:(CGRect)frame
 {
-    self = [[[NSBundle mainBundle] loadNibNamed:@"DiveCountlineView" owner:self options:Nil] objectAtIndex:0];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        self = [[[NSBundle mainBundle] loadNibNamed:@"DiveCountlineView" owner:self options:Nil] objectAtIndex:0];
+        [self setFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, 30.0f)];
+    } else {
+        self = [[[NSBundle mainBundle] loadNibNamed:@"DiveCountlineView-ipad" owner:self options:Nil] objectAtIndex:0];
+        [self setFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, 60.0f)];
+    }
+
+    
     if (self) {
         
-        [self setFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, 30.0f)];
-        _lblCurrentDiveNum.font = [UIFont fontWithName:kDefaultFontName size:12.0f];
-        
-        _lblMaxDiveNumb.font = [UIFont fontWithName:kDefaultFontName size:12.0f];
+//        [self setFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, 30.0f)];
 
         self.backgroundColor = [UIColor clearColor];
         
@@ -81,7 +87,14 @@
     rulerPixels = [[NSMutableArray alloc] init];
     
     float dt = 2.37f;
-    float ox = CGRectGetMaxX(_lblCurrentDiveNum.frame);
+    float ox;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        ox = CGRectGetMaxX(_lblCurrentDiveNum.frame);
+    } else {
+        ox = CGRectGetMaxX(_lblCurrentDiveNum.frame) + rulerPixelWidth * 5;
+    }
+    
+
     if (maxValue < rulerCount)
     {
         ox += rulerPixelWidth * dt * (rulerCount - maxValue) / 2;

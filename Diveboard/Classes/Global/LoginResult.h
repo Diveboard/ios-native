@@ -41,7 +41,7 @@
 @property (nonatomic, strong) NSString *dives5y;
 @property (nonatomic, strong) NSString *email;
 @property (nonatomic, strong) NSString *firstCertif;
-@property (nonatomic, strong) NSArray  *hegihts;
+@property (nonatomic, strong) NSArray  *heights;
 @property (nonatomic, strong) NSString *language;
 @property (nonatomic, strong) NSArray  *licenses;
 @property (nonatomic, strong) NSString *medications;
@@ -122,7 +122,7 @@
 @property (nonatomic, strong) NSString *about;
 @property (nonatomic, strong) NSString *adAlbumID;
 @property (nonatomic, strong) NSArray  *advertisements;
-@property (nonatomic, strong) NSArray  *allDiveIDs;
+@property (nonatomic, strong) NSMutableArray  *allDiveIDs;
 @property (nonatomic, strong) NSString *autoPublic;
 @property (nonatomic, strong) NSString *city;
 @property (nonatomic, strong) NSString *class_;

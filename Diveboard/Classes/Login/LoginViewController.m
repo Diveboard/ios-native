@@ -84,13 +84,13 @@
 
     // login button
     [GlobalMethods setRoundView:_btnLogin   cornorRadious:5.0f borderColor:nil border:0];
-    [_btnLogin.titleLabel setFont:[UIFont fontWithName:kDefaultFontName size:12.0f]];
+//    [_btnLogin.titleLabel setFont:[UIFont fontWithName:kDefaultFontName size:12.0f]];
     
     // facebook login button
     [GlobalMethods setRoundView:_btnFBLogin cornorRadious:5.0f borderColor:nil border:0];
     
     // signup button
-    [_btnSignup.titleLabel setFont:[UIFont fontWithName:kDefaultFontNameBold size:15.0f]];
+//    [_btnSignup.titleLabel setFont:[UIFont fontWithName:kDefaultFontNameBold size:15.0f]];
 }
 
 - (void) setBorderRoundOfTextField:(UITextField*)textField
@@ -99,7 +99,7 @@
                   cornorRadious:5.0f
                     borderColor:nil
                          border:0];
-    [textField setFont:[UIFont fontWithName:kDefaultFontName size:12.0f]];
+//    [textField setFont:[UIFont fontWithName:kDefaultFontName size:12.0f]];
     UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 15, CGRectGetHeight(textField.frame))];
     textField.leftView = paddingView;
     textField.leftViewMode = UITextFieldViewModeAlways;
@@ -182,7 +182,14 @@
 }
 
 - (IBAction)signupAction:(id)sender {
-    SignupViewController *viewController = [[SignupViewController alloc] init];
+    SignupViewController *viewController;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        viewController = [[SignupViewController alloc] initWithNibName:@"SignupViewController" bundle:Nil];
+    } else {
+        viewController = [[SignupViewController alloc] initWithNibName:@"SignupViewController-ipad" bundle:Nil];
+        
+    }
+
     [self.navigationController pushViewController:viewController animated:YES];
 }
 
@@ -233,10 +240,10 @@
     [self internetConnecting:YES];
     
     NSString     *requestURLString = [NSString stringWithFormat:@"%@/api/login_email", SERVER_URL];
-    NSDictionary *params = @{@"apikey": API_KEY,
-                             @"flavour" : FLAVOUR,
-                             @"email" :email,
-                             @"password" : password,
+    NSDictionary *params = @{@"apikey"      : API_KEY,
+                             @"flavour"     : FLAVOUR,
+                             @"email"       : email,
+                             @"password"    : password,
                              };
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -264,8 +271,15 @@
         NSLog(@"%@", data);
         if ([[data objectForKey:@"success"] boolValue]) {
             appManager.loginResult = [[LoginResult alloc] initWithDictionary:data];
+            appManager.loginResult.user.allDiveIDs = [NSMutableArray arrayWithArray:[[appManager.loginResult.user.allDiveIDs reverseObjectEnumerator] allObjects]];
             
-            DiveListViewController *viewController = [[DiveListViewController alloc] init];
+            DiveListViewController *viewController;
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+                viewController = [[DiveListViewController alloc] initWithNibName:@"DiveListViewController" bundle:Nil];
+            } else {
+                viewController = [[DiveListViewController alloc] initWithNibName:@"DiveListViewController-ipad" bundle:Nil];
+            }
+
             [self.navigationController pushViewController:viewController animated:YES];
             self.txtPassword.text = @"";
             
@@ -352,6 +366,7 @@
         
     }];
 }
+
 
 #pragma mark - Notification
 

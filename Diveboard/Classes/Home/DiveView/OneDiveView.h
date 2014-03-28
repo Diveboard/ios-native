@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "DiveInformation.h"
-
+#import "AsyncUIImageView.h"
 
 @protocol OneDiveViewDelegate;
 
@@ -20,7 +20,7 @@
     IBOutlet UILabel        *lblLogedUserName;
     
     IBOutlet UIView         *viewMain;
-    IBOutlet UIImageView    *imgviewMainPhoto;
+    IBOutlet AsyncUIImageView    *imgviewMainPhoto;
     IBOutlet UILabel        *lblSpotName;
     IBOutlet UILabel        *lblSpotCountryCity;
     IBOutlet UILabel        *lblSpotDate;
@@ -47,6 +47,8 @@
 
 - (void) setDiveID:(NSString *)diveID;
 - (DiveInformation *) getDiveInformation;
+- (void) setDiveInformation:(DiveInformation *)diveInfo;
+- (void) changeDepthUnit:(int)type;
 
 @end
 
@@ -56,6 +58,7 @@
 @optional;
 - (void) oneDiveViewDataLoadFinish:(OneDiveView*)diveView diveInfo:(DiveInformation *)diveInfoOfSelf;
 - (void) oneDiveViewImageTouch:(OneDiveView*)diveView     diveInfo:(DiveInformation *)diveInfoOfSelf;
+- (void) oneDiveViewDetailClick:(OneDiveView*)diveView    diveInfo:(DiveInformation *)diveInfoOfSelf;
 
 @end
 

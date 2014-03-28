@@ -6,81 +6,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Diveboard/Classes/Login/LoginViewController.m"
-            timestampString = "415392462.468062"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "250"
-            endingLineNumber = "250"
-            landmarkName = "-loginWithNativeUser:password:"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__52-[LoginViewController loginWithNativeUser:password:]_block_invoke"
-                  moduleName = "Diveboard"
-                  urlString = "file:///Users/vladimir/My_work/2.work/28.DiveBoard_Alexandor/DiveBoard_new/Diveboard%205/Diveboard/Classes/Login/LoginViewController.m"
-                  timestampString = "415533880.093763"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "251"
-                  endingLineNumber = "251"
-                  offsetFromSymbolStart = "220">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__copy_helper_block_176"
-                  moduleName = "Diveboard"
-                  urlString = "file:///Users/vladimir/My_work/2.work/28.DiveBoard_Alexandor/DiveBoard_new/Diveboard%205/Diveboard/Classes/Login/LoginViewController.m"
-                  timestampString = "415533880.093955"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "251"
-                  endingLineNumber = "251"
-                  offsetFromSymbolStart = "16">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__destroy_helper_block_177"
-                  moduleName = "Diveboard"
-                  urlString = "file:///Users/vladimir/My_work/2.work/28.DiveBoard_Alexandor/DiveBoard_new/Diveboard%205/Diveboard/Classes/Login/LoginViewController.m"
-                  timestampString = "415533880.094117"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "251"
-                  endingLineNumber = "251"
-                  offsetFromSymbolStart = "22">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__52-[LoginViewController loginWithNativeUser:password:]_block_invoke180"
-                  moduleName = "Diveboard"
-                  urlString = "file:///Users/vladimir/My_work/2.work/28.DiveBoard_Alexandor/DiveBoard_new/Diveboard%205/Diveboard/Classes/Login/LoginViewController.m"
-                  timestampString = "415533880.094321"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "251"
-                  endingLineNumber = "251"
-                  offsetFromSymbolStart = "74">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Diveboard/Classes/Home/DiveListViewController.m"
@@ -89,7 +15,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "239"
             endingLineNumber = "239"
-            landmarkName = "-setLayoutControllersToLandscape"
+            landmarkName = "-setLayoutControllersToPortrate"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -105,7 +31,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "257"
             endingLineNumber = "257"
-            landmarkName = "-setLayoutControllersToLandscape"
+            landmarkName = "-setLayoutControllersToPortrate"
             landmarkType = "5">
             <Locations>
                <Location
@@ -137,6 +63,38 @@
                   offsetFromSymbolStart = "50">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Diveboard/Classes/Setting/DBUnitSelectViewController.m"
+            timestampString = "417685933.747939"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "34"
+            endingLineNumber = "34"
+            landmarkName = "-viewDidAppear:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Diveboard/Classes/Setting/SettingViewController.m"
+            timestampString = "417685999.919505"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
+            landmarkName = "-viewWillDisappear:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

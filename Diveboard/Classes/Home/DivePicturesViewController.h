@@ -16,8 +16,12 @@
     
 }
 
+//@property (nonatomic) int startIndex;
+
 - (id) initWithPicturesData:(NSArray *)pictures;
 
 - (IBAction)closeAction:(id)sender;
+
+- (void) showPictureWithIndex:(int)index;
 
 @end

@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MessageUI/MessageUI.h>
 #import "DiveCountlineView.h"
 #import "OneDiveView.h"
 
-@interface DiveListViewController : UIViewController <DiveCountlineDelegate, OneDiveViewDelegate,  UIScrollViewDelegate>
+@interface DiveListViewController : UIViewController <DiveCountlineDelegate, OneDiveViewDelegate,  UIScrollViewDelegate, MFMailComposeViewControllerDelegate>
 {
     
 }
@@ -26,5 +27,8 @@
 - (IBAction)menuAction:(id)sender;
 
 - (void)setCoordinateValue:(DiveInformation *)diveInfoOfSelf;
+
+- (void) diveViewsUpdate;
+- (void) updateUnit;
 
 @end

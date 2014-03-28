@@ -133,16 +133,18 @@
         
     }
     
-    currentPictureIndex = picCount - 1;
-    prevPicIndex = currentPictureIndex + 1;
-    nextPicIndex = currentPictureIndex - 1;
-    
-    mainImageView = [imgviewArray lastObject];
-    [mainImageView setFrame:viewMain.bounds];
-    [mainImageView setAlpha:1.0f];
-    prevImageView = nil;
-    nextImageView = (imgviewArray.count > 1 ? [imgviewArray objectAtIndex:nextPicIndex] : nil);
-    
+//    [self showPictureWithIndex:0];
+//    
+//    currentPictureIndex = picCount - 1;
+//    prevPicIndex = currentPictureIndex + 1;
+//    nextPicIndex = currentPictureIndex - 1;
+//    
+//    mainImageView = [imgviewArray lastObject];
+//    [mainImageView setFrame:viewMain.bounds];
+//    [mainImageView setAlpha:1.0f];
+//    prevImageView = nil;
+//    nextImageView = (imgviewArray.count > 1 ? [imgviewArray objectAtIndex:nextPicIndex] : nil);
+//    
 //    AsyncUIImageView *imgview = [imgviewArray lastObject];
 //    [imgview setFrame:viewMain.bounds];
 //    [imgview setAlpha:1.0f];
@@ -168,6 +170,20 @@
 //    [secondImageView setFrame:viewMain.frame];
 }
 
+- (void)showPictureWithIndex:(int)index
+{
+    int picCount = divePictures.count;
+    currentPictureIndex = picCount - 1 - index;
+    prevPicIndex = currentPictureIndex + 1;
+    nextPicIndex = currentPictureIndex - 1;
+    
+    mainImageView = [imgviewArray objectAtIndex:currentPictureIndex];
+    [mainImageView setFrame:viewMain.bounds];
+    [mainImageView setAlpha:1.0f];
+    prevImageView = (prevPicIndex < picCount ? [imgviewArray objectAtIndex:prevPicIndex] : nil);
+    nextImageView = (nextPicIndex >= 0       ? [imgviewArray objectAtIndex:nextPicIndex] : nil);
+
+}
 
 - (void) imagePanGestureAction:(UIPanGestureRecognizer *)sender
 {

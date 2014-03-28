@@ -16,7 +16,7 @@
 {
     self = [super init];
     if (self) {
-        if (![data isEqual:[NSNull null]]) {
+        if (data && ![data isEqual:[NSNull null]]) {
             self.class_             = getStringValue([data objectForKey:@"class"]);
             self.countryCode        = getStringValue([data objectForKey:@"country_code"]);
             self.countryFlagBig     = getStringValue([data objectForKey:@"country_flag_big"]);
@@ -106,6 +106,97 @@
 @end
 
 
+
+@implementation DiveShop
+
+- (id)initWithDictionary:(NSDictionary *)data
+{
+    self = [super init];
+    if (self) {
+        if (![data isEqual:[NSNull null]]) {
+            self.ID             = getStringValue([data objectForKey:@"id"]);
+            self.name           = getStringValue([data objectForKey:@"name"]);
+            self.address        = getStringValue([data objectForKey:@"address"]);
+            self.city           = getStringValue([data objectForKey:@"city"]);
+            self.email          = getStringValue([data objectForKey:@"email"]);
+            self.fullPermalink  = getStringValue([data objectForKey:@"fullpermalink"]);
+            self.logoUrl        = getStringValue([data objectForKey:@"logo_url"]);
+            self.web            = getStringValue([data objectForKey:@"web"]);
+            self.shakenID       = getStringValue([data objectForKey:@"shaken_id"]);
+            
+        } else {
+            self.ID             = @""; //getStringValue([data objectForKey:@"id"]);
+            self.name           = @""; //getStringValue([data objectForKey:@"name"]);
+            self.address        = @""; //= getStringValue([data objectForKey:@"address"]);
+            self.city           = @""; //= getStringValue([data objectForKey:@"city"]);
+            self.email          = @""; //= getStringValue([data objectForKey:@"email"]);
+            self.fullPermalink  = @""; //= getStringValue([data objectForKey:@"fullpermalink"]);
+            self.logoUrl        = @""; //= getStringValue([data objectForKey:@"logo_url"]);
+            self.web            = @""; // = getStringValue([data objectForKey:@"web"]);
+            self.shakenID       = @""; // = getStringValue([data objectForKey:@"shaken_id"]);
+        }
+        
+    }
+    return self;
+
+}
+
+@end
+
+
+
+@implementation Temp
+
+- (id)initWithDictionary:(NSDictionary *)data
+{
+    self = [super init];
+    if (self) {
+        self.bottom         = getStringValue([data objectForKey:@"temp_bottom"]);
+        self.bottomUnit     = getStringValue([data objectForKey:@"temp_bottom_unit"]);
+        self.bottomValue    = getStringValue([data objectForKey:@"temp_bottom_value"]);
+        self.surface        = getStringValue([data objectForKey:@"temp_surface"]);
+        self.surfaceUnit    = getStringValue([data objectForKey:@"temp_surface_unit"]);
+        self.surfaceValue   = getStringValue([data objectForKey:@"temp_surface_value"]);
+    }
+    return self;
+
+}
+
+@end
+
+@implementation DiveWegith
+
+- (id)initWithDictionary:(NSDictionary *)data
+{
+    self = [super init];
+    if (self) {
+        self.weight         = getStringValue([data objectForKey:@"weights"]);
+        self.unit           = getStringValue([data objectForKey:@"weights_unit"]);
+        self.value          = getStringValue([data objectForKey:@"weights_value"]);
+    }
+    return self;
+
+}
+
+@end
+
+
+@implementation SpotSearchResult
+
+- (id)initWithDictionary:(NSDictionary *)data
+{
+    self = [super init];
+    if (self) {
+        self.spotInfo = [[DiveSpotInfo alloc] initWithDictionary:[data objectForKey:@"data"]];
+        self.ID       = getStringValue([data objectForKey:@"id"]);
+        self.name     = getStringValue([data objectForKey:@"name"]);
+    }
+    return self;
+
+}
+
+@end
+
 @implementation DiveInformation
 
 - (id)initWithDictionary:(NSDictionary *)data
@@ -113,8 +204,10 @@
     self = [super init];
     if (self) {
         self.ID       = getStringValue([data objectForKey:@"id"]);
+        self.shakenID = getStringValue([data objectForKey:@"shaken_id"]);
         self.tripName = getStringValue([data objectForKey:@"trip_name"]);
         self.date     = getStringValue([data objectForKey:@"date"]);
+        self.time     = getStringValue([data objectForKey:@"time"]);
         self.duration = getStringValue([data objectForKey:@"duration"]);
         self.maxDepth = getStringValue([data objectForKey:@"maxdepth"]);
         self.maxDepthUnit = getStringValue([data objectForKey:@"maxdepth_unit"]);
@@ -125,6 +218,19 @@
         for (NSDictionary *elem in pics) {
             [self.divePictures addObject:[[DivePicture alloc] initWithDictionary:elem]];
         }
+        
+        self.diveShop = [[DiveShop alloc] initWithDictionary:[data objectForKey:@"shop"]];
+        self.diveShop.picture = getStringValue([data objectForKey:@"shop_picture"]);
+        self.visibility = getStringValue([data objectForKey:@"visibility"]);
+        self.water      = getStringValue([data objectForKey:@"water"]);
+        self.temp       = [[Temp alloc] initWithDictionary:data];
+        self.diveType   = [data objectForKey:@"divetype"];
+        self.note       = getStringValue([data objectForKey:@"notes"]);
+        self.number     = getStringValue([data objectForKey:@"number"]);
+        self.current    = getStringValue([data objectForKey:@"current"]);
+        self.altitude    = getStringValue([data objectForKey:@"altitude"]);
+        self.privacy    = getStringValue([data objectForKey:@"privacy"]);
+        self.weight     = [[DiveWegith alloc] initWithDictionary:data];
     }
     return self;
 }

@@ -61,17 +61,92 @@
 
 @end
 
+#pragma mark - DiveShop
+
+@interface DiveShop : NSObject
+
+@property (nonatomic, strong) NSString *ID;
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *address;
+@property (nonatomic, strong) NSString *city;
+@property (nonatomic, strong) NSString *email;
+@property (nonatomic, strong) NSString *fullPermalink;
+@property (nonatomic, strong) NSString *logoUrl;
+@property (nonatomic, strong) NSString *web;
+@property (nonatomic, strong) NSString *shakenID;
+@property (nonatomic, strong) NSString *picture;
+
+- (id)initWithDictionary:(NSDictionary *)data;
+
+@end
+
+#pragma mark - Temp
+
+@interface Temp : NSObject
+
+@property (nonatomic, strong) NSString *bottom;
+@property (nonatomic, strong) NSString *bottomUnit;
+@property (nonatomic, strong) NSString *bottomValue;
+@property (nonatomic, strong) NSString *surface;
+@property (nonatomic, strong) NSString *surfaceUnit;
+@property (nonatomic, strong) NSString *surfaceValue;
+
+- (id)initWithDictionary:(NSDictionary *)data;
+
+@end
+
+
+
+#pragma mark - DiveWeight
+
+@interface DiveWegith : NSObject
+
+@property (nonatomic, strong) NSString *weight;
+@property (nonatomic, strong) NSString *unit;
+@property (nonatomic, strong) NSString *value;
+
+- (id)initWithDictionary:(NSDictionary *)data;
+
+@end
+
+#pragma mark - SpotSearchResult
+
+@interface SpotSearchResult : NSObject
+
+@property (nonatomic, strong) DiveSpotInfo *spotInfo;
+@property (nonatomic, strong) NSString     *ID;
+@property (nonatomic, strong) NSString     *name;
+
+- (id)initWithDictionary:(NSDictionary *)data;
+
+@end
+
+#pragma mark - DiveInformation
+
 @interface DiveInformation : NSObject
 
 @property (nonatomic, strong) NSString *ID;
+@property (nonatomic, strong) NSString *shakenID;
 @property (nonatomic, strong) NSString *maxDepth;
 @property (nonatomic, strong) NSString *maxDepthUnit;
 @property (nonatomic, strong) NSString *date;
+@property (nonatomic, strong) NSString *time;
 @property (nonatomic, strong) NSString *imageURL;
 @property (nonatomic, strong) NSString *tripName;
 @property (nonatomic, strong) NSString *duration;
 @property (nonatomic, strong) DiveSpotInfo *spotInfo;
 @property (nonatomic, strong) NSMutableArray *divePictures;
+@property (nonatomic, strong) DiveShop *diveShop;
+@property (nonatomic, strong) NSString *visibility;
+@property (nonatomic, strong) NSString *water;
+@property (nonatomic, strong) Temp     *temp;
+@property (nonatomic, strong) NSArray  *diveType;
+@property (nonatomic, strong) NSString *note;
+@property (nonatomic, strong) DiveWegith *weight;
+@property (nonatomic, strong) NSString *number;
+@property (nonatomic, strong) NSString *current;
+@property (nonatomic, strong) NSString *altitude;
+@property (nonatomic, strong) NSString *privacy;
 
 - (id)initWithDictionary:(NSDictionary *)data;
 

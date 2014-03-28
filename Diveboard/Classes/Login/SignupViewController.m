@@ -12,6 +12,7 @@
 #import "MBProgressHUD.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "AFNetworking.h"
+#import "DiveListViewController.h"
 
 
 @interface SignupViewController ()
@@ -50,25 +51,25 @@
     
     [self initMethod];
     
-
+    [self.scrMainView setContentSize:CGSizeMake(CGRectGetWidth(self.scrMainView.frame), CGRectGetMaxY(self.btnFBLogin.frame) + 5)];
 }
 
 - (void) initMethod
 {
-    float textFieldFontSize = 13.0f;
-    _lblTitle.font              = [UIFont fontWithName:kDefaultFontName size:18.0f];
-    _txtEmail.font              = [UIFont fontWithName:kDefaultFontName size:textFieldFontSize];
-    _txtPassword.font           = [UIFont fontWithName:kDefaultFontName size:textFieldFontSize];
-    _txtConfirmPassword.font    = [UIFont fontWithName:kDefaultFontName size:textFieldFontSize];
-    _txtDiveboardURL.font       = [UIFont fontWithName:kDefaultFontName size:textFieldFontSize];
-    _txtNickname.font           = [UIFont fontWithName:kDefaultFontName size:textFieldFontSize];
-    _btnSignup.titleLabel.font  = [UIFont fontWithName:kDefaultFontNameBold size:15.0f];
+//    float textFieldFontSize = 13.0f;
+//    _lblTitle.font              = [UIFont fontWithName:kDefaultFontName size:18.0f];
+//    _txtEmail.font              = [UIFont fontWithName:kDefaultFontName size:textFieldFontSize];
+//    _txtPassword.font           = [UIFont fontWithName:kDefaultFontName size:textFieldFontSize];
+//    _txtConfirmPassword.font    = [UIFont fontWithName:kDefaultFontName size:textFieldFontSize];
+//    _txtDiveboardURL.font       = [UIFont fontWithName:kDefaultFontName size:textFieldFontSize];
+//    _txtNickname.font           = [UIFont fontWithName:kDefaultFontName size:textFieldFontSize];
+//    _btnSignup.titleLabel.font  = [UIFont fontWithName:kDefaultFontNameBold size:15.0f];
         _btnSignup.layer.cornerRadius = 4;
         _btnSignup.clipsToBounds = YES;
 
-    _btnFBLogin.titleLabel.font = [UIFont fontWithName:kDefaultFontName size:10.0f];
-    _lblKeep.font               = [UIFont fontWithName:kDefaultFontName size:12.0f];
-    _lblIAgree.font             = [UIFont fontWithName:kDefaultFontName size:12.0f];
+//    _btnFBLogin.titleLabel.font = [UIFont fontWithName:kDefaultFontName size:10.0f];
+//    _lblKeep.font               = [UIFont fontWithName:kDefaultFontName size:12.0f];
+//    _lblIAgree.font             = [UIFont fontWithName:kDefaultFontName size:12.0f];
     
     [self setCircleButton:_btnAgree];
     isAgree = FALSE;
@@ -236,6 +237,8 @@
         else  // success!
         {
             
+            [self requestResultCheckingWithObject:data];
+            
         }
         
 
@@ -243,7 +246,26 @@
 }
 
 
+- (void) requestResultCheckingWithObject:(NSDictionary *)data
+{
+    
+        [userDefault setObject:kLoginModeNative forKey:kLoginMode];
+        [userDefault setObject:@{@"email": _txtEmail.text, @"password": _txtPassword.text} forKey:kLoginUserInfo];
+        [userDefault synchronize];
 
+        appManager.loginResult = [[LoginResult alloc] initWithDictionary:data];
+        appManager.loginResult.user.allDiveIDs = [NSMutableArray arrayWithArray:[[appManager.loginResult.user.allDiveIDs reverseObjectEnumerator] allObjects]];
+        
+        DiveListViewController *viewController;
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+            viewController = [[DiveListViewController alloc] initWithNibName:@"DiveListViewController" bundle:Nil];
+        } else {
+            viewController = [[DiveListViewController alloc] initWithNibName:@"DiveListViewController-ipad" bundle:Nil];
+        }
+        
+        [self.navigationController pushViewController:viewController animated:YES];
+    
+}
 
 #pragma mark - Facebook Login
 
@@ -324,27 +346,23 @@
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager POST:fbLoginURLString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"%@", operation.responseString);
-        [self requestResultCheckingWithObject:responseObject];
+        if (responseObject) {
+            NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseObject
+                                                                 options:NSJSONReadingAllowFragments
+                                                                   error:nil];
+            NSLog(@"%@", data);
+            if ([[data objectForKey:@"success"] boolValue]) {
+                [self requestResultCheckingWithObject:data];
+            } else {
+                
+            }
+        }
+
         [self internetConnecting:NO];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"%@", error);
         [self internetConnecting:NO];
     }];
-}
-
-- (void) requestResultCheckingWithObject:(id)responseObject
-{
-    if (responseObject) {
-        NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseObject
-                                                             options:NSJSONReadingAllowFragments
-                                                               error:nil];
-        NSLog(@"%@", data);
-        if ([[data objectForKey:@"success"] boolValue]) {
-            appManager.loginResult = [[LoginResult alloc] initWithDictionary:data];
-        } else {
-            
-        }
-    }
 }
 
 
