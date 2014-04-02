@@ -963,6 +963,9 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = threek;
 				TargetAttributes = {
+					3CE0473D18BCB83100FA47FF = {
+						DevelopmentTeam = B98JMF7SE7;
+					};
 					3CE0475E18BCB83100FA47FF = {
 						TestTargetID = 3CE0473D18BCB83100FA47FF;
 					};
@@ -1211,8 +1214,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: C CHONG (R6TZQBYJ8C)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: C CHONG (R6TZQBYJ8C)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1230,7 +1233,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "9426ED2B-5E96-451E-9B20-F59974F3C0BD";
+				PROVISIONING_PROFILE = "F9396F8A-A03A-41C0-BD16-D318ADC8B5C8";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1252,8 +1255,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: C CHONG (R6TZQBYJ8C)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: C CHONG (R6TZQBYJ8C)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1264,7 +1267,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PROVISIONING_PROFILE = "9426ED2B-5E96-451E-9B20-F59974F3C0BD";
+				PROVISIONING_PROFILE = "F9396F8A-A03A-41C0-BD16-D318ADC8B5C8";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1273,7 +1276,8 @@
 		3CE0477118BCB83100FA47FF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: qingsong jin (ZYC3293G46)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					$SRCROOT/Diveboard/Lib,
@@ -1283,7 +1287,7 @@
 				INFOPLIST_FILE = "Diveboard/Diveboard-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "2E91F13D-E8F1-417E-B6A0-D67A6FD8D244";
+				PROVISIONING_PROFILE = "F9396F8A-A03A-41C0-BD16-D318ADC8B5C8";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1292,7 +1296,8 @@
 		3CE0477218BCB83100FA47FF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: qingsong jin (ZYC3293G46)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					$SRCROOT/Diveboard/Lib,
@@ -1302,7 +1307,7 @@
 				INFOPLIST_FILE = "Diveboard/Diveboard-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "2E91F13D-E8F1-417E-B6A0-D67A6FD8D244";
+				PROVISIONING_PROFILE = "F9396F8A-A03A-41C0-BD16-D318ADC8B5C8";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
