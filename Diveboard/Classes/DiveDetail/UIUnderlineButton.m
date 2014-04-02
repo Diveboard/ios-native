@@ -2,8 +2,8 @@
 //  UIUnderlineButton.m
 //  Diveboard
 //
-//  Created by threek on 3/4/14.
-//  Copyright (c) 2014 threek. All rights reserved.
+//  Created by Vladimir Popov on 3/4/14.
+//  Copyright (c) 2014 Vladimir Popov. All rights reserved.
 //
 
 #import "UIUnderlineButton.h"

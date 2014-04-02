@@ -3,7 +3,7 @@
 //  Diveboard
 //
 //  Created by Vladimir Popov on 2/27/14.
-//  Copyright (c) 2014 Vladimir Popov. All rights reserved.
+//  Copyright (c) 2014 C. All rights reserved.
 //
 
 #import "OneDiveView.h"
