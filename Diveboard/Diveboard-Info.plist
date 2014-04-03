@@ -21,6 +21,8 @@
 				<string>icon114</string>
 				<string>icon57</string>
 			</array>
+            <key>UIPrerenderedIcon</key>
+            <true/>
 		</dict>
 	</dict>
 	<key>CFBundleIcons~ipad</key>
@@ -42,6 +44,8 @@
 				<string>icon114</string>
 				<string>icon57</string>
 			</array>
+            <key>UIPrerenderedIcon</key>
+            <true/>
 		</dict>
 	</dict>
 	<key>CFBundleIdentifier</key>
