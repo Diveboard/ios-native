@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
+#import <BugSense-iOS/BugSenseController.h>
+
 #import "DiveCountlineView.h"
 #import "OneDiveView.h"
 

@@ -13,6 +13,12 @@
 int main(int argc, char * argv[])
 {
     @autoreleasepool {
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([DBAppDelegate class]));
+        @try {
+            return UIApplicationMain(argc, argv, nil, NSStringFromClass([DBAppDelegate class]));
+        } @catch (NSException *exc) {
+            NSDictionary *data = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"sample-value", nil]
+                                                             forKeys:[NSArray arrayWithObjects:@"sample-key", nil]];
+            BUGSENSE_LOG(exc, data);
+        }
     }
 }

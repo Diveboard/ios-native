@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <BugSense-iOS/BugSenseController.h>
+
 #import "DiveListViewController.h"
 
 

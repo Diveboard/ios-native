@@ -32,6 +32,11 @@ static AppManager *_sharedManager;
 {
     self = [super init];
     if (self) {
+        [BugSenseController sharedControllerWithBugSenseAPIKey:@"6ab17859"
+                                                userDictionary:nil
+                                               sendImmediately:YES];
+        [BugSenseController setLogMessagesCount:10];
+        [BugSenseController setLogMessagesLevel:8];
         
     }
     return self;
