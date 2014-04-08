@@ -70,9 +70,9 @@
     [self setRelayout];
     [self tapButtonTouchAction:(btnDetails)];
     if (diveLengthUnit == 0) {
-        [lblMaxdepthUnit setText:@"FEETS"];
+        [lblMaxdepthUnit setText:@"ft"];
     } else {
-        [lblMaxdepthUnit setText:@"M"];
+        [lblMaxdepthUnit setText:@"m"];
     }
 }
 

@@ -24,7 +24,8 @@
     
     [BugSenseController sharedControllerWithBugSenseAPIKey:@"6ab17859"
                                             userDictionary:nil
-                                           sendImmediately:YES];
+                                            sendImmediately:YES];
+
     [BugSenseController setLogMessagesCount:10];
     [BugSenseController setLogMessagesLevel:8];
 

@@ -167,15 +167,15 @@
 {
     if (type == 0) {
         if (diveInfoOfSelf) {
-            [lblSpotDepth setText:[NSString stringWithFormat:@"%.1f FEETS", [diveInfoOfSelf.maxDepth intValue] * 3.2808f]];
+            [lblSpotDepth setText:[NSString stringWithFormat:@"%.1f ft", [diveInfoOfSelf.maxDepth intValue] * 3.2808f]];
         } else {
-            [lblSpotDepth setText:[NSString stringWithFormat:@"00.0 FEETS"]];
+            [lblSpotDepth setText:[NSString stringWithFormat:@"00.0 ft"]];
         }
     } else {
         if (diveInfoOfSelf) {
-            [lblSpotDepth setText:[NSString stringWithFormat:@"%@ METERS", diveInfoOfSelf.maxDepth]];
+            [lblSpotDepth setText:[NSString stringWithFormat:@"%@ m", diveInfoOfSelf.maxDepth]];
         } else {
-            [lblSpotDepth setText:[NSString stringWithFormat:@"00.0 METERS"]];
+            [lblSpotDepth setText:[NSString stringWithFormat:@"00.0 m"]];
         }
     }
     diveLengthUnit = type;
@@ -234,12 +234,12 @@
     lblSpotDate.text = diveInfoOfSelf.date;
     
     if (diveLengthUnit == 0) {
-        lblSpotDepth.text = [NSString stringWithFormat:@"%.2f FEETS", [diveInfoOfSelf.maxDepth intValue] * 3.2808f];
+        lblSpotDepth.text = [NSString stringWithFormat:@"%.2f ft", [diveInfoOfSelf.maxDepth intValue] * 3.2808f];
     } else {
-        lblSpotDepth.text = [NSString stringWithFormat:@"%.2f METERS", [diveInfoOfSelf.maxDepth floatValue]];
+        lblSpotDepth.text = [NSString stringWithFormat:@"%.2f m", [diveInfoOfSelf.maxDepth floatValue]];
     }
     
-    lblSpotDuration.text = [NSString stringWithFormat:@"%@ MINS", diveInfoOfSelf.duration];
+    lblSpotDuration.text = [NSString stringWithFormat:@"%@ mins", diveInfoOfSelf.duration];
     lblSpotCountryCity.text = [NSString stringWithFormat:@"%@ - %@", diveInfoOfSelf.spotInfo.counttyName, diveInfoOfSelf.spotInfo.locationName];
     lblTripName.text = diveInfoOfSelf.tripName;
     if (diveInfoOfSelf.tripName.length == 0) {

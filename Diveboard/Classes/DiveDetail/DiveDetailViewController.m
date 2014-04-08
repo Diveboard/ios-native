@@ -144,9 +144,9 @@
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
     int type = [[ud objectForKey:kDiveboardUnit] intValue];
     if (type == 0) {
-        [vdlblDepth setText:[NSString stringWithFormat:@"%.1f FEETS", [diveInformation.maxDepth intValue] * 3.2808f]];
+        [vdlblDepth setText:[NSString stringWithFormat:@"%.1f ft", [diveInformation.maxDepth intValue] * 3.2808f]];
     } else {
-        [vdlblDepth setText:[NSString stringWithFormat:@"%@ METERS", diveInformation.maxDepth]];
+        [vdlblDepth setText:[NSString stringWithFormat:@"%@ m", diveInformation.maxDepth]];
     }
     
     // dieve date
@@ -233,13 +233,13 @@
     if (diveInformation.note.length > 0) {
         [vdlblNoteContent setText:diveInformation.note];
     } else {
-        [vdlblNoteContent setText:@"No Note for thid dive."];
+        [vdlblNoteContent setText:@"No notes for this dive."];
     }
     
     if (!btnViewDiveBrowser) {
         btnViewDiveBrowser = [UIUnderlineButton underlineButton];
         [btnViewDiveBrowser setBackgroundColor:[UIColor clearColor]];
-        [btnViewDiveBrowser setTitle:@"View dive in Brower" forState:(UIControlStateNormal)];
+        [btnViewDiveBrowser setTitle:@"View dive in Browser" forState:(UIControlStateNormal)];
         [btnViewDiveBrowser setTitleColor:[UIColor blueColor] forState:(UIControlStateNormal)];
         [btnViewDiveBrowser.titleLabel setFont:[UIFont fontWithName:kDefaultFontName size:12.0f]];
         [btnViewDiveBrowser addTarget:self action:@selector(openBrowser) forControlEvents:UIControlEventTouchUpInside];

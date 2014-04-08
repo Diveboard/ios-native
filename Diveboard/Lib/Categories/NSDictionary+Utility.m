@@ -14,7 +14,7 @@
 - (id)objectForKeyNotNull:(id)key
 {
     id object = [self objectForKey:key];
-    if (object == [NSNull null])
+    if ([object isEqual:[NSNull null]])
         return nil;
     
     return object;
