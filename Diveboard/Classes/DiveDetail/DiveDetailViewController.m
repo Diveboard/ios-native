@@ -123,7 +123,11 @@
     
     
     [vdlblNickname          setText:appManager.loginResult.user.nickName];
-    [vdlblCountry           setText:[appManager.loginResult.user.danData.address lastObject]];
+    if (appManager.loginResult.user.location.length > 0){
+        [vdlblCountry           setText:[appManager.loginResult.user.location uppercaseString]];
+    }else{
+        [vdlblCountry           setText:@""];
+    }
     
     // dive shop
     if (diveInformation.diveShop.name.length > 0) {
