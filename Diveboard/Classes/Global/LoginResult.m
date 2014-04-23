@@ -23,7 +23,13 @@
     self = [super init];
     if (self) {
         if (![data isEqual:[NSNull null]]) {
-            self.address            = ([data objectForKey:@"address"]);
+            id address = [data objectForKey:@"address"];
+            if (address != [NSNull null] && address) {
+                self.address            = address;
+            } else {
+                self.address = nil;
+            }
+            
             self.alias              = getStringValue([data objectForKey:@"alias"]);
             self.birthday           = getStringValue([data objectForKey:@"birthday"]);
             self.birthPlace         = ([data objectForKey:@"birthplace"]);

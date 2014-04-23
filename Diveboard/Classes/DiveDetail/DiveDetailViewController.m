@@ -110,12 +110,15 @@
 
 - (void) setDiveInformationToView
 {
+    
+    
+    [viewContent addSubview:viewDetail];
+
     // trip name
     [lblTripName            setText:diveInformation.tripName];
     [lblCityCountry         setText:[NSString stringWithFormat:@"%@, %@",
                                      diveInformation.spotInfo.locationName,
-                                     diveInformation.spotInfo.counttyName]];
-    
+                                     diveInformation.spotInfo.countryName]];
     // username , photo
     [vdimgUserAvator setImageURL:[NSURL URLWithString:appManager.loginResult.user.pictureSmall]
                      placeholder:Nil];
@@ -123,8 +126,20 @@
     
     
     [vdlblNickname          setText:appManager.loginResult.user.nickName];
-    [vdlblCountry           setText:[appManager.loginResult.user.danData.address lastObject]];
     
+    if ([appManager.loginResult.user.danData.address isKindOfClass:[NSArray class]]) {
+        id country = [appManager.loginResult.user.danData.address lastObject];
+        if (country != [NSNull null]) {
+            [vdlblCountry           setText:(NSString *)country];
+        } else {
+            [vdlblCountry setText:@""];
+        }
+
+    }
+//    [vdlblCountry           setText:[appManager.loginResult.user.danData.address lastObject]];
+    
+//    return;
+
     // dive shop
     if (diveInformation.diveShop.name.length > 0) {
         [vdlblShopContent       setText:diveInformation.diveShop.name];
@@ -136,25 +151,25 @@
         [imgviewShop setImageURL:[NSURL URLWithString:diveInformation.diveShop.picture] placeholder:nil];
     }
     
-    // graph
-    NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@/profile.png?g=mobile_v002&u=m", SERVER_URL, appManager.loginResult.user.nickName, diveInformation.shakenID];
-    [vdimgviewGraph setImageURL:[NSURL URLWithString:urlString] placeholder:Nil];
     
-    // dive max depth
-    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    int type = [[ud objectForKey:kDiveboardUnit] intValue];
-    if (type == 0) {
-        [vdlblDepth setText:[NSString stringWithFormat:@"%.1f FEETS", [diveInformation.maxDepth intValue] * 3.2808f]];
-    } else {
-        [vdlblDepth setText:[NSString stringWithFormat:@"%@ METERS", diveInformation.maxDepth]];
+    
+    // graph
+    if (![DiveOfflineModeManager sharedManager].isOffline) {
+        NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@/profile.png?g=mobile_v002&u=m", SERVER_URL, appManager.loginResult.user.nickName, diveInformation.shakenID];
+        [vdimgviewGraph setImageURL:[NSURL URLWithString:urlString] placeholder:Nil];
     }
     
+    // dive max depth
+    [vdlblDepth setText:[DiveInformation unitOfLengthWithValue:diveInformation.maxDepth
+                                                   defaultUnit:diveInformation.maxDepthUnit]];
+    
+
     // dieve date
     [vdlblDateContent       setText:[NSString stringWithFormat:@"%@ %@",
                                      diveInformation.date,
                                      diveInformation.time]];
     
-    
+
     [vdlblDurationContent   setText:[NSString stringWithFormat:@"%@ mins", diveInformation.duration]];
     
     int itemCount = 0;
@@ -166,10 +181,14 @@
     if (diveInformation.water.length        > 0) itemCount++;
     if (diveInformation.diveType.count      > 0) itemCount++;
 
+    float dt = 32.0f;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        dt = 54.0f;
+    
     [vdDateBox    setFrame:CGRectMake(0,
                                      CGRectGetMaxY(vdGraphBox.frame),
                                      CGRectGetWidth(viewDetail.frame),
-                                     (int)(itemCount / 2.0f + 0.5f) * 32.0f)];
+                                     (int)(itemCount / 2.0f + 0.5f) * dt)];
 //    [vdDateBox setBackgroundColor:[UIColor colorWithWhite:0.1f alpha:0.7f]];
     
     if (diveInformation.visibility.length > 0) {
@@ -183,7 +202,10 @@
     }
     
     if (diveInformation.temp.bottom.length > 0 || diveInformation.temp.surface.length > 0) {
-        [vdlblTempContent setText:[NSString stringWithFormat:@"SURF %@ °C | BOTTOM %@ °C", diveInformation.temp.surface, diveInformation.temp.bottom]];
+        [vdlblTempContent setText:[NSString stringWithFormat:@"SURF %@ | BOTTOM %@",
+                                   [DiveInformation unitOfTempWithValue:diveInformation.temp.surface defaultUnit:diveInformation.temp.surfaceUnit],
+                                   [DiveInformation unitOfTempWithValue:diveInformation.temp.bottom defaultUnit:diveInformation.temp.bottomUnit]
+                                   ]];
     } else {
         [vdlblTempTitle setHidden:YES];
         [vdlblTempContent setHidden:YES];
@@ -220,7 +242,7 @@
                                                    context: nil].size;
 #else
     sizeToFit = [diveInformation.note sizeWithFont:[UIFont fontWithName:kDefaultFontName size:10.0f]
-                                 constrainedToSize:CGSizeMake(CGRectGetWidth(vdNoteBox.frame) * 0.9f, CGFLOAT_MAX)
+                                 constrainedToSize:CGSizeMake(CGRectGetWidth(vdlblNoteContent.frame) * 0.9f, CGFLOAT_MAX)
                                      lineBreakMode:NSLineBreakByWordWrapping];
 #endif
     
@@ -235,7 +257,7 @@
     } else {
         [vdlblNoteContent setText:@"No Note for thid dive."];
     }
-    
+
     if (!btnViewDiveBrowser) {
         btnViewDiveBrowser = [UIUnderlineButton underlineButton];
         [btnViewDiveBrowser setBackgroundColor:[UIColor clearColor]];
@@ -249,10 +271,7 @@
     [viewDetail addSubview:btnViewDiveBrowser];
     
     [viewDetail setFrame:CGRectMake(0, 0, CGRectGetWidth(viewContent.frame), CGRectGetMaxY(btnViewDiveBrowser.frame) + 10)];
-    [viewContent addSubview:viewDetail];
     [viewDetail setHidden:YES];
-    
-    
     
 }
 
@@ -451,48 +470,70 @@
     NSDictionary *params = @{@"auth_token": appManager.loginResult.token,
                              @"apikey"    : API_KEY,
                              };
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager DELETE:requestURLString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"delete operation : %@", responseObject);
+    
+    if ([DiveOfflineModeManager sharedManager].isOffline) {
+        NSDictionary *dic = @{kRequestKey: requestURLString,
+                              kRequestParamKey : params
+                              };
+        [[DiveOfflineModeManager sharedManager] diveEdit:dic];
         
-        if ([responseObject isKindOfClass:[NSDictionary class]]) {
-            if ([[responseObject objectForKey:@"success"] boolValue]) {
-//                [self.diveListViewController diveViewsUpdate];
-                for (id diveID in appManager.loginResult.user.allDiveIDs) {
-                    NSString *diveIDStr = [NSString stringWithFormat:@"%@", diveID];
-                    if ([diveInformation.ID isEqualToString:diveIDStr]) {
-                        [appManager.loginResult.user.allDiveIDs removeObject:diveID];
-                        [self.diveListViewController diveViewsUpdate];
-                        break;
-                    }
+        [[DiveOfflineModeManager sharedManager] deleteDiveID:diveInformation.ID];
+        
+        [self deleteDiveSuccess];
+        
+    }
+    else {
+    
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        [manager DELETE:requestURLString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSLog(@"delete operation : %@", responseObject);
+            
+            if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                if ([[responseObject objectForKey:@"success"] boolValue]) {
+    //                [self.diveListViewController diveViewsUpdate];
+                    
+                    [self deleteDiveSuccess];
+                    
+                } else {
+                    [MMProgressHUD dismissWithSuccess:@"Error" title:@"Delete"];
+
+                    [[[UIAlertView alloc] initWithTitle:@"Error"
+                                                message:[NSString stringWithFormat:@"%@", responseObject]
+                                               delegate:nil
+                                      cancelButtonTitle:@"OK"
+                                      otherButtonTitles: nil]
+                     show];
                 }
-                
-                [MMProgressHUD dismissWithSuccess:@"Deleted Dive" title:@"Success!"];
-                [self.navigationController popViewControllerAnimated:YES];
-                
-            } else {
-                [MMProgressHUD dismissWithSuccess:@"Error" title:@"Delete"];
-
-                [[[UIAlertView alloc] initWithTitle:@"Error"
-                                            message:[NSString stringWithFormat:@"%@", responseObject]
-                                           delegate:nil
-                                  cancelButtonTitle:@"OK"
-                                  otherButtonTitles: nil]
-                 show];
             }
-        }
-        
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [MMProgressHUD dismissWithSuccess:@"Error" title:@"Delete"];
+            
+            
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            [MMProgressHUD dismissWithSuccess:@"Error" title:@"Delete"];
 
-        [[[UIAlertView alloc] initWithTitle:@"Error"
-                                    message:[NSString stringWithFormat:@"%@", error]
-                                   delegate:nil
-                          cancelButtonTitle:@"OK"
-                          otherButtonTitles: nil]
-         show];
-    }];
+            [[[UIAlertView alloc] initWithTitle:@"Error"
+                                        message:[NSString stringWithFormat:@"%@", error]
+                                       delegate:nil
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles: nil]
+             show];
+        }];
+    }
+}
+
+- (void) deleteDiveSuccess
+{
+    for (id diveID in appManager.loginResult.user.allDiveIDs) {
+        NSString *diveIDStr = [NSString stringWithFormat:@"%@", diveID];
+        if ([diveInformation.ID isEqualToString:diveIDStr]) {
+            [appManager.loginResult.user.allDiveIDs removeObject:diveID];
+            [self.diveListViewController diveViewsUpdate];
+            break;
+        }
+    }
+    
+    [MMProgressHUD dismissWithSuccess:@"Deleted Dive" title:@"Success!"];
+    [self.navigationController popViewControllerAnimated:YES];
+
 }
 
 - (void) clickButtonWithName:(UIButton *)button

@@ -22,6 +22,8 @@
 }
 
 @end
+
+
 @implementation OneDiveView
 
 - (id)initWithFrame:(CGRect)frame diveID:(NSString *)diveID rotate:(UIInterfaceOrientation)orien
@@ -74,16 +76,6 @@
 
 - (void) initMethod
 {
-//    lblLogedBy.font         = [UIFont fontWithName:kDefaultFontName size:8.0f];
-//    lblLogedUserName.font   = [UIFont fontWithName:kDefaultFontName size:12.0f];
-//    lblTripName.font        = [UIFont fontWithName:kDefaultFontNameBold size:12.0f];
-//    lblTripNameTitle.font   = [UIFont fontWithName:kDefaultFontName size:10.0f];
-//    lblSpotName.font        = [UIFont fontWithName:kDefaultFontName size:14.0f];
-//    lblSpotCountryCity.font = [UIFont fontWithName:kDefaultFontName size:12.0f];
-//    lblSpotDate.font        = [UIFont fontWithName:kDefaultFontName size:10.0f];
-//    lblSpotDepth.font       = [UIFont fontWithName:kDefaultFontName size:10.0f];
-//    lblSpotDuration.font    = [UIFont fontWithName:kDefaultFontName size:10.0f];
-    
     
     subPicImageHeight = 40.0f;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
@@ -165,19 +157,30 @@
 
 - (void)changeDepthUnit:(int)type
 {
-    if (type == 0) {
-        if (diveInfoOfSelf) {
-            [lblSpotDepth setText:[NSString stringWithFormat:@"%.1f FEETS", [diveInfoOfSelf.maxDepth intValue] * 3.2808f]];
-        } else {
-            [lblSpotDepth setText:[NSString stringWithFormat:@"00.0 FEETS"]];
-        }
-    } else {
-        if (diveInfoOfSelf) {
-            [lblSpotDepth setText:[NSString stringWithFormat:@"%@ METERS", diveInfoOfSelf.maxDepth]];
-        } else {
-            [lblSpotDepth setText:[NSString stringWithFormat:@"00.0 METERS"]];
-        }
-    }
+    [lblSpotDepth setText:[DiveInformation unitOfLengthWithValue:diveInfoOfSelf.maxDepth
+                                                     defaultUnit:diveInfoOfSelf.maxDepthUnit]];
+    
+//    if (type == 0) {
+//        if (diveInfoOfSelf) {
+//            if ([diveInfoOfSelf.maxDepthUnit isEqualToString:@"m"]) {
+//                [lblSpotDepth setText:[NSString stringWithFormat:@"%.1f FEET", [diveInfoOfSelf.maxDepth intValue] * 3.2808f]];
+//            } else {
+//                [lblSpotDepth setText:[NSString stringWithFormat:@"%.1f FEET", [diveInfoOfSelf.maxDepth floatValue]]];
+//            }
+//        } else {
+//            [lblSpotDepth setText:[NSString stringWithFormat:@"-"]];
+//        }
+//    } else {
+//        if (diveInfoOfSelf) {
+//            if ([diveInfoOfSelf.maxDepthUnit isEqualToString:@"m"]) {
+//                [lblSpotDepth setText:[NSString stringWithFormat:@"%.1f METERS", [diveInfoOfSelf.maxDepth floatValue]]];
+//            } else {
+//                [lblSpotDepth setText:[NSString stringWithFormat:@"%.1f METERS", [diveInfoOfSelf.maxDepth floatValue] * 0.3048]];
+//            }
+//        } else {
+//            [lblSpotDepth setText:[NSString stringWithFormat:@"-"]];
+//        }
+//    }
     diveLengthUnit = type;
 }
 
@@ -185,6 +188,13 @@
 
 - (void) loadDiveData:(NSString *)diveID
 {
+    if ([DiveOfflineModeManager sharedManager].isOffline) {
+        [self requestResultCheckingWithObject:[[DiveOfflineModeManager sharedManager] getOneDiveInformation:diveID]];
+        [self removeLoadingScreen];
+        return;
+    }
+    
+    
     [self addLoadingScreen];
     NSString *authToken = appManager.loginResult.token;
     
@@ -217,7 +227,7 @@
         if ([[data objectForKey:@"success"] boolValue]) {
             diveInfoOfSelf = [[DiveInformation alloc] initWithDictionary:[data objectForKey:@"result"]];
             [appManager.loadedDives setObject:responseObject forKey:currentDiveID];
-            
+            [[DiveOfflineModeManager sharedManager] writeOneDiveInformation:responseObject overwrite:NO];
             NSLog(@"--- end ----");
             
             [self setDiveValueToSelf];
@@ -233,14 +243,18 @@
     lblSpotName.text = diveInfoOfSelf.spotInfo.name;
     lblSpotDate.text = diveInfoOfSelf.date;
     
-    if (diveLengthUnit == 0) {
-        lblSpotDepth.text = [NSString stringWithFormat:@"%.2f FEETS", [diveInfoOfSelf.maxDepth intValue] * 3.2808f];
-    } else {
-        lblSpotDepth.text = [NSString stringWithFormat:@"%.2f METERS", [diveInfoOfSelf.maxDepth floatValue]];
-    }
+    
+    [lblSpotDepth setText:[DiveInformation unitOfLengthWithValue:diveInfoOfSelf.maxDepth
+                                                     defaultUnit:diveInfoOfSelf.maxDepthUnit]];
+
+//    if (diveLengthUnit == 0) {
+//        lblSpotDepth.text = [NSString stringWithFormat:@"%.2f FEET", [diveInfoOfSelf.maxDepth intValue] * 3.2808f];
+//    } else {
+//        lblSpotDepth.text = [NSString stringWithFormat:@"%.2f METERS", [diveInfoOfSelf.maxDepth floatValue]];
+//    }
     
     lblSpotDuration.text = [NSString stringWithFormat:@"%@ MINS", diveInfoOfSelf.duration];
-    lblSpotCountryCity.text = [NSString stringWithFormat:@"%@ - %@", diveInfoOfSelf.spotInfo.counttyName, diveInfoOfSelf.spotInfo.locationName];
+    lblSpotCountryCity.text = [NSString stringWithFormat:@"%@ - %@", diveInfoOfSelf.spotInfo.countryName, diveInfoOfSelf.spotInfo.locationName];
     lblTripName.text = diveInfoOfSelf.tripName;
     if (diveInfoOfSelf.tripName.length == 0) {
         [viewTripBox setHidden:YES];

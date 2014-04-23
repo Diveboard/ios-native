@@ -12,6 +12,8 @@
 #import "LoginResult.h"
 #import "SignupViewController.h"
 #import "DiveListViewController.h"
+#import "Reachability.h"
+#import "DiveOfflineModeManager.h"
 
 
 @interface LoginViewController ()
@@ -19,6 +21,10 @@
     NSUserDefaults *userDefault;
     AppManager *appManager;
     FBSession  *fbSession;
+    
+    Reachability *internetReachableFoo;
+    
+    DiveOfflineModeManager *offlineManager;
 }
 
 @end
@@ -40,11 +46,15 @@
     
     userDefault = [NSUserDefaults standardUserDefaults];
     appManager = [AppManager sharedManager];
+    offlineManager = [DiveOfflineModeManager sharedManager];
+    
     fbSession  = appManager.fbSession;
     
     [self initMethod];
     
     [self autoLogin];
+    
+//    [self testInternetConnection];
     
     [self keyboardShowHideAnimationSetting];
 }
@@ -103,6 +113,34 @@
     UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 15, CGRectGetHeight(textField.frame))];
     textField.leftView = paddingView;
     textField.leftViewMode = UITextFieldViewModeAlways;
+}
+
+- (void)testInternetConnection
+{
+    internetReachableFoo = [Reachability reachabilityWithHostname:SERVER_URL];
+    
+    // Internet is reachable
+    
+//    LoginViewController *wself = self;
+    
+    internetReachableFoo.reachableBlock = ^(Reachability*reach)
+    {
+        // Update the UI on the main thread
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"Yayyy, we have the interwebs!");
+        });
+    };
+    
+    // Internet is not reachable
+    internetReachableFoo.unreachableBlock = ^(Reachability*reach)
+    {
+        // Update the UI on the main thread
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"Someone broke the internet :(");
+        });
+    };
+    
+    [internetReachableFoo startNotifier];
 }
 
 - (void) autoLogin
@@ -252,24 +290,93 @@
         
         NSLog(@"---- LOGIN RESULT ----\n%@", operation.responseString);
         
-        [self internetConnecting:NO];
-        [self requestResultCheckingWithObject:responseObject];
+        if ([self updatedDiveInformation:responseObject]) {
+            
+            [offlineManager updateLocalDiveToServer:^{
+                offlineManager.isUpdated = NO;
+                [self loginWithNativeUser:email password:password];
+            }];
+            
+        } else {
+            [self internetConnecting:NO];
+            [self requestResultCheckingWithObject:responseObject];
+        }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"%@", error);
         [self internetConnecting:NO];
-        
+        offlineManager.isOffline = YES;
+        [self requestResultCheckingWithObject:offlineManager.getLoginResultData];
     }];
+}
+
+- (BOOL) updatedDiveInformation:(id)responseObject
+{
+    if (![offlineManager getLoginResultData]) {
+        return NO;
+    }
+    if (!offlineManager.isUpdated) {
+        return NO;
+    }
+    
+    if (responseObject) {
+        
+        
+        NSDictionary *data;
+        if ([responseObject isKindOfClass:[NSDictionary class]]) {
+            data = [NSDictionary dictionaryWithDictionary:responseObject];
+            
+        }
+        else {
+            
+            data = [NSJSONSerialization JSONObjectWithData:responseObject
+                                                   options:NSJSONReadingAllowFragments
+                                                     error:nil];
+        }
+
+        if ([[data objectForKey:@"success"] boolValue]) {
+            
+            LoginResult *nowLoginResult = [[LoginResult alloc] initWithDictionary:data];
+            LoginResult *oldLoginResult = [[LoginResult alloc] initWithDictionary:[offlineManager getLoginResultData]];
+            
+            if ([nowLoginResult.ID isEqualToString:oldLoginResult.ID]) {
+                
+                return YES;
+                
+            } else {
+                [offlineManager cleanOldInformation];
+                return NO;
+            }
+            
+        } else {
+            return NO;
+        }
+    } else {
+        return NO;
+    }
 }
 
 - (void) requestResultCheckingWithObject:(id)responseObject
 {
     if (responseObject) {
-        NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseObject
-                                                             options:NSJSONReadingAllowFragments
-                                                               error:nil];
+        NSDictionary *data;
+        if ([responseObject isKindOfClass:[NSDictionary class]]) {
+            data = [NSDictionary dictionaryWithDictionary:responseObject];
+            
+        }
+        else {
+            
+            data = [NSJSONSerialization JSONObjectWithData:responseObject
+                                                   options:NSJSONReadingAllowFragments
+                                                     error:nil];
+        }
         NSLog(@"%@", data);
         if ([[data objectForKey:@"success"] boolValue]) {
+            
+            if (!offlineManager.isOffline) {
+                [offlineManager writeLoginResultData:data];
+            }
+            
             appManager.loginResult = [[LoginResult alloc] initWithDictionary:data];
             appManager.loginResult.user.allDiveIDs = [NSMutableArray arrayWithArray:[[appManager.loginResult.user.allDiveIDs reverseObjectEnumerator] allObjects]];
             
@@ -364,9 +471,50 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
+        offlineManager.isOffline = YES;
+        [self requestResultCheckingWithObject:offlineManager.getLoginResultData];
+
     }];
 }
 
+#pragma mark - write plist & load
+
+- (void) writeLoginResultToPlist:(NSDictionary *)dictionary
+{
+//    NSError *error;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    
+    NSString *plistPath = [documentsDirectory stringByAppendingPathComponent:kLoginResultPlistFileName];
+    NSLog(@"filepath : %@", plistPath);
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    
+    //check if the file exists already in users documents folder
+    //if file does not exist copy it from the application bundle Plist file
+    
+    NSError * error;
+    
+    if (![fileManager fileExistsAtPath: plistPath])
+    {
+        NSArray *filenames = [kLoginResultPlistFileName componentsSeparatedByString:@"."];
+        NSString *filename = [filenames objectAtIndex:0];
+        NSString *fileExt  = [filenames lastObject];
+        NSString *bundle = [[NSBundle mainBundle] pathForResource:filename ofType:fileExt];
+        [fileManager copyItemAtPath:bundle toPath:plistPath error:&error];
+    }
+    NSDictionary *dic = [NSDictionary dictionaryWithDictionary:dictionary];
+//    [dic writeToFile:plistPath atomically:NO];
+    
+    NSDictionary *dic2 = @{@"string1": @"string"};
+    [dic2 writeToFile:plistPath atomically:YES];
+}
+
+- (void) loginWithOfflineMode
+{
+    
+}
 
 #pragma mark - Notification
 

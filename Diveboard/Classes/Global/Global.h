@@ -14,8 +14,8 @@
 #define AUTH_TOKEN              @"9P+7PrBkhMBfrYrqk03g362xiwe8ETL0bJCubq7V8Bs="
 #define API_KEY                 @"vr7J6gUuy4ChTUUp2TJybFk"
 #define FLAVOUR                 @"mobile"
-#define SERVER_URL              @"http://www.diveboard.com"
-//#define SERVER_URL              @"http://stage.diveboard.com"
+//#define SERVER_URL              @"http://www.diveboard.com"
+#define SERVER_URL              @"http://stage.diveboard.com"
 
 #define kLoginMode              @"loginMode"
 #define kLoginModeNative        @"nativeLoginMode"
@@ -28,7 +28,8 @@
 #define kLoadedDiveData(userid) [NSString stringWithFormat:@"userid_%@_loadedDiveData", userid]
 
 #define kMainDefaultColor [UIColor colorWithRed:1.0f green:0.68f blue:0.1f alpha:1.0f]
-#define getStringValue(v)     ([v isEqual:[NSNull null]] || [v isEqual:@"<null>"] || [v isEqual:@"(null)"]? @"" : [NSString stringWithFormat:@"%@", v]);
+#define getStringValue(v)     ([v isEqual:[NSNull null]] || [v isEqual:@"<null>"] || [v isEqual:@"(null)"]  || [v isEqual:@"Null"] ? @"" : [NSString stringWithFormat:@"%@", v]);
+
 #define kDefaultFontName        @"Quicksand-Regular"
 #define kDefaultFontNameBold    @"Quicksand-Bold"
 
@@ -37,6 +38,9 @@
 #define SCREEN_WIDTH ((([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait) || ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortraitUpsideDown)) ? [[UIScreen mainScreen] bounds].size.width : [[UIScreen mainScreen] bounds].size.height)
 #define SCREEN_HEIGHT ((([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait) || ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortraitUpsideDown)) ? [[UIScreen mainScreen] bounds].size.height : [[UIScreen mainScreen] bounds].size.width)
 #define isPortrateScreen ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait || [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortraitUpsideDown )
+
+#define kLoginResultPlistFileName @"loginResult.plist"
+
 
 #pragma mark -
 

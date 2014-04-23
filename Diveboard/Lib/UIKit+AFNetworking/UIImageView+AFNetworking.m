@@ -115,6 +115,11 @@ static char kAFResponseSerializerKey;
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request addValue:@"image/*" forHTTPHeaderField:@"Accept"];
 
+    if ([DiveOfflineModeManager sharedManager].isOffline) {
+        self.image = [[DiveOfflineModeManager sharedManager] getImageWithUrl:url.absoluteString];
+        return;
+    }
+    
     [self setImageWithURLRequest:request placeholderImage:placeholderImage success:nil failure:nil];
 }
 
@@ -135,6 +140,8 @@ static char kAFResponseSerializerKey;
             success(nil, nil, cachedImage);
         } else {
             self.image = cachedImage;
+            
+            [[DiveOfflineModeManager sharedManager] writeImage:cachedImage url:urlRequest.URL.absoluteString];
         }
         [loadIndicator stopAnimating];
         self.af_imageRequestOperation = nil;
@@ -154,6 +161,8 @@ static char kAFResponseSerializerKey;
                     success(urlRequest, operation.response, responseObject);
                 } else if (responseObject) {
                     strongSelf.image = responseObject;
+                    
+                    [[DiveOfflineModeManager sharedManager] writeImage:strongSelf.image url:urlRequest.URL.absoluteString];
                 }
             }
             [loadIndicator stopAnimating];

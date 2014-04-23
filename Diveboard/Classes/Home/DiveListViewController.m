@@ -67,7 +67,10 @@
     
     [self initMethod];
     
-    [self startPreloadDiveData];
+    if (![DiveOfflineModeManager sharedManager].isOffline) {
+        [self startPreloadDiveData];
+    }
+    
     
 //    [self preloadDiveData];
     
@@ -149,14 +152,16 @@
     
     NSDictionary *params = @{@"auth_token": authToken,
                              @"apikey"    : API_KEY,
-                             @"flavour"   :FLAVOUR,
+                             @"flavour"   : FLAVOUR,
                              };
+    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager.requestSerializer setValue:@"multipart/form-data"  forHTTPHeaderField:@"Content-Type"];
     [manager.requestSerializer setValue:@"application/json"     forHTTPHeaderField:@"Accept"];
     [manager POST:requestURLString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
 //        NSLog(@"%@ preload one complete!---- \n %@", diveID, responseObject);
         if (responseObject) {
+            [[DiveOfflineModeManager sharedManager] writeOneDiveInformation:responseObject overwrite:NO];
             [appManager.loadedDives setObject:responseObject forKey:diveID];
         }
         
@@ -382,18 +387,28 @@
         self.lblCoordinate.text = [NSString stringWithFormat:@"%.4f°N,  %.4f°E", [diveInfoOfSelf.spotInfo.lat floatValue], [diveInfoOfSelf.spotInfo.lng floatValue]];
     }
     
-    dispatch_queue_t dqueue = dispatch_queue_create("image.loading", 0);
-    dispatch_async(dqueue, ^{
-        NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:diveInfoOfSelf.imageURL]];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
+    if ([DiveOfflineModeManager sharedManager].isOffline) {
+        UIImage *backgroundImage = [[DiveOfflineModeManager sharedManager] getImageWithUrl:diveInfoOfSelf.imageURL];
+        [self.imgviewBackground setImageToBlur:backgroundImage blurRadius:3.0f completionBlock:^(NSError *error) {
             
-            [self.imgviewBackground setImageToBlur:[UIImage imageWithData:imageData] blurRadius:3.0f completionBlock:^(NSError *error) {
-                
-            }];
+        }];
+    } else {
+        dispatch_queue_t dqueue = dispatch_queue_create("image.loading", 0);
+        dispatch_async(dqueue, ^{
+            
+            NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:diveInfoOfSelf.imageURL]];
+    
+            UIImage *backgroundImage = [UIImage imageWithData:imageData];
+            [[DiveOfflineModeManager sharedManager] writeImage:backgroundImage url:diveInfoOfSelf.imageURL];
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.imgviewBackground setImageToBlur:backgroundImage blurRadius:3.0f completionBlock:^(NSError *error) {
+                    
+                }];
+            });
+            
         });
-        
-    });
+    }
 }
 
 

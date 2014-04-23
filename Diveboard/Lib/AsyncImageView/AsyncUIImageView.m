@@ -58,6 +58,14 @@ static ImageCache *imageCache = nil;
 
 - (void)setImageURL:(NSURL *)url placeholder:(UIImage *)image
 {
+    if ([DiveOfflineModeManager sharedManager].isOffline) {
+        self.image = [[DiveOfflineModeManager sharedManager] getImageWithUrl:url.absoluteString];
+        [spinny removeFromSuperview];
+        spinny = nil;
+
+        return;
+    }
+    
     if (connection != nil) {
         [connection cancel];
         connection = nil;
@@ -73,6 +81,9 @@ static ImageCache *imageCache = nil;
     self.image = [imageCache imageForKey:urlString];
     if (image != nil) {
         [self setImage:image];
+        
+        [[DiveOfflineModeManager sharedManager] writeImage:image url:url.absoluteString];
+        
         [spinny removeFromSuperview];
         spinny = nil;
         return;
@@ -106,6 +117,8 @@ static ImageCache *imageCache = nil;
     [spinny removeFromSuperview];
     spinny = nil;
     self.image = [UIImage imageWithData:data];
+    
+    [[DiveOfflineModeManager sharedManager] writeImage:self.image url:aConnection.originalRequest.URL.absoluteString];
     
     [imageCache insertImage:self.image withSize:[data length] forKey:urlString];
     data = nil;

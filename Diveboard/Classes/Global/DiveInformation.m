@@ -21,8 +21,8 @@
             self.countryCode        = getStringValue([data objectForKey:@"country_code"]);
             self.countryFlagBig     = getStringValue([data objectForKey:@"country_flag_big"]);
             self.countryFlagSmall   = getStringValue([data objectForKey:@"country_flag_small"]);
-            self.counttyName        = getStringValue([data objectForKey:@"country_name"]);
-            self.flavour            = getStringValue([data objectForKey:@"flavure"]);
+            self.countryName        = getStringValue([data objectForKey:@"country_name"]);
+            self.flavour            = getStringValue([data objectForKey:@"flavour"]);
             self.fullPermalink      = getStringValue([data objectForKey:@"fullpermalink"]);
             self.ID                 = getStringValue([data objectForKey:@"id"]);
             self.lat                = getStringValue([data objectForKey:@"lat"]);
@@ -39,7 +39,7 @@
             self.countryCode        = @""; //getStringValue([data objectForKey:@"country_code"]);
             self.countryFlagBig     = @""; //getStringValue([data objectForKey:@"country_flag_big"]);
             self.countryFlagSmall   = @""; //getStringValue([data objectForKey:@"country_flag_small"]);
-            self.counttyName        = @""; //getStringValue([data objectForKey:@"country_name"]);
+            self.countryName        = @""; //getStringValue([data objectForKey:@"country_name"]);
             self.flavour            = @""; //getStringValue([data objectForKey:@"flavure"]);
             self.fullPermalink      = @""; //getStringValue([data objectForKey:@"fullpermalink"]);
             self.ID                 = @""; //getStringValue([data objectForKey:@"id"]);
@@ -71,7 +71,7 @@
             self.class_             = getStringValue([data objectForKey:@"class"]);
             self.createdAt          = getStringValue([data objectForKey:@"created_at"]);
             self.fullRedirectLink   = getStringValue([data objectForKey:@"full_redirect_link"]);
-            self.flavour            = getStringValue([data objectForKey:@"flavure"]);
+            self.flavour            = getStringValue([data objectForKey:@"flavour"]);
             self.fullPermaLink      = getStringValue([data objectForKey:@"fullpermalink"]);
             self.ID                 = getStringValue([data objectForKey:@"id"]);
             self.largeURL           = getStringValue([data objectForKey:@"large"]);
@@ -234,6 +234,105 @@
     }
     return self;
 }
+
++ (NSString *)unitOfLengthWithValue:(NSString *)value defaultUnit:(NSString *)unit
+{
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    int type = [[ud objectForKey:kDiveboardUnit] intValue];
+    NSString *result;
+    if (type == 0) {   // unit is imperial
+        if ([[unit lowercaseString] isEqualToString:@"m"]) {
+            result = [NSString stringWithFormat:@"%.2f FEET", [value floatValue] * 3.2808f];
+        } else {
+            result = [NSString stringWithFormat:@"%.2f FEET", [value floatValue]];
+        }
+    } else {           // unit is metric
+        if ([[unit lowercaseString] isEqualToString:@"m"]) {
+            result = [NSString stringWithFormat:@"%.2f METERS", [value floatValue]];
+        } else {
+            result = [NSString stringWithFormat:@"%.2f METERS", [value floatValue] * 0.3048f];
+        }
+    }
+    return result;
+}
+
++ (NSString *)unitOfLengthWithValue:(NSString *)value defaultUnit:(NSString *)unit showUnit:(BOOL)flag
+{
+    NSString *result = [DiveInformation unitOfLengthWithValue:value defaultUnit:unit];
+    if (flag) {
+        return result;
+    } else {
+        return [[result componentsSeparatedByString:@" "] objectAtIndex:0];
+    }
+}
+
++ (NSString *)unitOfTempWithValue:(NSString *)value defaultUnit:(NSString *)unit
+{
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    int type = [[ud objectForKey:kDiveboardUnit] intValue];
+    NSString *result;
+    if (type == 0) {   // unit is imperial
+        if ([[unit lowercaseString] isEqualToString:@"c"]) {
+            result = [NSString stringWithFormat:@"%.2f °F", [value floatValue] + 32];
+        } else {
+            result = [NSString stringWithFormat:@"%.2f °F", [value floatValue]];
+        }
+    } else {           // unit is metric
+        if ([[unit lowercaseString] isEqualToString:@"c"]) {
+            result = [NSString stringWithFormat:@"%.2f °C", [value floatValue]];
+        } else {
+            result = [NSString stringWithFormat:@"%.2f °C", [value floatValue] - 32];
+        }
+    }
+    return result;
+
+}
+
++ (NSString *)unitOfTempWithValue:(NSString *)value defaultUnit:(NSString *)unit showUnit:(BOOL)flag
+{
+    NSString *result = [DiveInformation unitOfTempWithValue:value defaultUnit:unit];
+    if (flag) {
+        return result;
+    } else {
+        return [[result componentsSeparatedByString:@" "] objectAtIndex:0];
+    }
+
+}
+
++ (NSString *)unitOfWeightWithValue:(NSString *)value defaultUnit:(NSString *)unit
+{
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    int type = [[ud objectForKey:kDiveboardUnit] intValue];
+    NSString *result;
+    if (type == 0) {   // unit is imperial
+        if ([[unit lowercaseString] isEqualToString:@"kg"]) {
+            result = [NSString stringWithFormat:@"%.4f lbs", [value floatValue] * 2.2046f];
+        } else {
+            result = [NSString stringWithFormat:@"%.4f lbs", [value floatValue]];
+        }
+    } else {           // unit is metric
+        if ([[unit lowercaseString] isEqualToString:@"kg"]) {
+            result = [NSString stringWithFormat:@"%.2f kg", [value floatValue]];
+        } else {
+            result = [NSString stringWithFormat:@"%.2f kg", [value floatValue] * 0.45359f];
+        }
+    }
+    return result;
+
+}
+
++ (NSString *)unitOfWeightWithValue:(NSString *)value defaultUnit:(NSString *)unit showUnit:(BOOL)flag
+{
+    NSString *result = [DiveInformation unitOfWeightWithValue:value defaultUnit:unit];
+    if (flag) {
+        return result;
+    } else {
+        return [[result componentsSeparatedByString:@" "] objectAtIndex:0];
+    }
+    
+}
+
+
 @end
 
 

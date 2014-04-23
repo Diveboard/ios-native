@@ -21,6 +21,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    
+    [DiveOfflineModeManager sharedManager];
+    
+    
     LoginViewController *loginVC;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         loginVC = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:Nil];

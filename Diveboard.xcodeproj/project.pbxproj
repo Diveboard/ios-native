@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C049A5918F2ED780043D291 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C049A5818F2ED780043D291 /* Reachability.m */; };
 		3C1076A518D0CCE1006F249F /* MMHud.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C10769118D0CCE1006F249F /* MMHud.m */; };
 		3C1076A618D0CCE1006F249F /* MMLinearProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C10769318D0CCE1006F249F /* MMLinearProgressView.m */; };
 		3C1076A718D0CCE1006F249F /* MMProgressHUD+Animations.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C10769518D0CCE1006F249F /* MMProgressHUD+Animations.m */; };
@@ -17,7 +18,9 @@
 		3C1076AC18D0CCE1006F249F /* MMProgressHUDWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C10769F18D0CCE1006F249F /* MMProgressHUDWindow.m */; };
 		3C1076AD18D0CCE1006F249F /* MMRadialProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C1076A218D0CCE1006F249F /* MMRadialProgressView.m */; };
 		3C1076AE18D0CCE1006F249F /* MMVectorImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C1076A418D0CCE1006F249F /* MMVectorImage.m */; };
+		3C13084718F3E1DC00D51AC7 /* DataRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C13084618F3E1DC00D51AC7 /* DataRequestManager.m */; };
 		3C1B31D618D7438700FE27BF /* OneDiveView-mini.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3C1B31D518D7438700FE27BF /* OneDiveView-mini.xib */; };
+		3C1E32B618F3083C003063EA /* loginResult.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3C1E32B518F3083C003063EA /* loginResult.plist */; };
 		3C24E55718D7DEBE00215E9E /* LoginViewController-ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3C24E55618D7DEBE00215E9E /* LoginViewController-ipad.xib */; };
 		3C24E55918D7E0D400215E9E /* SignupViewController-ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3C24E55818D7E0D400215E9E /* SignupViewController-ipad.xib */; };
 		3C24E55B18D7E66400215E9E /* DiveListViewController-ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3C24E55A18D7E66400215E9E /* DiveListViewController-ipad.xib */; };
@@ -46,6 +49,8 @@
 		3C539E2118EA46C200470897 /* icon72.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C539E1318EA46C200470897 /* icon72.png */; };
 		3C539E2218EA46C200470897 /* icon76.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C539E1418EA46C200470897 /* icon76.png */; };
 		3C539E2318EA46C200470897 /* icon80.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C539E1518EA46C200470897 /* icon80.png */; };
+		3C66AB0318F538C7000AB0D6 /* DiveOfflineModeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C66AB0218F538C7000AB0D6 /* DiveOfflineModeManager.m */; };
+		3C66AB0518F54378000AB0D6 /* updatelist.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3C66AB0418F54378000AB0D6 /* updatelist.plist */; };
 		3CB7A19118C706FF008B66BF /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB7A19018C706FF008B66BF /* CoreLocation.framework */; };
 		3CB7A1A118C70CAB008B66BF /* DiveEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB7A19F18C70CAB008B66BF /* DiveEditViewController.m */; };
 		3CB7A1A218C70CAB008B66BF /* DiveEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3CB7A1A018C70CAB008B66BF /* DiveEditViewController.xib */; };
@@ -176,6 +181,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3C049A5718F2ED780043D291 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		3C049A5818F2ED780043D291 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		3C10769018D0CCE1006F249F /* MMHud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMHud.h; sourceTree = "<group>"; };
 		3C10769118D0CCE1006F249F /* MMHud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMHud.m; sourceTree = "<group>"; };
 		3C10769218D0CCE1006F249F /* MMLinearProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMLinearProgressView.h; sourceTree = "<group>"; };
@@ -197,7 +204,10 @@
 		3C1076A218D0CCE1006F249F /* MMRadialProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMRadialProgressView.m; sourceTree = "<group>"; };
 		3C1076A318D0CCE1006F249F /* MMVectorImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMVectorImage.h; sourceTree = "<group>"; };
 		3C1076A418D0CCE1006F249F /* MMVectorImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMVectorImage.m; sourceTree = "<group>"; };
+		3C13084518F3E1DC00D51AC7 /* DataRequestManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataRequestManager.h; sourceTree = "<group>"; };
+		3C13084618F3E1DC00D51AC7 /* DataRequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataRequestManager.m; sourceTree = "<group>"; };
 		3C1B31D518D7438700FE27BF /* OneDiveView-mini.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "OneDiveView-mini.xib"; sourceTree = "<group>"; };
+		3C1E32B518F3083C003063EA /* loginResult.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = loginResult.plist; sourceTree = "<group>"; };
 		3C24E55618D7DEBE00215E9E /* LoginViewController-ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "LoginViewController-ipad.xib"; sourceTree = "<group>"; };
 		3C24E55818D7E0D400215E9E /* SignupViewController-ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "SignupViewController-ipad.xib"; sourceTree = "<group>"; };
 		3C24E55A18D7E66400215E9E /* DiveListViewController-ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "DiveListViewController-ipad.xib"; sourceTree = "<group>"; };
@@ -229,6 +239,9 @@
 		3C539E1318EA46C200470897 /* icon72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon72.png; sourceTree = "<group>"; };
 		3C539E1418EA46C200470897 /* icon76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon76.png; sourceTree = "<group>"; };
 		3C539E1518EA46C200470897 /* icon80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon80.png; sourceTree = "<group>"; };
+		3C66AB0118F538C7000AB0D6 /* DiveOfflineModeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiveOfflineModeManager.h; sourceTree = "<group>"; };
+		3C66AB0218F538C7000AB0D6 /* DiveOfflineModeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiveOfflineModeManager.m; sourceTree = "<group>"; };
+		3C66AB0418F54378000AB0D6 /* updatelist.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = updatelist.plist; sourceTree = "<group>"; };
 		3CB7A19018C706FF008B66BF /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		3CB7A19E18C70CAB008B66BF /* DiveEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiveEditViewController.h; sourceTree = "<group>"; };
 		3CB7A19F18C70CAB008B66BF /* DiveEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiveEditViewController.m; sourceTree = "<group>"; };
@@ -430,6 +443,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3C049A5618F2ED780043D291 /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				3C049A5718F2ED780043D291 /* Reachability.h */,
+				3C049A5818F2ED780043D291 /* Reachability.m */,
+			);
+			path = Reachability;
+			sourceTree = "<group>";
+		};
 		3C10768F18D0CCE1006F249F /* MMProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
@@ -456,6 +478,15 @@
 				3C1076A418D0CCE1006F249F /* MMVectorImage.m */,
 			);
 			path = MMProgressHUD;
+			sourceTree = "<group>";
+		};
+		3C1E32B418F3082A003063EA /* files */ = {
+			isa = PBXGroup;
+			children = (
+				3C1E32B518F3083C003063EA /* loginResult.plist */,
+				3C66AB0418F54378000AB0D6 /* updatelist.plist */,
+			);
+			path = files;
 			sourceTree = "<group>";
 		};
 		3C26F6D818E4636700684349 /* MJPopupView */ = {
@@ -654,6 +685,8 @@
 				3CF3377418BCEADD001D2DF0 /* LoginResult.m */,
 				3CE7913E18BEF78600E4265A /* DiveInformation.h */,
 				3CE7913F18BEF78600E4265A /* DiveInformation.m */,
+				3C13084518F3E1DC00D51AC7 /* DataRequestManager.h */,
+				3C13084618F3E1DC00D51AC7 /* DataRequestManager.m */,
 			);
 			path = Global;
 			sourceTree = "<group>";
@@ -685,6 +718,8 @@
 				3CF3377718BD21DE001D2DF0 /* SignupViewController.m */,
 				3CF3377818BD21DE001D2DF0 /* SignupViewController.xib */,
 				3C24E55818D7E0D400215E9E /* SignupViewController-ipad.xib */,
+				3C66AB0118F538C7000AB0D6 /* DiveOfflineModeManager.h */,
+				3C66AB0218F538C7000AB0D6 /* DiveOfflineModeManager.m */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -703,6 +738,7 @@
 				3CE047E018BCBBB000FA47FF /* MBProgressHUD */,
 				3CCD102818C5B3E2001AD995 /* Categories */,
 				3C10768F18D0CCE1006F249F /* MMProgressHUD */,
+				3C049A5618F2ED780043D291 /* Reachability */,
 			);
 			path = Lib;
 			sourceTree = "<group>";
@@ -758,6 +794,7 @@
 		3CE047B618BCBB4C00FA47FF /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				3C1E32B418F3082A003063EA /* files */,
 				3CE474BB18EC019100712370 /* lunch */,
 				3C539E0718EA46C200470897 /* appicon */,
 				3CE047C518BCBB4C00FA47FF /* fonts */,
@@ -1050,6 +1087,7 @@
 				3CE474C918EC019100712370 /* default-ipad-land.png in Resources */,
 				3CE047D818BCBB4C00FA47FF /* Quicksand-Bold.otf in Resources */,
 				3C39C4AD18DE414B00C29BF1 /* DiveDetailViewController-ipad.xib in Resources */,
+				3C1E32B618F3083C003063EA /* loginResult.plist in Resources */,
 				3CF3780718DD22CD00D832B3 /* DiveEditViewController-ipad.xib in Resources */,
 				3C26F6E718E46B3700684349 /* empty_check.png in Resources */,
 				3C24E55718D7DEBE00215E9E /* LoginViewController-ipad.xib in Resources */,
@@ -1062,6 +1100,7 @@
 				3CE047D518BCBB4C00FA47FF /* ic_facebook_btn_.png in Resources */,
 				3CCD100818C57EC2001AD995 /* DiveDetailViewController.xib in Resources */,
 				3CE474CF18EC019100712370 /* Default-Landscape@2x~ipad.png in Resources */,
+				3C66AB0518F54378000AB0D6 /* updatelist.plist in Resources */,
 				3C24E56318D7FAB500215E9E /* OneDiveView-ipadland.xib in Resources */,
 				3CCD101C18C57F2A001AD995 /* ic_map_white.png in Resources */,
 				3CE474C718EC019100712370 /* Default-568h@2x.png in Resources */,
@@ -1106,7 +1145,9 @@
 				3CCD102518C598D8001AD995 /* UIUnderlineButton.m in Sources */,
 				3C1076A618D0CCE1006F249F /* MMLinearProgressView.m in Sources */,
 				3CF3374718BCD14F001D2DF0 /* Global.m in Sources */,
+				3C66AB0318F538C7000AB0D6 /* DiveOfflineModeManager.m in Sources */,
 				3CD100ED18C99C0D0001B625 /* SettingViewController.m in Sources */,
+				3C13084718F3E1DC00D51AC7 /* DataRequestManager.m in Sources */,
 				3C1076AD18D0CCE1006F249F /* MMRadialProgressView.m in Sources */,
 				3CF3378318BD48FE001D2DF0 /* DiveCountlineView.m in Sources */,
 				3CF3375818BCD4FD001D2DF0 /* LoginViewController.m in Sources */,
@@ -1146,6 +1187,7 @@
 				3CE7914318BF0C1D00E4265A /* OneDiveView.m in Sources */,
 				3C1076A918D0CCE1006F249F /* MMProgressHUD.m in Sources */,
 				3CE7914018BEF78600E4265A /* DiveInformation.m in Sources */,
+				3C049A5918F2ED780043D291 /* Reachability.m in Sources */,
 				3CB7A1A118C70CAB008B66BF /* DiveEditViewController.m in Sources */,
 				3CE047E718BCBBB000FA47FF /* MBProgressHUD+Add.m in Sources */,
 				3CE047AD18BCBA3E00FA47FF /* AFURLSessionManager.m in Sources */,
@@ -1276,8 +1318,8 @@
 		3CE0477118BCB83100FA47FF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					$SRCROOT/Diveboard/Lib,
@@ -1287,7 +1329,7 @@
 				INFOPLIST_FILE = "Diveboard/Diveboard-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "F9396F8A-A03A-41C0-BD16-D318ADC8B5C8";
+				PROVISIONING_PROFILE = "2E91F13D-E8F1-417E-B6A0-D67A6FD8D244";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1296,8 +1338,8 @@
 		3CE0477218BCB83100FA47FF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					$SRCROOT/Diveboard/Lib,
@@ -1307,7 +1349,7 @@
 				INFOPLIST_FILE = "Diveboard/Diveboard-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "F9396F8A-A03A-41C0-BD16-D318ADC8B5C8";
+				PROVISIONING_PROFILE = "2E91F13D-E8F1-417E-B6A0-D67A6FD8D244";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};

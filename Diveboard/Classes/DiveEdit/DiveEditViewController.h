@@ -32,13 +32,17 @@
     IBOutlet UILabel *lblMaxdepthUnit;
     IBOutlet UITextField    *txtDuration;
     IBOutlet UITextField    *txtWeight;
+    IBOutlet UILabel        *lblWeightUnit;
     IBOutlet UITextField    *txtDiveNumber;
     IBOutlet UITextField    *txtTripName;
     IBOutlet UILabel        *lblVisibility;
     IBOutlet UILabel        *lblCurrent;
     IBOutlet UITextField    *txtSurface;
     IBOutlet UITextField    *txtBottom;
+    IBOutlet UILabel        *lblSurfaceUnit;
+    IBOutlet UILabel        *lblBottomUnit;
     IBOutlet UITextField    *txtAltitude;
+    IBOutlet UILabel        *lblAltitudeUnit;
     IBOutlet UILabel        *lblWater;
     IBOutlet UISwitch       *schPublic;
     IBOutlet UIButton *btnDiveEditCloseKeyboard;

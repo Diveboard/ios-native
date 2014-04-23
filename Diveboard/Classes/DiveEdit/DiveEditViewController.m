@@ -69,11 +69,7 @@
 {
     [self setRelayout];
     [self tapButtonTouchAction:(btnDetails)];
-    if (diveLengthUnit == 0) {
-        [lblMaxdepthUnit setText:@"FEETS"];
-    } else {
-        [lblMaxdepthUnit setText:@"M"];
-    }
+
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -125,6 +121,14 @@
     btnSpots.layer.borderColor = [UIColor whiteColor].CGColor;
     btnSpots.layer.borderWidth = 1.0f;
     
+    if (diveLengthUnit == 0) {
+        [lblMaxdepthUnit setText:@"FEET"];
+        [lblWeightUnit   setText:@"lbs"];
+        [lblSurfaceUnit  setText:@"°F"];
+        [lblBottomUnit   setText:@"°F"];
+//        [lblAltitudeUnit setText:@"ft"];
+    }
+    
     [scrviewMain addSubview:viewSpots];
     [scrviewMain addSubview:viewNotes];
     [scrviewMain addSubview:viewContent];
@@ -141,20 +145,25 @@
     [lblDate        setText:diveInformation.date];
     [lblTime        setText:diveInformation.time];
     // dive max depth
-    if (diveLengthUnit == 0) {
-        [txtDepth setText:[NSString stringWithFormat:@"%.1f", [diveInformation.maxDepth intValue] * 3.2808f]];
-    } else {
-        [txtDepth setText:[NSString stringWithFormat:@"%@", diveInformation.maxDepth]];
-    }
-//    [txtDepth       setText:diveInformation.maxDepth];
+    [txtDepth setText:[DiveInformation unitOfLengthWithValue:diveInformation.maxDepth
+                                                 defaultUnit:diveInformation.maxDepthUnit
+                                                    showUnit:NO]];
+
     [txtDuration    setText:diveInformation.duration];
-    [txtWeight      setText:diveInformation.weight.value];
+    [txtWeight      setText:[DiveInformation unitOfWeightWithValue:diveInformation.weight.weight
+                                                       defaultUnit:diveInformation.weight.unit
+                                                          showUnit:NO]];
     [txtDiveNumber  setText:diveInformation.number];
     [txtTripName    setText:diveInformation.tripName];
     [lblVisibility  setText:[diveInformation.visibility capitalizedString]];
     [lblCurrent     setText:[diveInformation.current capitalizedString]];
-    [txtSurface     setText:diveInformation.temp.surface];
-    [txtBottom      setText:diveInformation.temp.bottom];
+    
+    [txtSurface     setText:[DiveInformation unitOfTempWithValue:diveInformation.temp.surface
+                                                     defaultUnit:diveInformation.temp.surfaceUnit
+                                                        showUnit:NO]];
+    [txtBottom      setText:[DiveInformation unitOfTempWithValue:diveInformation.temp.bottom
+                                                     defaultUnit:diveInformation.temp.bottomUnit
+                                                        showUnit:NO]];
     [txtAltitude    setText:diveInformation.altitude];
     [lblWater       setText:[diveInformation.water capitalizedString]];
     if ([diveInformation.privacy isEqualToString:@"0"]) {
@@ -191,7 +200,11 @@
 
 - (IBAction)backAction:(id)sender {
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:Nil message:@"Exit without save?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:Nil
+                                                    message:@"Exit without save?"
+                                                   delegate:self
+                                          cancelButtonTitle:@"Cancel"
+                                          otherButtonTitles:@"OK", nil];
     [alert setTag:400];
     [alert show];
 }
@@ -217,66 +230,101 @@
 
 - (void) saveDiveDetailData
 {
+    // date
     NSMutableDictionary *updateParams = [[NSMutableDictionary alloc] init];
     if (![diveInformation.date          isEqualToString:lblDate.text])
         [updateParams setObject:[NSString stringWithFormat:@"%@T%@Z", lblDate.text, lblTime.text] forKey:@"time_in"];
     
+    // time
     if (![diveInformation.time          isEqualToString:lblTime.text])
         [updateParams setObject:[NSString stringWithFormat:@"%@T%@Z", lblDate.text, lblTime.text] forKey:@"time_in"];
     
-    NSString *maxdepth;
-    if (diveLengthUnit == 0) {
-        maxdepth = [NSString stringWithFormat:@"%.1f", [diveInformation.maxDepth intValue] * 3.2808f];
-    } else {
-        maxdepth = [NSString stringWithFormat:@"%@", diveInformation.maxDepth];
-    }
+    // max depth
+    NSString *maxdepth = [DiveInformation unitOfLengthWithValue:diveInformation.maxDepth
+                                                    defaultUnit:diveInformation.maxDepthUnit
+                                                       showUnit:NO];
 
     if (![maxdepth      isEqualToString:txtDepth.text]) {
-        if (diveLengthUnit == 0) {
-            float depth = [txtDepth.text floatValue] * 0.3048f;
-            [updateParams setObject:[NSString stringWithFormat:@"%f", depth] forKey:@"maxdepth"];
-        } else {
-            [updateParams setObject:txtDepth.text forKey:@"maxdepth"];
-        }
-        
+        [updateParams setObject:[DiveInformation unitOfLengthWithValue:txtDepth.text
+                                                           defaultUnit:(diveLengthUnit == 0 ? @"ft" : @"m")
+                                                              showUnit:NO]
+                         forKey:@"maxdepth"];
+        [updateParams setObject:(diveLengthUnit == 0 ? @"ft" : @"m") forKey:@"maxdepth_unit"];
     }
     
+    // duration
     if (![diveInformation.duration      isEqualToString:txtDuration.text])
         [updateParams setObject:txtDuration.text forKey:@"duration"];
     
-    if (![diveInformation.weight.weight isEqualToString:txtWeight.text])
-        [updateParams setObject:txtWeight.text forKey:@"weights"];
+    // weight
+    NSString *actualWeight = [DiveInformation unitOfWeightWithValue:diveInformation.weight.weight
+                                                        defaultUnit:diveInformation.weight.unit
+                                                           showUnit:NO];
+    if (![actualWeight isEqualToString:txtWeight.text]) {
+        [updateParams setObject:[DiveInformation unitOfWeightWithValue:txtWeight.text
+                                                           defaultUnit:(diveLengthUnit == 0 ? @"lbs" : @"kg")
+                                                              showUnit:NO]
+                         forKey:@"weights"];
+        [updateParams setObject:(diveLengthUnit == 0 ? @"lbs" : @"kg") forKey:@"weights_unit"];
+    }
     
+    // dive number
     if (![diveInformation.number        isEqualToString:txtDiveNumber.text])
         [updateParams setObject:txtDiveNumber.text forKey:@"number"];
     
+    // dive trip name
     if (![diveInformation.tripName      isEqualToString:txtTripName.text])
         [updateParams setObject:txtTripName.text forKey:@"trip_name"];
     
+    // visibility
     if (![diveInformation.visibility    isEqualToString:lblVisibility.text])
         [updateParams setObject:[lblVisibility.text lowercaseString] forKey:@"visibility"];
     
+    // current
     if (![diveInformation.current       isEqualToString:lblCurrent.text])
         [updateParams setObject:[lblCurrent.text lowercaseString] forKey:@"current"];
     
-    if (![diveInformation.temp.surface  isEqualToString:txtSurface.text])
-        [updateParams setObject:txtSurface.text forKey:@"temp_surface"];
+    // surface temporature
+    NSString *tempSurface = [DiveInformation unitOfTempWithValue:diveInformation.temp.surface
+                                                     defaultUnit:diveInformation.temp.surfaceUnit
+                                                        showUnit:NO];
+    if (![tempSurface  isEqualToString:txtSurface.text]) {
+        [updateParams setObject:[DiveInformation unitOfTempWithValue:txtSurface.text
+                                                         defaultUnit:(diveLengthUnit == 0 ? @"F" : @"C")
+                                                            showUnit:NO]
+                         forKey:@"temp_surface"];
+        [updateParams setObject:(diveLengthUnit == 0 ? @"F" : @"C") forKey:@"temp_surface_unit"];
+    }
     
-    if (![diveInformation.temp.bottom   isEqualToString:txtBottom.text])
-        [updateParams setObject:txtBottom.text forKey:@"temp_bottom"];
+    // bottom temporature
+    NSString *tempBottom = [DiveInformation unitOfTempWithValue:diveInformation.temp.bottom
+                                                     defaultUnit:diveInformation.temp.bottomUnit
+                                                        showUnit:NO];
+    if (![tempBottom  isEqualToString:txtBottom.text]) {
+        [updateParams setObject:[DiveInformation unitOfTempWithValue:txtBottom.text
+                                                         defaultUnit:(diveLengthUnit == 0 ? @"F" : @"C")
+                                                            showUnit:NO]
+                         forKey:@"temp_bottom"];
+        [updateParams setObject:(diveLengthUnit == 0 ? @"F" : @"C") forKey:@"temp_bottom_unit"];
+    }
     
+    // altitude
     if (![diveInformation.altitude      isEqualToString:txtAltitude.text])
         [updateParams setObject:txtAltitude.text forKey:@"altitude"];
     
+    // water
     if (![diveInformation.water         isEqualToString:lblWater.text])
         [updateParams setObject:[lblWater.text lowercaseString] forKey:@"water"];
     
+    // public
     if ( [diveInformation.privacy boolValue] != !schPublic.isOn)
         [updateParams setObject:(schPublic.isOn ? @"0" : @"1") forKey:@"privacy"];
     
+    // dive note
     if (![diveInformation.note   isEqualToString:txtviewNotes.text])
         [updateParams setObject:txtviewNotes.text forKey:@"notes"];
     
+    // dive spot information
     if (![diveInformation.spotInfo.name isEqualToString:lblCurrentSpot.text]) {
         if (selectedSpot) {
             [updateParams setObject:@{@"id": selectedSpot.ID} forKey:@"spot"];
@@ -309,25 +357,32 @@
             
             NSString *requestURLStr = [NSString stringWithFormat:@"%@/api/V2/dive", SERVER_URL];
             
-            AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-            [manager POST:requestURLStr parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                NSLog(@"%@", responseObject);
-                [self updateDiveInformation];
-                [MMProgressHUD dismissWithSuccess:@"Saved!" title:@"Success"];
+            if ([DiveOfflineModeManager sharedManager].isOffline) {
+                NSDictionary *dic = @{kRequestKey: requestURLStr,
+                                      kRequestParamKey : params
+                                      };
+                [[DiveOfflineModeManager sharedManager] diveEdit:dic];
                 
-                if (self.delegate && [self.delegate respondsToSelector:@selector(diveEditFinish:)]) {
-                    [self.delegate diveEditFinish:diveInformation];
-                }
-
-                [self dismissViewControllerAnimated:YES completion:^{
+                [self updateDiveSuccess];
+                
+            }
+            else {
+                AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+                [manager POST:requestURLStr parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                    NSLog(@"%@", responseObject);
+                    
+                    [[DiveOfflineModeManager sharedManager] writeOneDiveInformation:responseObject overwrite:YES];
+                    
+                    [self updateDiveSuccess];
+                    
+                } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                    NSLog(@"error : %@", error);
+                    
+                    [MMProgressHUD dismissWithSuccess:@"Failure" title:@"Update"];
+                    
                 }];
-                
-            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                NSLog(@"error : %@", error);
-                
-                [MMProgressHUD dismissWithSuccess:@"Failure" title:@"Update"];
-                
-            }];
+
+            }
 
         }
         
@@ -338,34 +393,47 @@
 
 }
 
-
 - (void) updateDiveInformation
 {
     diveInformation.date = lblDate.text;
     diveInformation.time = lblTime.text;
     
-    if (diveLengthUnit == 0) {
-        float depth = [txtDepth.text floatValue] * 0.3048f;
-        diveInformation.maxDepth = [NSString stringWithFormat:@"%f", depth];
-    } else {
-        diveInformation.maxDepth = txtDepth.text;
-    }
+    diveInformation.maxDepth = [DiveInformation unitOfLengthWithValue:txtDepth.text
+                                                          defaultUnit:(diveLengthUnit == 0 ? @"ft" : @"m")
+                                                             showUnit:NO];
     
-    diveInformation.duration = txtDuration.text;
-    diveInformation.weight.weight = txtWeight.text;
-    diveInformation.number = txtDiveNumber.text;
-    diveInformation.tripName = txtTripName.text;
-    diveInformation.visibility = lblVisibility.text;
-    diveInformation.current = lblCurrent.text;
-    diveInformation.temp.surface = txtSurface.text;
-    diveInformation.temp.bottom = txtBottom.text;
-    diveInformation.altitude = txtAltitude.text;
-    diveInformation.water = lblWater.text;
-    diveInformation.privacy = (schPublic.isOn ? @"0" : @"1");
-    diveInformation.note    = txtviewNotes.text;
+    diveInformation.duration        = txtDuration.text;
+    diveInformation.weight.weight   = txtWeight.text;
+    diveInformation.weight.unit     = (diveLengthUnit == 0 ? @"lbs" : @"kg");
+    diveInformation.number          = txtDiveNumber.text;
+    diveInformation.tripName        = txtTripName.text;
+    diveInformation.visibility      = lblVisibility.text;
+    diveInformation.current         = lblCurrent.text;
+    diveInformation.temp.surface    = txtSurface.text;
+    diveInformation.temp.surfaceUnit = (diveLengthUnit == 0 ? @"F" : @"C");
+    diveInformation.temp.bottom     = txtBottom.text;
+    diveInformation.temp.bottomUnit = (diveLengthUnit == 0 ? @"F" : @"C");
+    diveInformation.altitude        = txtAltitude.text;
+    diveInformation.water           = lblWater.text;
+    diveInformation.privacy         = (schPublic.isOn ? @"0" : @"1");
+    diveInformation.note            = txtviewNotes.text;
     if (selectedSpot) {
         diveInformation.spotInfo = selectedSpot.spotInfo;
     }
+}
+
+- (void) updateDiveSuccess
+{
+    [self updateDiveInformation];
+    [MMProgressHUD dismissWithSuccess:@"Saved!" title:@"Success"];
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(diveEditFinish:)]) {
+        [self.delegate diveEditFinish:diveInformation];
+    }
+    
+    [self dismissViewControllerAnimated:YES completion:^{
+    }];
+
 }
 
 - (void) createDiveData
@@ -374,14 +442,21 @@
     
     [updateParams setObject:[NSString stringWithFormat:@"%@T%@Z", lblDate.text, lblTime.text] forKey:@"time_in"];
     
-    if (txtDepth.text.length > 0)
-        [updateParams setObject:txtDepth.text forKey:@"maxdepth"];
+        
+    // max depth
+    if (txtDepth.text.length > 0) {
+        [updateParams setObject:[DiveInformation unitOfLengthWithValue:txtDepth.text
+                                                           defaultUnit:(diveLengthUnit == 0 ? @"ft" : @"m")
+                                                              showUnit:NO]
+                         forKey:@"maxdepth"];
+        [updateParams setObject:(diveLengthUnit == 0 ? @"ft" : @"m") forKey:@"maxdepth_unit"];
+    }
     else {
         [[[UIAlertView alloc] initWithTitle:nil message:@"Please enter value of Max Depth." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
         return;
     }
-        
     
+    // duration
     if (txtDuration.text.length > 0)
         [updateParams setObject:txtDuration.text forKey:@"duration"];
     else {
@@ -389,42 +464,71 @@
         return;
     }
     
-    
+    // weight
     if (txtWeight.text.length > 0)
-        [updateParams setObject:txtWeight.text forKey:@"weights"];
-
+    {
+        [updateParams setObject:[DiveInformation unitOfWeightWithValue:txtWeight.text
+                                                           defaultUnit:(diveLengthUnit == 0 ? @"lbs" : @"kg")
+                                                              showUnit:NO]
+                         forKey:@"weights"];
+        [updateParams setObject:(diveLengthUnit == 0 ? @"lbs" : @"kg") forKey:@"weights_unit"];
+    }
+    
+    // dive number
     if (txtDiveNumber.text.length > 0)
         [updateParams setObject:txtDiveNumber.text forKey:@"number"];
-
+    
+    // dive trip name
     if (txtTripName.text.length > 0)
         [updateParams setObject:txtTripName.text forKey:@"trip_name"];
-
+    
+    // visibility
     if (lblVisibility.text.length > 0)
         [updateParams setObject:[lblVisibility.text lowercaseString] forKey:@"visibility"];
-
+    
+    // current
     if (lblCurrent.text.length > 0)
-        [updateParams setObject:[lblVisibility.text lowercaseString] forKey:@"current"];
+        [updateParams setObject:[lblCurrent.text    lowercaseString] forKey:@"current"];
 
-    if (txtSurface.text.length > 0)
-        [updateParams setObject:txtSurface.text forKey:@"temp_surface"];
-
-    if (txtBottom.text.length > 0)
-        [updateParams setObject:txtBottom.text forKey:@"temp_bottom"];
-
+    
+    // surface temporature
+    if (txtSurface.text.length > 0) {
+        [updateParams setObject:[DiveInformation unitOfTempWithValue:txtSurface.text
+                                                         defaultUnit:(diveLengthUnit == 0 ? @"F" : @"C")
+                                                            showUnit:NO]
+                         forKey:@"temp_surface"];
+        [updateParams setObject:(diveLengthUnit == 0 ? @"F" : @"C") forKey:@"temp_surface_unit"];
+    }
+    
+    // bottom temporature
+    if (txtBottom.text.length > 0) {
+        [updateParams setObject:[DiveInformation unitOfTempWithValue:txtBottom.text
+                                                         defaultUnit:(diveLengthUnit == 0 ? @"F" : @"C")
+                                                            showUnit:NO]
+                         forKey:@"temp_bottom"];
+        [updateParams setObject:(diveLengthUnit == 0 ? @"F" : @"C") forKey:@"temp_bottom_unit"];
+    }
+    
+    // altitude
     if (txtAltitude.text.length > 0)
         [updateParams setObject:txtAltitude.text forKey:@"altitude"];
-
-    if (txtviewNotes.text.length > 0)
-        [updateParams setObject:txtviewNotes.text forKey:@"notes"];
-
+    
+    // water
     if (lblWater.text.length > 0)
         [updateParams setObject:[lblWater.text lowercaseString] forKey:@"water"];
-
+    
+    // public
     [updateParams setObject:(schPublic.isOn ? @"1" : @"0") forKey:@"privacy"];
-
+    
+    // dive note
+    if (txtviewNotes.text.length > 0)
+        [updateParams setObject:txtviewNotes.text forKey:@"notes"];
+    
+    // dive spot information
     if (selectedSpot) {
         [updateParams setObject:@{@"id": selectedSpot.ID} forKey:@"spot"];
     }
+
     
     if (updateParams.count > 0) {
         [updateParams setObject:appManager.loginResult.user.ID forKey:@"user_id"];
@@ -452,38 +556,73 @@
             
             NSString *requestURLStr = [NSString stringWithFormat:@"%@/api/V2/dive", SERVER_URL];
             
-            AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-            
-            [manager POST:requestURLStr parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                NSLog(@"%@", responseObject);
-                if (responseObject && [responseObject isKindOfClass:[NSDictionary class]]) {
-                    if ([[responseObject objectForKey:@"success"] boolValue]) {
-                        NSDictionary *diveData = [responseObject objectForKey:@"result"];
-                        NSString *diveID = getStringValue([diveData objectForKey:@"id"]);
-                        [appManager.loadedDives setObject:responseObject forKey:diveID];
-                        
-                        DiveInformation *diveInfo = [[DiveInformation alloc] initWithDictionary:[responseObject objectForKey:@"result"]];
-                        if (self.delegate && [self.delegate respondsToSelector:@selector(diveEditFinish:)]) {
-                            [self.delegate diveEditFinish:diveInfo];
-                        }
-                        [MMProgressHUD dismissWithSuccess:@"Saved!" title:@"Success"];
-                    }
-                } else {
-                    [MMProgressHUD dismissWithSuccess:@"Failure" title:@"Create New Dive"];
-                }
+            if ([DiveOfflineModeManager sharedManager].isOffline) {
+                NSDictionary *dic = @{kRequestKey: requestURLStr,
+                                      kRequestParamKey : params
+                                      };
+                [[DiveOfflineModeManager sharedManager] diveEdit:dic];
                 
-//                [self updateDiveInformation];
+                NSDictionary *responseObject = [self createVirtualServerResult];
+//                DiveInformation *diveInfo = [[DiveInformation alloc] initWithDictionary:[responseObject objectForKey:@"result"]];
+                
+                [[DiveOfflineModeManager sharedManager] createNewDive:responseObject];
+                
+                
+                [self createDiveSuccess:responseObject];
                 
                 [self dismissViewControllerAnimated:YES completion:^{
                 }];
+
+
+//                DiveInformation *diveInfo = [[DiveInformation alloc] init];
+//                diveInfo.ID   = [NSString stringWithFormat:@"%.0f", [[NSDate date] timeIntervalSince1970]];
+//                diveInfo.date = lblDate.text;
+//                diveInfo.time = lblTime.text;
+//                diveInfo.maxDepth = txtDepth.text;
+//                diveInfo.duration = txtDuration.text;
+//                diveInfo.weight.weight = txtWeight.text;
+//                diveInfo.number        = txtDiveNumber.text;
+//                diveInfo.tripName      = txtTripName.text;
+//                diveInfo.visibility    = lblVisibility.text;
+//                diveInfo.current       = lblCurrent.text;
+//                diveInfo.temp.surface  = txtSurface.text;
+//                diveInfo.temp.bottom   = txtBottom.text;
+//                diveInfo.altitude      = txtAltitude.text;
+//                diveInfo.note          = txtviewNotes.text;
+//                diveInfo.water         = lblWater.text;
+//                diveInfo.privacy       = (schPublic.isOn ? @"1" : @"0");
+//                
                 
-            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                NSLog(@"error : %@", error);
+            }
+            else {
+                AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
                 
-                [MMProgressHUD dismissWithSuccess:@"Failure" title:@"Create New Dive"];
-                
-            }];
-            
+                [manager POST:requestURLStr parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                    NSLog(@"%@", responseObject);
+                    if (responseObject && [responseObject isKindOfClass:[NSDictionary class]]) {
+                        if ([[responseObject objectForKey:@"success"] boolValue]) {
+                            
+                            [[DiveOfflineModeManager sharedManager] writeOneDiveInformation:responseObject overwrite:YES];
+
+                            [self createDiveSuccess:responseObject];
+                            
+                        }
+                    } else {
+                        [MMProgressHUD dismissWithSuccess:@"Failure" title:@"Create New Dive"];
+                    }
+                    
+    //                [self updateDiveInformation];
+                    
+                    [self dismissViewControllerAnimated:YES completion:^{
+                    }];
+                    
+                } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                    NSLog(@"error : %@", error);
+                    
+                    [MMProgressHUD dismissWithSuccess:@"Failure" title:@"Create New Dive"];
+                    
+                }];
+            }
         }
         
     } else {
@@ -493,6 +632,64 @@
 
 }
 
+- (void) createDiveSuccess :(NSDictionary *)responseObject
+{
+
+    NSDictionary *diveData = [responseObject objectForKey:@"result"];
+    NSString *diveID = getStringValue([diveData objectForKey:@"id"]);
+    [appManager.loadedDives setObject:responseObject forKey:diveID];
+    
+    DiveInformation *diveInfo = [[DiveInformation alloc] initWithDictionary:[responseObject objectForKey:@"result"]];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(diveEditFinish:)]) {
+        [self.delegate diveEditFinish:diveInfo];
+    }
+    [MMProgressHUD dismissWithSuccess:@"Saved!" title:@"Success"];
+
+}
+
+- (NSDictionary *) createVirtualServerResult
+{
+    NSDictionary *result = @{@"error"  : [NSArray array],
+                             @"result" : @{@"altitude"      : txtAltitude.text,
+                                           @"current"       : lblCurrent.text,
+                                           @"date"          : lblDate.text,
+                                           @"diveshop"      : [NSNull null],
+                                           @"divetype"      : [NSArray array],
+                                           @"duration"      : txtDuration.text,
+                                           @"id"            : [NSString stringWithFormat:@"%.0f", [[NSDate date] timeIntervalSince1970]],
+                                           @"lat"           : @"0",
+                                           @"lng"           : @"0",
+                                           @"maxdepth"      : txtDepth.text,
+                                           @"maxdepth_unit" : (diveLengthUnit == 0 ? @"ft" : @"m"),
+                                           @"maxdepth_value" : txtDepth.text,
+                                           @"notes"         : txtviewNotes.text,
+                                           @"privacy"       : (schPublic.isOn ? @"1" : @"0"),
+                                           @"shaken_id"     : appManager.loginResult.user.shakenID,
+                                           @"shop"          : [NSNull null],
+                                           @"shop_id"       : [NSNull null],
+                                           @"spot_id"       : @"1",
+                                           @"temp_bottom"   : txtBottom.text,
+                                           @"temp_bottom_unit" : (diveLengthUnit == 0 ? @"F" : @"C"),
+                                           @"temp_bottom_value"     : txtBottom.text,
+                                           @"temp_surface"  : txtSurface.text,
+                                           @"temp_surface_value"    : txtSurface.text,
+                                           @"temp_surface_unit"     : (diveLengthUnit == 0 ? @"F" : @"C"),
+                                           @"thumbnail_image_url"   : @"http://stage.diveboard.com/map_images/map_1.jpg?v=1394539383",
+                                           @"thumbnail_profile_url" : [NSNull null],
+                                           @"time"          : lblTime.text,
+                                           @"trip_name"     : txtTripName.text,
+                                           @"user_id"       : appManager.loginResult.user.ID,
+                                           @"visibility"    : lblVisibility.text,
+                                           @"water"         : lblWater.text,
+                                           @"weights"       : txtWeight.text,
+                                           @"weights_unit"  : (diveLengthUnit == 0 ? @"lbs" : @"kg"),
+                                           @"weights_value" : txtWeight.text,
+                                           },
+                             @"success" : @"1",
+                             @"user_authentified" : @"1",
+                             };
+    return result;
+}
 
 - (IBAction)tapButtonAction:(id)sender {
     [self tapButtonTouchAction:sender];
@@ -728,7 +925,7 @@
     }
     SpotSearchResult *result = [spotSearchResultArray objectAtIndex:indexPath.row];
     [cell.textLabel setText:result.spotInfo.name];
-    [cell.detailTextLabel setText:[NSString stringWithFormat:@"%@, %@", result.spotInfo.locationName, result.spotInfo.counttyName]];
+    [cell.detailTextLabel setText:[NSString stringWithFormat:@"%@, %@", result.spotInfo.locationName, result.spotInfo.countryName]];
     return cell;
 }
 

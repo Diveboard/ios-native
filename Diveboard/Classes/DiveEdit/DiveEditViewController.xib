@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DiveEditViewController">
@@ -13,15 +13,19 @@
                 <outlet property="btnNotes" destination="YMi-ml-7so" id="7RY-oG-mpf"/>
                 <outlet property="btnSpotDelete" destination="Z92-jy-yui" id="MXi-30-vdj"/>
                 <outlet property="btnSpots" destination="u7c-fD-44E" id="JDo-mC-0OC"/>
+                <outlet property="lblAltitudeUnit" destination="Tem-ZR-CU8" id="eXj-xQ-QQ3"/>
+                <outlet property="lblBottomUnit" destination="hQg-eW-Chn" id="f3m-RD-jrG"/>
                 <outlet property="lblCurrent" destination="Rk9-ps-vuV" id="32c-zg-JLt"/>
                 <outlet property="lblCurrentSpot" destination="GHy-cR-Hm5" id="uIc-lc-NJo"/>
                 <outlet property="lblDate" destination="tpV-OI-REK" id="Jpd-Pb-j8l"/>
                 <outlet property="lblMaxdepthUnit" destination="FjK-83-OgY" id="Jre-Vz-A6b"/>
                 <outlet property="lblNoResult" destination="ncc-vf-fH3" id="mDD-Tk-l2K"/>
+                <outlet property="lblSurfaceUnit" destination="XDX-fg-jth" id="pIj-dG-8gg"/>
                 <outlet property="lblTime" destination="DBK-Pq-3w2" id="uas-TU-xhE"/>
                 <outlet property="lblTitle" destination="g3N-HV-pig" id="kyo-BF-cSC"/>
                 <outlet property="lblVisibility" destination="FHd-fd-3A1" id="T7y-XL-aWe"/>
                 <outlet property="lblWater" destination="H6z-Qg-qt4" id="CEj-5o-bHc"/>
+                <outlet property="lblWeightUnit" destination="OTl-QH-NHs" id="znO-JP-R9F"/>
                 <outlet property="schPublic" destination="Wpa-Kl-ohQ" id="Mxl-31-ovQ"/>
                 <outlet property="scrviewMain" destination="rvJ-4L-vxz" id="6LB-GG-C4m"/>
                 <outlet property="tblSpotList" destination="YAG-Ta-ob5" id="acq-XT-fnB"/>
@@ -461,7 +465,7 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="°C" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="XDX-fg-jth">
-                            <rect key="frame" x="213" y="11" width="64" height="20"/>
+                            <rect key="frame" x="227" y="11" width="50" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -471,7 +475,7 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                         <textField opaque="NO" clipsSubviews="YES" tag="405" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="00" minimumFontSize="17" id="3b8-Vu-SkW">
-                            <rect key="frame" x="174" y="12" width="31" height="20"/>
+                            <rect key="frame" x="174" y="12" width="45" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="next"/>
@@ -499,7 +503,7 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="°C" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hQg-eW-Chn">
-                            <rect key="frame" x="213" y="11" width="64" height="20"/>
+                            <rect key="frame" x="227" y="11" width="50" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -509,7 +513,7 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                         <textField opaque="NO" clipsSubviews="YES" tag="406" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="00" minimumFontSize="17" id="UYP-VG-aAm">
-                            <rect key="frame" x="174" y="11" width="39" height="20"/>
+                            <rect key="frame" x="174" y="11" width="45" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="next"/>

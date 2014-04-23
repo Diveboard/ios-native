@@ -13,15 +13,19 @@
                 <outlet property="btnNotes" destination="ggV-tK-KlF" id="KON-a9-4YB"/>
                 <outlet property="btnSpotDelete" destination="S7B-4U-uds" id="Zic-8w-G7i"/>
                 <outlet property="btnSpots" destination="Uph-Ht-qVn" id="HTa-dn-tYn"/>
+                <outlet property="lblAltitudeUnit" destination="9vk-ci-DS3" id="CzF-Ar-bUc"/>
+                <outlet property="lblBottomUnit" destination="CZy-Yp-To5" id="Ejf-6L-K49"/>
                 <outlet property="lblCurrent" destination="FkJ-2i-6nc" id="OFK-TQ-akt"/>
                 <outlet property="lblCurrentSpot" destination="pNk-fK-HS7" id="t9J-TK-uop"/>
                 <outlet property="lblDate" destination="KFG-Zb-JJE" id="KHB-hJ-B8j"/>
                 <outlet property="lblMaxdepthUnit" destination="wxX-b1-h4M" id="4pW-ca-GKH"/>
                 <outlet property="lblNoResult" destination="Vn7-pQ-HGZ" id="EzO-QP-q57"/>
+                <outlet property="lblSurfaceUnit" destination="9OX-lD-Mf1" id="RDC-Zw-swg"/>
                 <outlet property="lblTime" destination="CRg-dK-h6n" id="DTd-RR-FDx"/>
                 <outlet property="lblTitle" destination="xSw-P2-2jR" id="zKh-RO-ZPm"/>
                 <outlet property="lblVisibility" destination="oF5-u4-a8Z" id="Cb5-xC-H1m"/>
                 <outlet property="lblWater" destination="fDC-tf-9l8" id="agv-ID-HwW"/>
+                <outlet property="lblWeightUnit" destination="NaT-IL-PVh" id="ovq-9Q-k2z"/>
                 <outlet property="schPublic" destination="9Bn-hN-kCG" id="BCo-Ae-6yP"/>
                 <outlet property="scrviewMain" destination="O4v-2r-Koc" id="H0p-6O-xg1"/>
                 <outlet property="tblSpotList" destination="5ke-2l-e9N" id="Z7I-ph-Q5q"/>
