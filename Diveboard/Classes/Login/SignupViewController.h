@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <BugSense-iOS/BugSenseController.h>
 
 #import "MBProgressHUD.h"
 #import "TPKeyboardAvoidingScrollView.h"

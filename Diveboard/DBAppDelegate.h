@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <FacebookSDK/FacebookSDK.h>
+#import <BugSense-iOS/BugSenseController.h>
+
 
 
 @interface DBAppDelegate : UIResponder <UIApplicationDelegate>

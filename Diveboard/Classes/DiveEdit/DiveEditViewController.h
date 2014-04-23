@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <BugSense-iOS/BugSenseController.h>
+
 #import "TPKeyboardAvoidingScrollView.h"
 #import "DiveInformation.h"
 #import "TKDatePickerView.h"

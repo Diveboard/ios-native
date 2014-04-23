@@ -24,7 +24,13 @@
     
     [DiveOfflineModeManager sharedManager];
     
-    
+    [BugSenseController sharedControllerWithBugSenseAPIKey:@"6ab17859"
+                                            userDictionary:nil
+                                            sendImmediately:YES];
+
+    [BugSenseController setLogMessagesCount:10];
+    [BugSenseController setLogMessagesLevel:8];
+
     LoginViewController *loginVC;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         loginVC = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:Nil];

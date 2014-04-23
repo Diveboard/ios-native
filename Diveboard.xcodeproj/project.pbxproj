@@ -168,6 +168,9 @@
 		3CF3378318BD48FE001D2DF0 /* DiveCountlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF3378218BD48FE001D2DF0 /* DiveCountlineView.m */; };
 		3CF3378518BD591F001D2DF0 /* DiveCountlineView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3CF3378418BD591F001D2DF0 /* DiveCountlineView.xib */; };
 		3CF3780718DD22CD00D832B3 /* DiveEditViewController-ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3CF3780618DD22CD00D832B3 /* DiveEditViewController-ipad.xib */; };
+		FAFA872318F4035300DDDDEE /* BugSense-iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAFA872218F4035300DDDDEE /* BugSense-iOS.framework */; };
+		FAFA872518F4036600DDDDEE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAFA872418F4036600DDDDEE /* SystemConfiguration.framework */; };
+		FAFA872718F4037B00DDDDEE /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FAFA872618F4037B00DDDDEE /* libz.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -412,6 +415,9 @@
 		3CF3378218BD48FE001D2DF0 /* DiveCountlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiveCountlineView.m; sourceTree = "<group>"; };
 		3CF3378418BD591F001D2DF0 /* DiveCountlineView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiveCountlineView.xib; sourceTree = "<group>"; };
 		3CF3780618DD22CD00D832B3 /* DiveEditViewController-ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "DiveEditViewController-ipad.xib"; sourceTree = "<group>"; };
+		FAFA872218F4035300DDDDEE /* BugSense-iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = "BugSense-iOS.framework"; sourceTree = "<group>"; };
+		FAFA872418F4036600DDDDEE /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		FAFA872618F4037B00DDDDEE /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -419,6 +425,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAFA872718F4037B00DDDDEE /* libz.dylib in Frameworks */,
+				FAFA872518F4036600DDDDEE /* SystemConfiguration.framework in Frameworks */,
+				FAFA872318F4035300DDDDEE /* BugSense-iOS.framework in Frameworks */,
 				3CD100E818C996A90001B625 /* MessageUI.framework in Frameworks */,
 				3CB7A19118C706FF008B66BF /* CoreLocation.framework in Frameworks */,
 				3CCD102718C5B08B001AD995 /* MapKit.framework in Frameworks */,
@@ -608,6 +617,9 @@
 		3CE0474018BCB83100FA47FF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FAFA872618F4037B00DDDDEE /* libz.dylib */,
+				FAFA872418F4036600DDDDEE /* SystemConfiguration.framework */,
+				FAFA872218F4035300DDDDEE /* BugSense-iOS.framework */,
 				3CD100E718C996A90001B625 /* MessageUI.framework */,
 				3CB7A19018C706FF008B66BF /* CoreLocation.framework */,
 				3CCD102618C5B08B001AD995 /* MapKit.framework */,
@@ -1256,8 +1268,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Alexander CASASSOVICI (AG6FREL88W)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Alexander CASASSOVICI (AG6FREL88W)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1275,7 +1287,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "F9396F8A-A03A-41C0-BD16-D318ADC8B5C8";
+				PROVISIONING_PROFILE = "DCE51938-8EED-40E8-8E28-7554DD0E8738";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1318,18 +1330,20 @@
 		3CE0477118BCB83100FA47FF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Alexander CASASSOVICI (AG6FREL88W)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Alexander CASASSOVICI (AG6FREL88W)";
+				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					$SRCROOT/Diveboard/Lib,
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Diveboard/Diveboard-Prefix.pch";
 				INFOPLIST_FILE = "Diveboard/Diveboard-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "2E91F13D-E8F1-417E-B6A0-D67A6FD8D244";
+				PROVISIONING_PROFILE = "DCE51938-8EED-40E8-8E28-7554DD0E8738";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1343,6 +1357,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					$SRCROOT/Diveboard/Lib,
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Diveboard/Diveboard-Prefix.pch";

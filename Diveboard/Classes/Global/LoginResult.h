@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <BugSense-iOS/BugSenseController.h>
+
 
 //@class DanData;
 //@class QualificationElemet;

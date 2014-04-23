@@ -8,7 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import <FacebookSDK/FacebookSDK.h>
+#import <BugSense-iOS/BugSenseController.h>
 #import "LoginResult.h"
+
+
 
 
 #define AUTH_TOKEN              @"9P+7PrBkhMBfrYrqk03g362xiwe8ETL0bJCubq7V8Bs="

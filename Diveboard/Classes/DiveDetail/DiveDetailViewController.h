@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
+#import <BugSense-iOS/BugSenseController.h>
+
 #import "UIUnderlineButton.h"
 #import "DiveInformation.h"
 #import "AsyncUIImageView.h"

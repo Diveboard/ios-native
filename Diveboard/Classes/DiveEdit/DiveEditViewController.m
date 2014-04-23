@@ -69,7 +69,6 @@
 {
     [self setRelayout];
     [self tapButtonTouchAction:(btnDetails)];
-
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration

@@ -255,13 +255,13 @@
     if (diveInformation.note.length > 0) {
         [vdlblNoteContent setText:diveInformation.note];
     } else {
-        [vdlblNoteContent setText:@"No Note for thid dive."];
+        [vdlblNoteContent setText:@"No notes for this dive."];
     }
 
     if (!btnViewDiveBrowser) {
         btnViewDiveBrowser = [UIUnderlineButton underlineButton];
         [btnViewDiveBrowser setBackgroundColor:[UIColor clearColor]];
-        [btnViewDiveBrowser setTitle:@"View dive in Brower" forState:(UIControlStateNormal)];
+        [btnViewDiveBrowser setTitle:@"View dive in Browser" forState:(UIControlStateNormal)];
         [btnViewDiveBrowser setTitleColor:[UIColor blueColor] forState:(UIControlStateNormal)];
         [btnViewDiveBrowser.titleLabel setFont:[UIFont fontWithName:kDefaultFontName size:12.0f]];
         [btnViewDiveBrowser addTarget:self action:@selector(openBrowser) forControlEvents:UIControlEventTouchUpInside];

@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <BugSense-iOS/BugSenseController.h>
+
 
 
 #pragma mark - DiveSpotInfo
