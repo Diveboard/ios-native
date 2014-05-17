@@ -69,6 +69,7 @@
 {
     [self setRelayout];
     [self tapButtonTouchAction:(btnDetails)];
+
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -113,12 +114,12 @@
     UITapGestureRecognizer *waterTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(waterLabelTapAction:)];
     [lblWater addGestureRecognizer:waterTap];
     
-    btnDetails.layer.borderColor = [UIColor whiteColor].CGColor;
-    btnDetails.layer.borderWidth = 1.0f;
-    btnNotes.layer.borderColor = [UIColor whiteColor].CGColor;
-    btnNotes.layer.borderWidth = 1.0f;
-    btnSpots.layer.borderColor = [UIColor whiteColor].CGColor;
-    btnSpots.layer.borderWidth = 1.0f;
+//    btnDetails.layer.borderColor = [UIColor whiteColor].CGColor;
+//    btnDetails.layer.borderWidth = 1.0f;
+//    btnNotes.layer.borderColor = [UIColor whiteColor].CGColor;
+//    btnNotes.layer.borderWidth = 1.0f;
+//    btnSpots.layer.borderColor = [UIColor whiteColor].CGColor;
+//    btnSpots.layer.borderWidth = 1.0f;
     
     if (diveLengthUnit == 0) {
         [lblMaxdepthUnit setText:@"FEET"];
@@ -594,6 +595,9 @@
                 
             }
             else {
+                
+                
+                
                 AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
                 
                 [manager POST:requestURLStr parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -618,7 +622,23 @@
                 } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                     NSLog(@"error : %@", error);
                     
-                    [MMProgressHUD dismissWithSuccess:@"Failure" title:@"Create New Dive"];
+                    [DiveOfflineModeManager sharedManager].isOffline = YES;
+                    
+                    NSDictionary *dic = @{kRequestKey: requestURLStr,
+                                          kRequestParamKey : params
+                                          };
+                    [[DiveOfflineModeManager sharedManager] diveEdit:dic];
+                    
+                    NSDictionary *responseObject = [self createVirtualServerResult];
+                    [[DiveOfflineModeManager sharedManager] createNewDive:responseObject];
+                    
+                    [self createDiveSuccess:responseObject];
+                    
+                    [self dismissViewControllerAnimated:YES completion:^{
+                    }];
+
+                    
+//                    	[MMProgressHUD dismissWithSuccess:@"Failure" title:@"Create New Dive"];
                     
                 }];
             }

@@ -36,6 +36,9 @@ typedef enum _diveUpdateType
 // if network is offline
 @property (nonatomic)               BOOL isOffline;
 
+// if network is online
+//@property (nonatomic)               BOOL isOnline;
+
 
 // write login result to file
 - (void) writeLoginResultData:(NSDictionary *)data;

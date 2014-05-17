@@ -10,7 +10,7 @@
 #define kLoginResultFilename     @"loginResult.dat"
 #define kOneDiveFilename(diveId) [NSString stringWithFormat:@"%@/diveInfo.dat", diveId]
 #define kUpdatedDiveFilename     @"updateDive.dat"
-
+#define kCheckingOnlineReqestTime   240 // seconds
 
 #import "DiveOfflineModeManager.h"
 #import "DiveInformation.h"
@@ -20,6 +20,7 @@
 @interface DiveOfflineModeManager()
 {
     NSFileManager *fileManager;
+    NSTimer *checkingTimer;
 }
 
 @end
@@ -40,17 +41,103 @@ static DiveOfflineModeManager *_sharedManager;
 {
     self = [super init];
     if (self) {
-        self.isOffline      = NO;
-        self.isAvailable    = NO;
-        self.isUpdated      = NO;
+        
+        _isOffline      = NO;
+        _isAvailable    = NO;
+        _isUpdated      = NO;
+        
         fileManager = [NSFileManager defaultManager];
         [self checkLocalDataExisting];
         [self checkUpdateDive];
         
         NSString *dirName = [self getFullpathFilename:@"images/"];
         [self createDirectory:dirName];
+        
+        [self startCheckingInternetConnection];
+        
     }
     return self;
+}
+
+- (void)setIsOffline:(BOOL)isOffline
+{
+    
+    if (isOffline) {
+        _isOffline = isOffline;
+        checkingTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckingOnlineReqestTime
+                                                         target:self
+                                                       selector:@selector(checkingRequestSend:)
+                                                       userInfo:nil
+                                                        repeats:YES];
+        
+    }
+    else {
+        [checkingTimer invalidate];
+        checkingTimer = nil;
+        
+        if ([self checkUpdateDive]) {
+            [self updateLocalDiveToServer:^{
+                _isOffline = isOffline;
+                
+            }];
+        }
+        else {
+            _isOffline = isOffline;
+        }
+    }
+}
+
+- (void) checkingRequestSend:(NSTimer *)dt
+{
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
+    [manager         GET:SERVER_URL
+              parameters:nil
+                 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                     
+        self.isOffline = NO;
+                     
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        NSLog(@"checking online timer : offline yet --------");
+        
+    }];
+    
+}
+
+- (void) startCheckingInternetConnection
+{
+    AFNetworkReachabilityManager *reachablilityManager = [AFNetworkReachabilityManager sharedManager];
+    
+    [reachablilityManager startMonitoring];
+    
+    [reachablilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        switch (status) {
+            case AFNetworkReachabilityStatusNotReachable:
+                NSLog(@"AFNetworkReachability Status NotReachable");
+//                reachable = NO;
+                _isOffline = YES;
+                break;
+            case AFNetworkReachabilityStatusReachableViaWiFi:
+                NSLog(@"AFNetworkReachability Status Reachable Via WiFi");
+                _isOffline = NO;
+//                reachable = YES;
+                break;
+            case AFNetworkReachabilityStatusReachableViaWWAN:
+                NSLog(@"AFNetworkReachability Status Reachable Via WWAN");
+                _isOffline = NO;
+//                reachable = YES;
+                break;
+            default:
+                NSLog(@"AFNetworkReachability   Unkown network status");
+                _isOffline = YES;
+//                reachable = NO;
+                break;
+        }
+    }];
 }
 
 - (BOOL) checkLocalDataExisting

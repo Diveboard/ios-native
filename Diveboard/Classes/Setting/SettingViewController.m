@@ -38,6 +38,9 @@
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
     selectedIndex = [ud objectForKey:kDiveboardUnit] == nil ? 1 : [[ud objectForKey:kDiveboardUnit] intValue];
     
+    [lblVersionNumber setText:[NSString stringWithFormat:@"Application Version : %@",
+                               [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]]];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated

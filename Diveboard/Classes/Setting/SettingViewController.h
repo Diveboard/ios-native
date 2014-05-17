@@ -16,7 +16,7 @@
 {
     IBOutlet UIScrollView *scrview;
     IBOutlet UIButton *btnUnit;
-    
+    IBOutlet UILabel  *lblVersionNumber;
 }
 
 @property (nonatomic, strong) DiveListViewController *parent;
