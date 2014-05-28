@@ -43,6 +43,7 @@
     
     [lblVersionNumber setText:[NSString stringWithFormat:@"Application Version : %@",
                                [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]]];
+<<<<<<< HEAD
     AppManager *appManager = [AppManager sharedManager];
     
     // ############
@@ -70,6 +71,8 @@
 //    else {
 //        [btnAccessSudo setSelected:NO];
 //    }
+=======
+>>>>>>> 685ccbd31b49cbe284c2f1c0074f39fcac1849d8
 
 }
 

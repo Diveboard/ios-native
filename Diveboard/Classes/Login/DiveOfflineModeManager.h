@@ -36,9 +36,12 @@ typedef enum _diveUpdateType
 // if network is offline
 @property (nonatomic)               BOOL isOffline;
 
+<<<<<<< HEAD
 // pending request count
 @property (nonatomic, readonly)     int  pendingRequestCount;
 
+=======
+>>>>>>> 685ccbd31b49cbe284c2f1c0074f39fcac1849d8
 // if network is online
 //@property (nonatomic)               BOOL isOnline;
 
