@@ -226,7 +226,14 @@
             self.about          = getStringValue([data objectForKey:@"about"]);
             self.adAlbumID      = getStringValue([data objectForKey:@"ad_album_id"]);
             self.advertisements = ([data objectForKey:@"advertisements"]);
-            self.allDiveIDs     = [[NSMutableArray alloc] initWithArray:[data objectForKey:@"all_dive_ids"]];
+            
+            if ([data objectForKey:@"all_dive_ids"]) {
+                self.allDiveIDs     = [[NSMutableArray alloc] initWithArray:[data objectForKey:@"all_dive_ids"]];
+            }
+            else {
+                self.allDiveIDs = [[NSMutableArray alloc] init];
+            }
+            
             self.autoPublic     = getStringValue([data objectForKey:@"auto_public"]);
             self.city           = getStringValue([data objectForKey:@"city"]);
             self.class_         = getStringValue([data objectForKey:@"class"]);
@@ -247,7 +254,14 @@
             self.picture        = getStringValue([data objectForKey:@"picture"]);
             self.pictureLarge   = getStringValue([data objectForKey:@"picture_large"]);
             self.pictureSmall   = getStringValue([data objectForKey:@"picture_small"]);
-            self.publicDiveIDs  = [data objectForKey:@"public_dive_ids"];
+            
+            if ([data objectForKey:@"public_dive_ids"]) {
+                self.publicDiveIDs     = [[NSMutableArray alloc] initWithArray:[data objectForKey:@"public_dive_ids"]];
+            }
+            else {
+                self.publicDiveIDs = [[NSMutableArray alloc] init];
+            }
+
             self.publicNbDives  = [data objectForKey:@"public_nb_dives"];
             self.qualifications = [[Qualifications alloc] initWithDictionary:[data objectForKey:@"qualifications"]];
             self.quotaLimit     = getStringValue([data objectForKey:@"quota_limit"]);
@@ -258,6 +272,7 @@
             self.totalNbDives   = [data objectForKey:@"total_nb_dives"];
             self.userGears      = [[NSMutableArray alloc] init];
             self.vanityURL      = getStringValue([data objectForKey:@"vanity_url"]);
+            self.adminRight     = getStringValue([data objectForKey:@"admin_rights"]);
             
             NSArray *userGears  = [data objectForKey:@"user_gears"];
             for (NSDictionary *elem in userGears) {
@@ -267,6 +282,16 @@
         
     }
     return self;
+}
+
+- (NSMutableArray *)allDiveIDs
+{
+    if ([AppManager sharedManager].currentSudoID > 0) {
+        return _publicDiveIDs;
+    }
+    else {
+        return _allDiveIDs;
+    }
 }
 
 @end
@@ -294,6 +319,14 @@
 
 #pragma mark - LoginResult
 
+@interface LoginResult()
+{
+    UserInfomation *masterUser;
+    UserInfomation *sudoUser;
+}
+
+@end
+
 @implementation LoginResult
 
 - (id)initWithDictionary:(NSDictionary *)data;
@@ -307,10 +340,27 @@
             self.preferredUnits = [[UnitOfDive alloc] initWithDictionary:[data objectForKey:@"preferred_units"]];
             self.token       = getStringValue([data objectForKey:@"token"]);
             self.units       = [[UnitOfDive alloc] initWithDictionary:[data objectForKey:@"units"]];
-            self.user        = [[UserInfomation alloc] initWithDictionary:[data objectForKey:@"user"]];
+//            self.user        = [[UserInfomation alloc] initWithDictionary:[data objectForKey:@"user"]];
+            masterUser       = [[UserInfomation alloc] initWithDictionary:[data objectForKey:@"user"]];
         }
     }
     return self;
+}
+
+- (UserInfomation *)user{
+    if ([AppManager sharedManager].currentSudoID > 0) {
+        return sudoUser;
+    }
+    else {
+        return masterUser;
+    }
+}
+
+- (void)setUser:(UserInfomation *)user
+{
+    if ([AppManager sharedManager].currentSudoID > 0) {
+        sudoUser = user;
+    }
 }
 
 @end

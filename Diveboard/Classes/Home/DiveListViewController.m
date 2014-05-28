@@ -36,6 +36,7 @@
     
     UIInterfaceOrientation oOrientation;
     
+    NSMutableArray *preloadRequestManagers;
 }
 @end
 
@@ -67,8 +68,12 @@
     
     [self initMethod];
     
+    
     if (![DiveOfflineModeManager sharedManager].isOffline) {
+        
+        // if internet online, preload dives information from server ------
         [self startPreloadDiveData];
+        
     }
     
     
@@ -85,8 +90,6 @@
 
 - (void) initMethod
 {
-//    _lblBottomTitle.font = [UIFont fontWithName:kDefaultFontName size:10.0f];
-//    _lblCoordinate.font  = [UIFont fontWithName:kDefaultFontName size:18.0f];
     currentDiveIndex = -1;
     
     if (isPortrateScreen) {
@@ -111,24 +114,35 @@
     
 }
 
+
+#pragma mark - Preload each Dive Information from server
+
 - (void) startPreloadDiveData
 {
+    // get dive IDs from saved data in local database
     NSDictionary *tempData = [userDefault objectForKey:kLoadedDiveData(appManager.loginResult.user.ID)];
     if (tempData && tempData.count > 0) {
         appManager.loadedDives = [[NSMutableDictionary alloc] initWithDictionary:tempData];
-    } else {
+    }
+    else {
         appManager.loadedDives = [[NSMutableDictionary alloc] init];
     }
     
     preloadDiveDataIndex = 0;
     
-    [NSTimer scheduledTimerWithTimeInterval:3.0f target:self selector:@selector(preloadDiveData) userInfo:Nil repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:3.0f
+                                     target:self
+                                   selector:@selector(preloadDiveData)
+                                   userInfo:Nil
+                                    repeats:NO];
 
 }
 
 - (void) preloadDiveData
 {
+    // from max index - to index 0
     int tIndex = (appManager.loginResult.user.allDiveIDs.count - 1) - preloadDiveDataIndex;
+    
     if (tIndex >= 0 && tIndex < appManager.loginResult.user.allDiveIDs.count) {
         NSString *diveID = [appManager.loginResult.user.allDiveIDs objectAtIndex:tIndex];
         NSDictionary *diveData = [appManager.loadedDives objectForKey:diveID];
@@ -136,7 +150,11 @@
             // request
             [self requestDiveData:diveID];
         }
-        [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(preloadDiveData) userInfo:Nil repeats:NO];
+        [NSTimer scheduledTimerWithTimeInterval:1.0f
+                                         target:self
+                                       selector:@selector(preloadDiveData)
+                                       userInfo:Nil
+                                        repeats:NO];
 
     } else {
         
@@ -146,6 +164,10 @@
 
 - (void) requestDiveData:(NSString *)diveID
 {
+    if (!preloadRequestManagers) {
+        preloadRequestManagers = [[NSMutableArray alloc] init];
+    }
+    
     NSString *authToken = appManager.loginResult.token;
     
     NSString *requestURLString = [NSString stringWithFormat:@"%@/api/V2/dive/%@", SERVER_URL, diveID] ; //]@"77197"];
@@ -156,12 +178,19 @@
                              };
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
     [manager.requestSerializer setValue:@"multipart/form-data"  forHTTPHeaderField:@"Content-Type"];
     [manager.requestSerializer setValue:@"application/json"     forHTTPHeaderField:@"Accept"];
     [manager POST:requestURLString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
 //        NSLog(@"%@ preload one complete!---- \n %@", diveID, responseObject);
+        
         if (responseObject) {
+            
+            // write to file from response data
             [[DiveOfflineModeManager sharedManager] writeOneDiveInformation:responseObject overwrite:NO];
+            
+            // add response data (a dive information) to local database
             [appManager.loadedDives setObject:responseObject forKey:diveID];
         }
         
@@ -169,24 +198,33 @@
         NSLog(@"error : %@", error);
     }];
     
+    [preloadRequestManagers addObject:manager];
 }
+
+#pragma mark - Layout
 
 - (void)viewDidAppear:(BOOL)animated
 {
     if (isPortrateScreen) {
         NSLog(@"Portrait");
+        
+        // if current orientation is portrate and old orientations is landscape
         if (oOrientation == UIInterfaceOrientationLandscapeLeft) {
             [self setLayoutControllersToPortrate];
         }
         
     } else {
         NSLog(@"Landscape");
+        
+        // if current orientation is landscape and old orientations is portrate
         if (oOrientation == UIInterfaceOrientationPortrait) {
             [self setLayoutControllersToLandscape];
         }
     }
+    
 }
 
+// portrate layout
 - (void) setLayoutControllersToPortrate
 {
     oOrientation = UIInterfaceOrientationPortrait;
@@ -198,34 +236,42 @@
 //    [self.view addSubview:oneDiveView];
  
     diveCount = (int)appManager.loginResult.user.allDiveIDs.count;
+    if (diveCount == 0) {
+        [self.lblCoordinate setText:@"No dive found!"];
+    }
     if (rulerView) {
         [rulerView removeFromSuperview];
     }
     CGRect rect;
     
-    if (deviceSize.height == 568) {
+    if (deviceSize.height == 568) {  // iPhone 5
         rect = CGRectMake(0, 45, rootSize.width, 420);
-    } else if (deviceSize.height == 480) {
+    }
+    else if (deviceSize.height == 480) {  // iPhone 4
         rect = CGRectMake(0, 35, rootSize.width, 360);
-    } else {
+    }
+    else {  // iPad
         rect = CGRectMake(0, 90, rootSize.width, 700);
     }
     
+    // if iOS 7, move offset to top by 20 pixcel
     if (SYSTEM_VERSION_LESS_THAN(@"7.0"))  rect = CGRectOffset(rect, 0, -20);
     
     [self.scrviewMain setFrame:rect];
 
-    if (deviceSize.height == 568) {
+    if (deviceSize.height == 568) {  // iPhone 5
         rect = CGRectMake(rootSize.width * 0.0625f,
                           rootSize.height - 100,
                           rootSize.width * 0.875f,
                           50);
-    } else if (deviceSize.height == 480) {
+    }
+    else if (deviceSize.height == 480) { // iPhone 4
         rect = CGRectMake(rootSize.width * 0.0625f,
                           rootSize.height - 80,
                           rootSize.width * 0.875f,
                           50);
-    } else {
+    }
+    else {  // iPad
         rect = CGRectMake(rootSize.width * 0.13f,
                           rootSize.height - 180,
                           rootSize.width * 0.74f,
@@ -233,9 +279,12 @@
 
     }
     
+    // if iOS 7, move offset to top by 20 pixcel
     if (SYSTEM_VERSION_LESS_THAN(@"7.0"))  rect = CGRectOffset(rect, 0, -20);
     
-    if (appManager.loginResult.user.allDiveIDs.count > 0) {
+    if (diveCount > 0) {
+        
+        // ruler create
         rulerView = [[DiveCountlineView alloc] initWithFrame:rect];
         [rulerView setDelegate:self];
         [rulerView setMaxValue:diveCount];
@@ -246,39 +295,49 @@
         [rulerView setCurrentValue:(currentDiveIndex + 1)];
         [self.view addSubview:rulerView];
         
-        
+        // remove all dive views
         for (UIView *view in self.scrviewMain.subviews) {
             [view removeFromSuperview];
         }
         
-        
+        // add dive views
         for (int i = 0; i < diveCount; i ++) {
             if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
                 rect = CGRectMake(20 + (rootSize.width * i), 0, 280, self.scrviewMain.frame.size.height);
             } else {
                 rect = CGRectMake(100 + (rootSize.width * i), 0, 560, self.scrviewMain.frame.size.height);
             }
-            
+            NSString *diveID = [appManager.loginResult.user.allDiveIDs objectAtIndex:i];
             OneDiveView *diveView = [[OneDiveView alloc] initWithFrame:rect
-                                                                diveID:[appManager.loginResult.user.allDiveIDs objectAtIndex:i] rotate:(UIInterfaceOrientationPortrait)];
+                                                                diveID:diveID
+                                                                rotate:(UIInterfaceOrientationPortrait)];
             diveView.tag = (kDiveViewTag + i);
             diveView.diveIndex = i;
             diveView.delegate = self;
             [self.scrviewMain addSubview:diveView];
+            if (i == 0) {
+                [diveView setDiveID:diveID];
+            }
         }
         
         [self.scrviewMain setContentSize:CGSizeMake(rootSize.width * diveCount, rect.size.height)];
         
+        // scroll to lastest dive view
         [self.scrviewMain setContentOffset:CGPointMake(self.scrviewMain.frame.size.width * (currentDiveIndex), 0)
                                   animated:YES];
     }
     
     if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
-        [self.viewBottom setFrame:CGRectMake(0, self.view.frame.size.height - self.viewBottom.frame.size.height, self.view.frame.size.width, self.viewBottom.frame.size.height)];
+        // viewBottom is view of coordinate information and menu button
+        [self.viewBottom setFrame:CGRectMake(0,
+                                             self.view.frame.size.height - self.viewBottom.frame.size.height,
+                                             self.view.frame.size.width,
+                                             self.viewBottom.frame.size.height)];
     }
     
 }
 
+// landscape layout
 - (void) setLayoutControllersToLandscape
 {
     oOrientation = UIInterfaceOrientationLandscapeLeft;
@@ -289,29 +348,39 @@
     [self.view setFrame:CGRectMake(0, 0, rootSize.width, rootSize.height)];
     
     diveCount = (int)appManager.loginResult.user.allDiveIDs.count;
+    if (diveCount == 0) {
+        [self.lblCoordinate setText:@"No dive found!"];
+    }
     if (rulerView) {
         [rulerView removeFromSuperview];
     }
+    
     CGRect rect;
-    if (deviceSize.height == 568) {
+    if (deviceSize.height == 568) {  // iPhone 5
         rect = CGRectMake(rootSize.width * 0.11,
                           rootSize.height - 90,
                           rootSize.width * 0.78,
                           50);
-    } else if (deviceSize.height == 480) {
+    }
+    else if (deviceSize.height == 480) {  // iPhone 4
         rect = CGRectMake(rootSize.width * 0.04,
                           rootSize.height - 90,
                           rootSize.width * 0.92,
                           50);
-    } else {
+    }
+    else {  // iPad
         rect = CGRectMake(rootSize.width * 0.05f,
                           rootSize.height - 200,
                           rootSize.width * 0.9f,
                           50);
     }
+    
+    // if iOS7, move offset to top by -20 pixcel
     if (SYSTEM_VERSION_LESS_THAN(@"7.0")) rect = CGRectOffset(rect, 0, -15);
 
-    if (appManager.loginResult.user.allDiveIDs.count > 0) {
+    if (diveCount > 0) {
+        
+        // create ruler
         rulerView = [[DiveCountlineView alloc] initWithFrame:rect];
         [rulerView setDelegate:self];
         [rulerView setMaxValue:diveCount];
@@ -323,15 +392,18 @@
 
         [self.view addSubview:rulerView];
         
+        // remove all dive views
         for (UIView *view in self.scrviewMain.subviews) {
             [view removeFromSuperview];
         }
+        
         
         float oneDiveViewWidth = 420.0f;
         float oneDiveViewHeight = 200.0f;
         float dx = (rootSize.width - oneDiveViewWidth) / 8;
         rect = CGRectMake((rootSize.width - oneDiveViewWidth) / 2 - dx, 20, oneDiveViewWidth + dx * 2,  oneDiveViewHeight);
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {  // iPad
             oneDiveViewWidth = 840.0f;
             oneDiveViewHeight = 385.0f;
             dx = (rootSize.width - oneDiveViewWidth) / 8;
@@ -343,14 +415,23 @@
         
         [self.scrviewMain setFrame:rect];
         
-        
+        // add dive views
         for (int i = 0; i < diveCount; i ++) {
-            OneDiveView *diveView = [[OneDiveView alloc] initWithFrame:CGRectMake(dx + (self.scrviewMain.frame.size.width * i), 0, oneDiveViewWidth, oneDiveViewHeight)
-                                                                diveID:[appManager.loginResult.user.allDiveIDs objectAtIndex:i] rotate:(UIInterfaceOrientationLandscapeLeft)];
+            
+            CGRect rect = CGRectMake(dx + (self.scrviewMain.frame.size.width * i), 0, oneDiveViewWidth, oneDiveViewHeight);
+            NSString *diveID = [appManager.loginResult.user.allDiveIDs objectAtIndex:i];
+            
+            OneDiveView *diveView = [[OneDiveView alloc] initWithFrame:rect
+                                                                diveID:diveID
+                                                                rotate:(UIInterfaceOrientationLandscapeLeft)];
             diveView.tag = (kDiveViewTag + i);
             diveView.diveIndex = i;
             diveView.delegate = self;
             [self.scrviewMain addSubview:diveView];
+            if (i == 0) {
+                [diveView setDiveID:diveID];
+            }
+
         }
         
         [self.scrviewMain setContentSize:CGSizeMake(self.scrviewMain.frame.size.width * diveCount, oneDiveViewHeight)];
@@ -378,39 +459,6 @@
 
 }
 
-- (void)setCoordinateValue:(DiveInformation *)diveInfoOfSelf
-{
-    if (([diveInfoOfSelf.spotInfo.lat floatValue] == 0) && ([diveInfoOfSelf.spotInfo.lng floatValue] == 0)) {
-        self.lblCoordinate.text = @"";
-        
-    } else {
-        self.lblCoordinate.text = [NSString stringWithFormat:@"%.4f°N,  %.4f°E", [diveInfoOfSelf.spotInfo.lat floatValue], [diveInfoOfSelf.spotInfo.lng floatValue]];
-    }
-    
-    if ([DiveOfflineModeManager sharedManager].isOffline) {
-        UIImage *backgroundImage = [[DiveOfflineModeManager sharedManager] getImageWithUrl:diveInfoOfSelf.imageURL];
-        [self.imgviewBackground setImageToBlur:backgroundImage blurRadius:3.0f completionBlock:^(NSError *error) {
-            
-        }];
-    } else {
-        dispatch_queue_t dqueue = dispatch_queue_create("image.loading", 0);
-        dispatch_async(dqueue, ^{
-            
-            NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:diveInfoOfSelf.imageURL]];
-    
-            UIImage *backgroundImage = [UIImage imageWithData:imageData];
-            [[DiveOfflineModeManager sharedManager] writeImage:backgroundImage url:diveInfoOfSelf.imageURL];
-
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.imgviewBackground setImageToBlur:backgroundImage blurRadius:3.0f completionBlock:^(NSError *error) {
-                    
-                }];
-            });
-            
-        });
-    }
-}
-
 
 #pragma mark - UIScrollView Delegate
 
@@ -419,7 +467,6 @@
     if (scrollView == self.scrviewMain) {
         int index = scrollView.contentOffset.x / scrollView.frame.size.width;
         [self loadDiveData:index];
-
     }
     
 }
@@ -441,15 +488,26 @@
     OneDiveView *diveView = (OneDiveView *)[self.scrviewMain viewWithTag:(kDiveViewTag + index)];
     if (diveView) {
         if (diveView.isLoadedData) {
+            // dive information is exist
+            
             DiveInformation *diveInfoOfSelf = [diveView getDiveInformation];
+            
+            // show coordinate information of dive
             [self setCoordinateValue:diveInfoOfSelf];
-        } else {
+        }
+        else {
+            // if dive information is empty
+            // load dive information from server
             [diveView setDiveID:[appManager.loginResult.user.allDiveIDs objectAtIndex:index]];
+            
             DiveInformation *diveInfoOfSelf = [diveView getDiveInformation];
+            
+            // show coordinate information of dive
             [self setCoordinateValue:diveInfoOfSelf];
 
         }
     }
+    
     if (appManager.loginResult.user.allDiveIDs.count > 0) {
         [rulerView setHidden:NO];
         [rulerView setCurrentValue:(index + 1)];
@@ -466,18 +524,69 @@
 
 #pragma mark - 
 
+- (void)setCoordinateValue:(DiveInformation *)diveInfoOfSelf
+{
+    if (([diveInfoOfSelf.spotInfo.lat floatValue] == 0) && ([diveInfoOfSelf.spotInfo.lng floatValue] == 0)) {
+        // coordinate value is empty
+        self.lblCoordinate.text = @"";
+        
+    }
+    else {
+        // coordinate value is exist
+        self.lblCoordinate.text = [NSString stringWithFormat:@"%.4f°N,  %.4f°E", [diveInfoOfSelf.spotInfo.lat floatValue], [diveInfoOfSelf.spotInfo.lng floatValue]];
+    }
+    
+    if ([DiveOfflineModeManager sharedManager].isOffline) {
+        // internet is offline
+        UIImage *backgroundImage = [[DiveOfflineModeManager sharedManager] getImageWithUrl:diveInfoOfSelf.imageURL];
+        [self.imgviewBackground setImageToBlur:backgroundImage blurRadius:3.0f completionBlock:^(NSError *error) {
+            
+        }];
+    }
+    else {
+        
+        // internet is online
+        dispatch_queue_t dqueue = dispatch_queue_create("image.loading", 0);
+        dispatch_async(dqueue, ^{
+            
+            NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:diveInfoOfSelf.imageURL]];
+            
+            UIImage *backgroundImage = [UIImage imageWithData:imageData];
+            [[DiveOfflineModeManager sharedManager] writeImage:backgroundImage url:diveInfoOfSelf.imageURL];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.imgviewBackground setImageToBlur:backgroundImage blurRadius:3.0f completionBlock:^(NSError *error) {
+                    
+                }];
+            });
+            
+        });
+    }
+}
+
+
+// reload all
 - (void)diveViewsUpdate
 {
     currentDiveIndex = -1;
-    if (([[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationLandscapeLeft) || ([[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationLandscapeRight)) {
-            [self setLayoutControllersToLandscape];
-    } else {
-            [self setLayoutControllersToPortrate];
+//    if (([[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationLandscapeLeft) || ([[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationLandscapeRight)) {
+    
+    if (isPortrateScreen) {
+        // orientation is portrate
+        [self setLayoutControllersToPortrate];
     }
+    else {
+        // orientation is landscape
+        [self setLayoutControllersToLandscape];
+    }
+    
     currentDiveIndex = appManager.loginResult.user.allDiveIDs.count - 1;
+    
     [self loadDiveData:currentDiveIndex];
+    
 }
 
+// change unit visible of all dive values
 - (void)updateUnit
 {
     diveLengthUnit = [[userDefault objectForKey:kDiveboardUnit] intValue];
@@ -549,34 +658,34 @@
 - (void)showMenu:(UIButton *)sender
 {
     NSArray *menuItems =
-    @[
-      
-      [KxMenuItem menuItem:@"Refresh"
-                     image:Nil
-                    target:self
-                    action:@selector(refreshAction:)],
-      
-      [KxMenuItem menuItem:@"New dive"
-                     image:Nil
-                    target:self
-                    action:@selector(newDiveAction:)],
+                            @[
+                              
+                              [KxMenuItem menuItem:@"Refresh"
+                                             image:Nil
+                                            target:self
+                                            action:@selector(refreshAction:)],
+                              
+                              [KxMenuItem menuItem:@"New dive"
+                                             image:Nil
+                                            target:self
+                                            action:@selector(newDiveAction:)],
 
-      [KxMenuItem menuItem:@"Settings"
-                     image:Nil
-                    target:self
-                    action:@selector(settingViewAction:)],
+                              [KxMenuItem menuItem:@"Settings"
+                                             image:Nil
+                                            target:self
+                                            action:@selector(settingViewAction:)],
 
-      [KxMenuItem menuItem:@"Report a bug"
-                     image:Nil
-                    target:self
-                    action:@selector(reportABugAction:)],
+                              [KxMenuItem menuItem:@"Report a bug"
+                                             image:Nil
+                                            target:self
+                                            action:@selector(reportABugAction:)],
 
-      [KxMenuItem menuItem:@"Logout"
-                     image:Nil
-                    target:self
-                    action:@selector(logoutAction:)],
+                              [KxMenuItem menuItem:@"Logout"
+                                             image:Nil
+                                            target:self
+                                            action:@selector(logoutAction:)],
 
-      ];
+                              ];
     
     for (KxMenuItem *item in menuItems) {
         item.foreColor = [UIColor colorWithWhite:0.1f alpha:1.0f];
@@ -595,6 +704,12 @@
     [userDefault setObject:nil forKey:kLoadedDiveData(appManager.loginResult.user.ID)];
     [userDefault synchronize];
     
+    if ([DiveOfflineModeManager sharedManager].isOffline) {
+        [self requestResultCheckingWithObject:[DiveOfflineModeManager sharedManager].getLoginResultData];
+        return;
+    }
+    
+    
     NSString *loginMode = [userDefault objectForKey:kLoginMode];
     if ([loginMode isEqualToString:kLoginModeNative]) {
         NSDictionary *userInfo = [userDefault objectForKey:kLoginUserInfo];
@@ -603,7 +718,8 @@
         
         [self loginWithNativeUser:email password:password];
         
-    } else if ([loginMode isEqualToString:kLoginModeFB]) {
+    }
+    else if ([loginMode isEqualToString:kLoginModeFB]) {
         
         NSDictionary *fbUserInfo = [userDefault objectForKey:kLoginUserInfo];
         
@@ -674,7 +790,10 @@
                 [self setLayoutControllersToLandscape];
             }
             
-            [self startPreloadDiveData];
+            if (![DiveOfflineModeManager sharedManager].isOffline) {
+                [self startPreloadDiveData];
+            }
+            
         } else {
             
         }
@@ -718,10 +837,11 @@
 {
     SettingViewController *viewController = [[SettingViewController alloc] init];
     viewController.parent = self;
-    viewController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-    [self presentViewController:viewController animated:YES completion:^{
-        
-    }];
+//    viewController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+//    [self presentViewController:viewController animated:YES completion:^{
+//        
+//    }];
+    [self.navigationController pushViewController:viewController animated:YES];
 }
 
 #pragma mark - Report a bug
@@ -772,8 +892,21 @@
     [userDefault removeObjectForKey:kLoginMode];
     [userDefault synchronize];
     
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    if (preloadRequestManagers) {
+        for (AFHTTPRequestOperationManager *manager in preloadRequestManagers) {
+            [manager.operationQueue cancelAllOperations];
+        }
+        [preloadRequestManagers removeAllObjects];
+        preloadRequestManagers = nil;
+    }
     
+    if (appManager.currentSudoID > 0) {
+        [self.navigationController dismissViewControllerAnimated:YES completion:^{
+            [(UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController popToRootViewControllerAnimated:NO];
+        }];
+    } else {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
 }
 
 @end

@@ -120,41 +120,46 @@
 #pragma mark - UserInformation
 
 @interface UserInfomation : NSObject
+{
+    NSMutableArray *allDiveIDsOfMaster;
+    NSMutableArray *allDiveIDsOfSudo;
+}
 
-@property (nonatomic, strong) NSString *about;
-@property (nonatomic, strong) NSString *adAlbumID;
-@property (nonatomic, strong) NSArray  *advertisements;
-@property (nonatomic, strong) NSMutableArray  *allDiveIDs;
-@property (nonatomic, strong) NSString *autoPublic;
-@property (nonatomic, strong) NSString *city;
-@property (nonatomic, strong) NSString *class_;
-@property (nonatomic, strong) DanData  *danData;
-@property (nonatomic, strong) NSArray  *dbBuddyIDs;
-@property (nonatomic, strong) NSArray  *extBuddyIDs;
-@property (nonatomic, strong) NSString *fbID;
-@property (nonatomic, strong) NSString *flavour;
-@property (nonatomic, strong) NSString *fullPermaLink;
-@property (nonatomic, strong) NSString *ID;
-@property (nonatomic, strong) NSString *lat;
-@property (nonatomic, strong) NSString *lng;
-@property (nonatomic, strong) NSString *location;
-@property (nonatomic, strong) NSString *nickName;
-@property (nonatomic, strong) NSString *permaLink;
-@property (nonatomic, strong) NSString *pict;
-@property (nonatomic, strong) NSString *picture;
-@property (nonatomic, strong) NSString *pictureLarge;
-@property (nonatomic, strong) NSString *pictureSmall;
-@property (nonatomic, strong) NSArray  *publicDiveIDs;
-@property (nonatomic, strong) NSString *publicNbDives;
-@property (nonatomic, strong) Qualifications *qualifications;
-@property (nonatomic, strong) NSString *quotaLimit;
-@property (nonatomic, strong) NSString *quotaType;
-@property (nonatomic, strong) NSString *shakenID;
-@property (nonatomic, strong) StorageUsed *storageUsed;
-@property (nonatomic, strong) NSString *totalExtDives;
-@property (nonatomic, strong) NSString *totalNbDives;
-@property (nonatomic, strong) NSMutableArray  *userGears;
-@property (nonatomic, strong) NSString *vanityURL;
+@property (nonatomic, strong) NSString          *about;
+@property (nonatomic, strong) NSString          *adAlbumID;
+@property (nonatomic, strong) NSArray           *advertisements;
+@property (nonatomic, strong) NSMutableArray    *allDiveIDs;
+@property (nonatomic, strong) NSString          *autoPublic;
+@property (nonatomic, strong) NSString          *city;
+@property (nonatomic, strong) NSString          *class_;
+@property (nonatomic, strong) DanData           *danData;
+@property (nonatomic, strong) NSArray           *dbBuddyIDs;
+@property (nonatomic, strong) NSArray           *extBuddyIDs;
+@property (nonatomic, strong) NSString          *fbID;
+@property (nonatomic, strong) NSString          *flavour;
+@property (nonatomic, strong) NSString          *fullPermaLink;
+@property (nonatomic, strong) NSString          *ID;
+@property (nonatomic, strong) NSString          *lat;
+@property (nonatomic, strong) NSString          *lng;
+@property (nonatomic, strong) NSString          *location;
+@property (nonatomic, strong) NSString          *nickName;
+@property (nonatomic, strong) NSString          *permaLink;
+@property (nonatomic, strong) NSString          *pict;
+@property (nonatomic, strong) NSString          *picture;
+@property (nonatomic, strong) NSString          *pictureLarge;
+@property (nonatomic, strong) NSString          *pictureSmall;
+@property (nonatomic, strong) NSMutableArray    *publicDiveIDs;
+@property (nonatomic, strong) NSString          *publicNbDives;
+@property (nonatomic, strong) Qualifications    *qualifications;
+@property (nonatomic, strong) NSString          *quotaLimit;
+@property (nonatomic, strong) NSString          *quotaType;
+@property (nonatomic, strong) NSString          *shakenID;
+@property (nonatomic, strong) StorageUsed       *storageUsed;
+@property (nonatomic, strong) NSString          *totalExtDives;
+@property (nonatomic, strong) NSString          *totalNbDives;
+@property (nonatomic, strong) NSMutableArray    *userGears;
+@property (nonatomic, strong) NSString          *vanityURL;
+@property (nonatomic, strong) NSString          *adminRight;
 
 - (id)initWithDictionary:(NSDictionary *)data;
 

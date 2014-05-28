@@ -31,7 +31,7 @@
 #define kLoadedDiveData(userid) [NSString stringWithFormat:@"userid_%@_loadedDiveData", userid]
 
 #define kMainDefaultColor [UIColor colorWithRed:1.0f green:0.68f blue:0.1f alpha:1.0f]
-#define getStringValue(v)     ([v isEqual:[NSNull null]] || [v isEqual:@"<null>"] || [v isEqual:@"(null)"]  || [v isEqual:@"Null"] ? @"" : [NSString stringWithFormat:@"%@", v]);
+#define getStringValue(v)     (v == nil || [v isEqual:[NSNull null]] || [v isEqual:@"<null>"] || [v isEqual:@"(null)"]  || [v isEqual:@"Null"] ? @"" : [NSString stringWithFormat:@"%@", v])
 
 #define kDefaultFontName        @"Quicksand-Regular"
 #define kDefaultFontNameBold    @"Quicksand-Bold"
@@ -60,7 +60,8 @@
 
 @interface AppManager : NSObject
 {
-    
+    NSMutableDictionary *loadedDivesofMaster;
+    NSMutableDictionary *loadedDivesofSudo;
 }
 
 + (AppManager *)sharedManager;
@@ -68,6 +69,7 @@
 @property (nonatomic, strong) LoginResult *loginResult;
 @property (nonatomic, strong) FBSession   *fbSession;
 @property (nonatomic, strong) NSMutableDictionary *loadedDives;
+@property (nonatomic)         int           currentSudoID;
 
 @end
 
@@ -76,6 +78,8 @@
 @interface GlobalMethods : NSObject
 
 + (void) setRoundView:(UIView *)view cornorRadious:(float)rad borderColor:(UIColor *)color border:(float)border;
+
++ (NSString *) encodeValueToFloat:(NSString *)value;
 
 @end
 

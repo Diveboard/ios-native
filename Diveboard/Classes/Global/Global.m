@@ -37,6 +37,26 @@ static AppManager *_sharedManager;
     return self;
 }
 
+- (void)setLoadedDives:(NSMutableDictionary *)loadedDives
+{
+    if (_currentSudoID > 0) {
+        loadedDivesofSudo = loadedDives;
+    }
+    else {
+        loadedDivesofMaster = loadedDives;
+    }
+}
+
+- (NSMutableDictionary *)loadedDives
+{
+    if (_currentSudoID > 0) {
+        return loadedDivesofSudo;
+    }
+    else {
+        return loadedDivesofMaster;
+    }
+}
+
 @end
 
 
@@ -52,4 +72,9 @@ static AppManager *_sharedManager;
     view.layer.borderWidth  = border;
 }
 
++ (NSString *)encodeValueToFloat:(NSString *)value
+{
+    
+    return nil;
+}
 @end

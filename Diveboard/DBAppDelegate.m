@@ -40,11 +40,14 @@
     }
     
     UINavigationController *navVC = [[UINavigationController alloc] initWithRootViewController:loginVC];
+//    DiveBoardNavigationController *navVC = [[DiveBoardNavigationController alloc] initWithRootViewController:loginVC sudoID:0];
     [navVC setNavigationBarHidden:YES];
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.rootViewController = navVC;
     
     [self.window makeKeyAndVisible];
+    
+    [AppManager sharedManager].currentSudoID = 0;
     
     return YES;
 }

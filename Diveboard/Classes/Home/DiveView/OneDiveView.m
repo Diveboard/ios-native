@@ -82,6 +82,8 @@
         subPicImageHeight = 70.0f;
     }
 
+
+    // layout orientation is portrate
     if (orientation == UIInterfaceOrientationPortrait) {
         imgviewMainPhoto.layer.cornerRadius = imgviewMainPhoto.frame.size.width / 2;
         float borderWidth = 5.0f;
@@ -191,8 +193,13 @@
         [self removeLoadingScreen];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [lblLoadingError setHidden:NO];
-        [lblLoadingError setText:[NSString stringWithFormat:@"%@", error]];
+        
+        // 13/May/2014
+        [DiveOfflineModeManager sharedManager].isOffline = YES;
+        [self loadDiveData:diveID];
+        
+//        [lblLoadingError setHidden:NO];
+//        [lblLoadingError setText:[NSString stringWithFormat:@"%@", error]];
     }];
     
 }

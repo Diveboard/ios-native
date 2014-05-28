@@ -16,6 +16,10 @@
 {
     IBOutlet UIScrollView *scrview;
     IBOutlet UIButton *btnUnit;
+    IBOutlet UILabel  *lblVersionNumber;
+    IBOutlet UILabel  *lblPendingRequest;
+    IBOutlet UIButton *btnPendingRequest;
+    IBOutlet UIButton *btnAccessSudo;
     
 }
 
