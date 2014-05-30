@@ -15,5 +15,6 @@
     #import <Foundation/Foundation.h>
     #import "Global.h"
     #import "DiveOfflineModeManager.h"
+    #import "DiveBoardNavigationController.h"
 
 #endif

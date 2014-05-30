@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="5053" systemVersion="12F45" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="5056" systemVersion="12F45" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
         <development version="5000" identifier="xcode"/>
@@ -108,6 +108,16 @@
                                 <action selector="tapButtonAction:" destination="-1" eventType="touchUpInside" id="E4Y-1G-qAV"/>
                             </connections>
                         </button>
+                        <view contentMode="scaleToFill" id="ymk-Be-Z1J">
+                            <rect key="frame" x="255" y="0.0" width="2" height="50"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" heightSizable="YES"/>
+                            <color key="backgroundColor" white="0.18972399640000001" alpha="1" colorSpace="calibratedWhite"/>
+                        </view>
+                        <view contentMode="scaleToFill" id="wgI-2O-MfH">
+                            <rect key="frame" x="511" y="0.0" width="2" height="50"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" heightSizable="YES"/>
+                            <color key="backgroundColor" white="0.18972399640000001" alpha="1" colorSpace="calibratedWhite"/>
+                        </view>
                     </subviews>
                     <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
@@ -228,7 +238,7 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="M" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wxX-b1-h4M">
-                            <rect key="frame" x="299" y="18" width="63" height="20"/>
+                            <rect key="frame" x="344" y="18" width="63" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -238,12 +248,15 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                         <textField opaque="NO" clipsSubviews="YES" tag="400" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="00.00" minimumFontSize="17" id="cGs-rt-KgJ">
-                            <rect key="frame" x="200" y="18" width="60" height="20"/>
+                            <rect key="frame" x="200" y="18" width="128" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="next"/>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="string" keyPath="fontName" value="Quicksand-Regular"/>
+                                <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
+                                    <color key="value" white="0.50345004559999995" alpha="1" colorSpace="calibratedWhite"/>
+                                </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                             <connections>
                                 <outlet property="delegate" destination="-1" id="YhV-aY-oTT"/>
@@ -266,7 +279,7 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MINS" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="HUf-aA-cma">
-                            <rect key="frame" x="298" y="18" width="64" height="20"/>
+                            <rect key="frame" x="343" y="18" width="64" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -276,12 +289,15 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                         <textField opaque="NO" clipsSubviews="YES" tag="401" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="00" minimumFontSize="17" id="w6S-nM-TCe">
-                            <rect key="frame" x="200" y="18" width="60" height="20"/>
+                            <rect key="frame" x="200" y="18" width="126" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="next"/>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="string" keyPath="fontName" value="Quicksand-Regular"/>
+                                <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
+                                    <color key="value" white="0.50345004559999995" alpha="1" colorSpace="calibratedWhite"/>
+                                </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                             <connections>
                                 <outlet property="delegate" destination="-1" id="qlm-yQ-0G4"/>
@@ -304,7 +320,7 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="KG" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="NaT-IL-PVh">
-                            <rect key="frame" x="298" y="18" width="64" height="20"/>
+                            <rect key="frame" x="342" y="18" width="64" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -314,12 +330,15 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                         <textField opaque="NO" clipsSubviews="YES" tag="402" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="00.0" minimumFontSize="17" id="NHz-T6-JR2">
-                            <rect key="frame" x="200" y="18" width="60" height="20"/>
+                            <rect key="frame" x="200" y="18" width="134" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="next"/>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="string" keyPath="fontName" value="Quicksand-Regular"/>
+                                <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
+                                    <color key="value" white="0.50345004559999995" alpha="1" colorSpace="calibratedWhite"/>
+                                </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                             <connections>
                                 <outlet property="delegate" destination="-1" id="fq8-UA-QWG"/>
@@ -348,6 +367,9 @@
                             <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="next"/>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="string" keyPath="fontName" value="Quicksand-Regular"/>
+                                <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
+                                    <color key="value" white="0.50345004559999995" alpha="1" colorSpace="calibratedWhite"/>
+                                </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                             <connections>
                                 <outlet property="delegate" destination="-1" id="b2Z-4R-MUR"/>
@@ -370,12 +392,15 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                         <textField opaque="NO" clipsSubviews="YES" tag="404" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Trip name" minimumFontSize="17" id="j5Z-Nl-ZJE">
-                            <rect key="frame" x="201" y="17" width="192" height="20"/>
+                            <rect key="frame" x="201" y="17" width="345" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits" returnKeyType="next"/>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="string" keyPath="fontName" value="Quicksand-Regular"/>
+                                <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
+                                    <color key="value" white="0.50345004559999995" alpha="1" colorSpace="calibratedWhite"/>
+                                </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                             <connections>
                                 <outlet property="delegate" destination="-1" id="zhV-tY-okP"/>
@@ -448,7 +473,7 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="°C" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9OX-lD-Mf1">
-                            <rect key="frame" x="292" y="18" width="64" height="20"/>
+                            <rect key="frame" x="343" y="17" width="64" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -458,12 +483,15 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                         <textField opaque="NO" clipsSubviews="YES" tag="405" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="00" minimumFontSize="17" id="iAv-AZ-zF3">
-                            <rect key="frame" x="219" y="18" width="31" height="20"/>
+                            <rect key="frame" x="219" y="18" width="89" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="next"/>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="string" keyPath="fontName" value="Quicksand-Regular"/>
+                                <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
+                                    <color key="value" white="0.50345004559999995" alpha="1" colorSpace="calibratedWhite"/>
+                                </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                             <connections>
                                 <outlet property="delegate" destination="-1" id="1p8-wk-Xpn"/>
@@ -486,7 +514,7 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="°C" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="CZy-Yp-To5">
-                            <rect key="frame" x="292" y="18" width="64" height="20"/>
+                            <rect key="frame" x="344" y="18" width="64" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -496,12 +524,15 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                         <textField opaque="NO" clipsSubviews="YES" tag="406" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="00" minimumFontSize="17" id="eyl-iE-n75">
-                            <rect key="frame" x="218" y="18" width="39" height="20"/>
+                            <rect key="frame" x="218" y="18" width="100" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="next"/>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="string" keyPath="fontName" value="Quicksand-Regular"/>
+                                <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
+                                    <color key="value" white="0.50345004559999995" alpha="1" colorSpace="calibratedWhite"/>
+                                </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                             <connections>
                                 <outlet property="delegate" destination="-1" id="5kr-Qn-lrf"/>
@@ -524,7 +555,7 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="M" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9vk-ci-DS3">
-                            <rect key="frame" x="294" y="18" width="64" height="20"/>
+                            <rect key="frame" x="346" y="18" width="64" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -534,12 +565,15 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                         <textField opaque="NO" clipsSubviews="YES" tag="407" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="00.0" minimumFontSize="17" id="sO4-52-bfi">
-                            <rect key="frame" x="218" y="18" width="60" height="20"/>
+                            <rect key="frame" x="218" y="18" width="110" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="next"/>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="string" keyPath="fontName" value="Quicksand-Regular"/>
+                                <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
+                                    <color key="value" white="0.50345004559999995" alpha="1" colorSpace="calibratedWhite"/>
+                                </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                             <connections>
                                 <outlet property="delegate" destination="-1" id="aBO-2j-aDP"/>
@@ -649,6 +683,9 @@
                     <textInputTraits key="textInputTraits" returnKeyType="search"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="string" keyPath="fontName" value="Quicksand-Regular"/>
+                        <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
+                            <color key="value" white="0.50345004559999995" alpha="1" colorSpace="calibratedWhite"/>
+                        </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                     <connections>
                         <outlet property="delegate" destination="-1" id="wmI-dP-Ci3"/>

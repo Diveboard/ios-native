@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C0415D419210A2F000D5F5D /* BugSense-iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C0415D319210A2F000D5F5D /* BugSense-iOS.framework */; };
 		3C049A5918F2ED780043D291 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C049A5818F2ED780043D291 /* Reachability.m */; };
 		3C1076A518D0CCE1006F249F /* MMHud.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C10769118D0CCE1006F249F /* MMHud.m */; };
 		3C1076A618D0CCE1006F249F /* MMLinearProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C10769318D0CCE1006F249F /* MMLinearProgressView.m */; };
@@ -153,6 +154,7 @@
 		3CE7914018BEF78600E4265A /* DiveInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CE7913F18BEF78600E4265A /* DiveInformation.m */; };
 		3CE7914318BF0C1D00E4265A /* OneDiveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CE7914218BF0C1D00E4265A /* OneDiveView.m */; };
 		3CE7914518BF0C2900E4265A /* OneDiveView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3CE7914418BF0C2900E4265A /* OneDiveView.xib */; };
+		3CE7FA501933731700D72A34 /* DiveBoardNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CE7FA4F1933731700D72A34 /* DiveBoardNavigationController.m */; };
 		3CF3374718BCD14F001D2DF0 /* Global.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF3374618BCD14F001D2DF0 /* Global.m */; };
 		3CF3375118BCD28C001D2DF0 /* TPKeyboardAvoidingCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF3374A18BCD28C001D2DF0 /* TPKeyboardAvoidingCollectionView.m */; };
 		3CF3375218BCD28C001D2DF0 /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF3374C18BCD28C001D2DF0 /* TPKeyboardAvoidingScrollView.m */; };
@@ -168,7 +170,6 @@
 		3CF3378318BD48FE001D2DF0 /* DiveCountlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF3378218BD48FE001D2DF0 /* DiveCountlineView.m */; };
 		3CF3378518BD591F001D2DF0 /* DiveCountlineView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3CF3378418BD591F001D2DF0 /* DiveCountlineView.xib */; };
 		3CF3780718DD22CD00D832B3 /* DiveEditViewController-ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3CF3780618DD22CD00D832B3 /* DiveEditViewController-ipad.xib */; };
-		FAFA872318F4035300DDDDEE /* BugSense-iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAFA872218F4035300DDDDEE /* BugSense-iOS.framework */; };
 		FAFA872518F4036600DDDDEE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAFA872418F4036600DDDDEE /* SystemConfiguration.framework */; };
 		FAFA872718F4037B00DDDDEE /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FAFA872618F4037B00DDDDEE /* libz.dylib */; };
 /* End PBXBuildFile section */
@@ -184,6 +185,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3C0415D319210A2F000D5F5D /* BugSense-iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "BugSense-iOS.framework"; path = "Diveboard/Lib/BugSense-iOS.framework"; sourceTree = "<group>"; };
 		3C049A5718F2ED780043D291 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		3C049A5818F2ED780043D291 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		3C10769018D0CCE1006F249F /* MMHud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMHud.h; sourceTree = "<group>"; };
@@ -390,6 +392,8 @@
 		3CE7914118BF0C1D00E4265A /* OneDiveView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OneDiveView.h; sourceTree = "<group>"; };
 		3CE7914218BF0C1D00E4265A /* OneDiveView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OneDiveView.m; sourceTree = "<group>"; };
 		3CE7914418BF0C2900E4265A /* OneDiveView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OneDiveView.xib; sourceTree = "<group>"; };
+		3CE7FA4E1933731700D72A34 /* DiveBoardNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiveBoardNavigationController.h; sourceTree = "<group>"; };
+		3CE7FA4F1933731700D72A34 /* DiveBoardNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiveBoardNavigationController.m; sourceTree = "<group>"; };
 		3CF3374518BCD14F001D2DF0 /* Global.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Global.h; sourceTree = "<group>"; };
 		3CF3374618BCD14F001D2DF0 /* Global.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Global.m; sourceTree = "<group>"; };
 		3CF3374918BCD28C001D2DF0 /* TPKeyboardAvoidingCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingCollectionView.h; sourceTree = "<group>"; };
@@ -415,7 +419,6 @@
 		3CF3378218BD48FE001D2DF0 /* DiveCountlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiveCountlineView.m; sourceTree = "<group>"; };
 		3CF3378418BD591F001D2DF0 /* DiveCountlineView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiveCountlineView.xib; sourceTree = "<group>"; };
 		3CF3780618DD22CD00D832B3 /* DiveEditViewController-ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "DiveEditViewController-ipad.xib"; sourceTree = "<group>"; };
-		FAFA872218F4035300DDDDEE /* BugSense-iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = "BugSense-iOS.framework"; sourceTree = "<group>"; };
 		FAFA872418F4036600DDDDEE /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		FAFA872618F4037B00DDDDEE /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -425,9 +428,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C0415D419210A2F000D5F5D /* BugSense-iOS.framework in Frameworks */,
 				FAFA872718F4037B00DDDDEE /* libz.dylib in Frameworks */,
 				FAFA872518F4036600DDDDEE /* SystemConfiguration.framework in Frameworks */,
-				FAFA872318F4035300DDDDEE /* BugSense-iOS.framework in Frameworks */,
 				3CD100E818C996A90001B625 /* MessageUI.framework in Frameworks */,
 				3CB7A19118C706FF008B66BF /* CoreLocation.framework in Frameworks */,
 				3CCD102718C5B08B001AD995 /* MapKit.framework in Frameworks */,
@@ -617,9 +620,9 @@
 		3CE0474018BCB83100FA47FF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3C0415D319210A2F000D5F5D /* BugSense-iOS.framework */,
 				FAFA872618F4037B00DDDDEE /* libz.dylib */,
 				FAFA872418F4036600DDDDEE /* SystemConfiguration.framework */,
-				FAFA872218F4035300DDDDEE /* BugSense-iOS.framework */,
 				3CD100E718C996A90001B625 /* MessageUI.framework */,
 				3CB7A19018C706FF008B66BF /* CoreLocation.framework */,
 				3CCD102618C5B08B001AD995 /* MapKit.framework */,
@@ -699,6 +702,8 @@
 				3CE7913F18BEF78600E4265A /* DiveInformation.m */,
 				3C13084518F3E1DC00D51AC7 /* DataRequestManager.h */,
 				3C13084618F3E1DC00D51AC7 /* DataRequestManager.m */,
+				3CE7FA4E1933731700D72A34 /* DiveBoardNavigationController.h */,
+				3CE7FA4F1933731700D72A34 /* DiveBoardNavigationController.m */,
 			);
 			path = Global;
 			sourceTree = "<group>";
@@ -1159,6 +1164,7 @@
 				3CF3374718BCD14F001D2DF0 /* Global.m in Sources */,
 				3C66AB0318F538C7000AB0D6 /* DiveOfflineModeManager.m in Sources */,
 				3CD100ED18C99C0D0001B625 /* SettingViewController.m in Sources */,
+				3CE7FA501933731700D72A34 /* DiveBoardNavigationController.m in Sources */,
 				3C13084718F3E1DC00D51AC7 /* DataRequestManager.m in Sources */,
 				3C1076AD18D0CCE1006F249F /* MMRadialProgressView.m in Sources */,
 				3CF3378318BD48FE001D2DF0 /* DiveCountlineView.m in Sources */,
@@ -1330,20 +1336,21 @@
 		3CE0477118BCB83100FA47FF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Alexander CASASSOVICI (AG6FREL88W)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Alexander CASASSOVICI (AG6FREL88W)";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					$SRCROOT/Diveboard/Lib,
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Diveboard/Lib",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Diveboard/Diveboard-Prefix.pch";
 				INFOPLIST_FILE = "Diveboard/Diveboard-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "DCE51938-8EED-40E8-8E28-7554DD0E8738";
+				PROVISIONING_PROFILE = "2E91F13D-E8F1-417E-B6A0-D67A6FD8D244";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1352,19 +1359,20 @@
 		3CE0477218BCB83100FA47FF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					$SRCROOT/Diveboard/Lib,
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Diveboard/Lib",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Diveboard/Diveboard-Prefix.pch";
 				INFOPLIST_FILE = "Diveboard/Diveboard-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "2E91F13D-E8F1-417E-B6A0-D67A6FD8D244";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};

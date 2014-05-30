@@ -221,8 +221,11 @@
                                                              options:NSJSONReadingAllowFragments
                                                                error:nil];
         NSLog(@"%@", data);
+        
         BOOL signUpSuccess = [[data objectForKey:@"success"] boolValue];
+        
         if (!signUpSuccess) {   // error
+            
             NSMutableString *errorMsg = [[NSMutableString alloc] init];
             for (NSDictionary *oneError in [data objectForKey:@"errors"]) {
                 [errorMsg appendString:[oneError objectForKey:@"error"]];
@@ -245,7 +248,7 @@
     }
 }
 
-
+// filter result dictionary to object
 - (void) requestResultCheckingWithObject:(NSDictionary *)data
 {
     

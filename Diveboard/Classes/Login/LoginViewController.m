@@ -265,6 +265,7 @@
     } else {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     }
+    
 }
 
 #pragma mark - Server connecting
@@ -284,7 +285,10 @@
                              @"password"    : password,
                              };
     
+    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+
+    
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager POST:requestURLString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
@@ -304,9 +308,13 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"%@", error);
+        
         [self internetConnecting:NO];
+        
         offlineManager.isOffline = YES;
+        
         [self requestResultCheckingWithObject:offlineManager.getLoginResultData];
+        
     }];
 }
 
@@ -349,6 +357,7 @@
             }
             
         } else {
+            
             return NO;
         }
     } else {
@@ -391,7 +400,13 @@
             self.txtPassword.text = @"";
             
         } else {
-            
+            NSString *errorMessage = [data objectForKey:@"message"];
+            [[[UIAlertView alloc] initWithTitle:@"Can't Login"
+                                        message:errorMessage
+                                       delegate:nil
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles: nil]
+             show];
         }
     }
 }

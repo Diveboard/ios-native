@@ -21,6 +21,7 @@
 #import "MMProgressHUD.h"
 #import "MBProgressHUD+Add.h"
 #import "DivePicturesViewController.h"
+#import "UIImageView+AFNetworking.h"
 
 
 @interface DiveDetailViewController () <DiveEditViewControllerDelegate, UIAlertViewDelegate>
@@ -154,9 +155,36 @@
     
     
     // graph
-    if (![DiveOfflineModeManager sharedManager].isOffline) {
-        NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@/profile.png?g=mobile_v002&u=m", SERVER_URL, appManager.loginResult.user.nickName, diveInformation.shakenID];
-        [vdimgviewGraph setImageURL:[NSURL URLWithString:urlString] placeholder:Nil];
+    
+    NSString *myNickName = appManager.loginResult.user.nickName;
+    NSString *diveShakenID   = diveInformation.shakenID;
+    NSString *tempURLString = [NSString stringWithFormat:@"%@/%@%@graph.png", SERVER_URL, myNickName, diveShakenID];
+    
+    if ([DiveOfflineModeManager sharedManager].isOffline) {
+        
+        [vdimgviewGraph setImage:[[DiveOfflineModeManager sharedManager] getImageWithUrl:tempURLString]];
+        
+    }
+    else {
+        NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@/profile.png?g=mobile_v002&u=m", SERVER_URL, myNickName, diveShakenID];
+        
+        UIImageView *imgviewGraph = vdimgviewGraph;
+        
+        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
+        
+        [vdimgviewGraph setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+            
+            [imgviewGraph setImage:image];
+            
+            [[DiveOfflineModeManager sharedManager] writeImage:image url:tempURLString];
+            
+        } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+            
+            [imgviewGraph setImage:[[DiveOfflineModeManager sharedManager] getImageWithUrl:tempURLString]];
+            
+        }];
+        
+//        [vdimgviewGraph setImageWithURL:[NSURL URLWithString:urlString] placeholderImage:Nil];
     }
     
     // dive max depth
@@ -164,12 +192,12 @@
                                                    defaultUnit:diveInformation.maxDepthUnit]];
     
 
-    // dieve date
+    // dive date
     [vdlblDateContent       setText:[NSString stringWithFormat:@"%@ %@",
                                      diveInformation.date,
                                      diveInformation.time]];
     
-
+    // dive duration
     [vdlblDurationContent   setText:[NSString stringWithFormat:@"%@ mins", diveInformation.duration]];
     
     int itemCount = 0;
@@ -471,6 +499,7 @@
                              @"apikey"    : API_KEY,
                              };
     
+    // offline
     if ([DiveOfflineModeManager sharedManager].isOffline) {
         NSDictionary *dic = @{kRequestKey: requestURLString,
                               kRequestParamKey : params
@@ -482,6 +511,7 @@
         [self deleteDiveSuccess];
         
     }
+    // online
     else {
     
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -508,14 +538,19 @@
             
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            [MMProgressHUD dismissWithSuccess:@"Error" title:@"Delete"];
-
-            [[[UIAlertView alloc] initWithTitle:@"Error"
-                                        message:[NSString stringWithFormat:@"%@", error]
-                                       delegate:nil
-                              cancelButtonTitle:@"OK"
-                              otherButtonTitles: nil]
-             show];
+            
+            [DiveOfflineModeManager sharedManager].isOffline = YES;
+            
+            [self diveDeleteRequest];
+            
+//            [MMProgressHUD dismissWithSuccess:@"Error" title:@"Delete"];
+//
+//            [[[UIAlertView alloc] initWithTitle:@"Error"
+//                                        message:[NSString stringWithFormat:@"%@", error]
+//                                       delegate:nil
+//                              cancelButtonTitle:@"OK"
+//                              otherButtonTitles: nil]
+//             show];
         }];
     }
 }

@@ -69,6 +69,7 @@
 {
     [self setRelayout];
     [self tapButtonTouchAction:(btnDetails)];
+
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -113,12 +114,12 @@
     UITapGestureRecognizer *waterTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(waterLabelTapAction:)];
     [lblWater addGestureRecognizer:waterTap];
     
-    btnDetails.layer.borderColor = [UIColor whiteColor].CGColor;
-    btnDetails.layer.borderWidth = 1.0f;
-    btnNotes.layer.borderColor = [UIColor whiteColor].CGColor;
-    btnNotes.layer.borderWidth = 1.0f;
-    btnSpots.layer.borderColor = [UIColor whiteColor].CGColor;
-    btnSpots.layer.borderWidth = 1.0f;
+//    btnDetails.layer.borderColor = [UIColor whiteColor].CGColor;
+//    btnDetails.layer.borderWidth = 1.0f;
+//    btnNotes.layer.borderColor = [UIColor whiteColor].CGColor;
+//    btnNotes.layer.borderWidth = 1.0f;
+//    btnSpots.layer.borderColor = [UIColor whiteColor].CGColor;
+//    btnSpots.layer.borderWidth = 1.0f;
     
     if (diveLengthUnit == 0) {
         [lblMaxdepthUnit setText:@"FEET"];
@@ -594,17 +595,24 @@
                 
             }
             else {
+                
+                
+                
                 AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
                 
                 [manager POST:requestURLStr parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
                     NSLog(@"%@", responseObject);
                     if (responseObject && [responseObject isKindOfClass:[NSDictionary class]]) {
-                        if ([[responseObject objectForKey:@"success"] boolValue]) {
+                        if ([[responseObject objectForKey:@"success"] boolValue] &&
+                            ![[responseObject objectForKey:@"result"] isEqual:[NSNull null]]) {
                             
+                           
                             [[DiveOfflineModeManager sharedManager] writeOneDiveInformation:responseObject overwrite:YES];
-
-                            [self createDiveSuccess:responseObject];
                             
+                            [self createDiveSuccess:responseObject];
+                        }
+                        else {
+                            [MMProgressHUD dismissWithSuccess:@"Failure" title:@"Create New Dive"];
                         }
                     } else {
                         [MMProgressHUD dismissWithSuccess:@"Failure" title:@"Create New Dive"];
@@ -618,7 +626,23 @@
                 } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                     NSLog(@"error : %@", error);
                     
-                    [MMProgressHUD dismissWithSuccess:@"Failure" title:@"Create New Dive"];
+                    [DiveOfflineModeManager sharedManager].isOffline = YES;
+                    
+                    NSDictionary *dic = @{kRequestKey: requestURLStr,
+                                          kRequestParamKey : params
+                                          };
+                    [[DiveOfflineModeManager sharedManager] diveEdit:dic];
+                    
+                    NSDictionary *responseObject = [self createVirtualServerResult];
+                    [[DiveOfflineModeManager sharedManager] createNewDive:responseObject];
+                    
+                    [self createDiveSuccess:responseObject];
+                    
+                    [self dismissViewControllerAnimated:YES completion:^{
+                    }];
+
+                    
+//                    	[MMProgressHUD dismissWithSuccess:@"Failure" title:@"Create New Dive"];
                     
                 }];
             }
@@ -635,15 +659,16 @@
 {
 
     NSDictionary *diveData = [responseObject objectForKey:@"result"];
-    NSString *diveID = getStringValue([diveData objectForKey:@"id"]);
-    [appManager.loadedDives setObject:responseObject forKey:diveID];
-    
-    DiveInformation *diveInfo = [[DiveInformation alloc] initWithDictionary:[responseObject objectForKey:@"result"]];
-    if (self.delegate && [self.delegate respondsToSelector:@selector(diveEditFinish:)]) {
-        [self.delegate diveEditFinish:diveInfo];
+    if (![diveData isEqual:[NSNull null]]) {
+        NSString *diveID = getStringValue([diveData objectForKey:@"id"]);
+        [appManager.loadedDives setObject:responseObject forKey:diveID];
+        
+        DiveInformation *diveInfo = [[DiveInformation alloc] initWithDictionary:[responseObject objectForKey:@"result"]];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(diveEditFinish:)]) {
+            [self.delegate diveEditFinish:diveInfo];
+        }
+        [MMProgressHUD dismissWithSuccess:@"Saved!" title:@"Success"];
     }
-    [MMProgressHUD dismissWithSuccess:@"Saved!" title:@"Success"];
-
 }
 
 - (NSDictionary *) createVirtualServerResult
@@ -859,6 +884,40 @@
         }
     }
     return YES;
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    static NSString *avaliableCharactor = @"0123456789.-";
+    if ([string isEqualToString:@""]) {
+        return YES;
+    }
+    
+    if (textField == txtDepth ||
+        textField == txtDuration ||
+        textField == txtWeight ||
+        textField == txtSurface ||
+        textField == txtBottom) {
+        if ([string isEqualToString:@"."]) {
+            NSRange range = [textField.text rangeOfString:@"."];
+            if (range.location != NSNotFound) {
+                return NO;
+            }
+        }
+        for (int i = 0; i < avaliableCharactor.length; i ++) {
+            NSRange range;
+            range.location = i;
+            range.length   = 1;
+            NSString *oneCharactor = [avaliableCharactor substringWithRange:range];
+            if ([oneCharactor isEqualToString:string]) {
+                return YES;
+            }
+        }
+        return NO;
+    }
+    else {
+        return YES;
+    }
 }
 
 #pragma mark - Search Spot

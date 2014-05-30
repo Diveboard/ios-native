@@ -82,6 +82,8 @@
         subPicImageHeight = 70.0f;
     }
 
+
+    // layout orientation is portrate
     if (orientation == UIInterfaceOrientationPortrait) {
         imgviewMainPhoto.layer.cornerRadius = imgviewMainPhoto.frame.size.width / 2;
         float borderWidth = 5.0f;
@@ -191,8 +193,13 @@
         [self removeLoadingScreen];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [lblLoadingError setHidden:NO];
-        [lblLoadingError setText:[NSString stringWithFormat:@"%@", error]];
+        
+        // 13/May/2014
+        [DiveOfflineModeManager sharedManager].isOffline = YES;
+        [self loadDiveData:diveID];
+        
+//        [lblLoadingError setHidden:NO];
+//        [lblLoadingError setText:[NSString stringWithFormat:@"%@", error]];
     }];
     
 }
@@ -221,29 +228,12 @@
     lblSpotName.text = diveInfoOfSelf.spotInfo.name;
     lblSpotDate.text = diveInfoOfSelf.date;
     
-<<<<<<< HEAD
     
     [lblSpotDepth setText:[DiveInformation unitOfLengthWithValue:diveInfoOfSelf.maxDepth
                                                      defaultUnit:diveInfoOfSelf.maxDepthUnit]];
-
-//    if (diveLengthUnit == 0) {
-//        lblSpotDepth.text = [NSString stringWithFormat:@"%.2f FEET", [diveInfoOfSelf.maxDepth intValue] * 3.2808f];
-//    } else {
-//        lblSpotDepth.text = [NSString stringWithFormat:@"%.2f METERS", [diveInfoOfSelf.maxDepth floatValue]];
-//    }
-    
-    lblSpotDuration.text = [NSString stringWithFormat:@"%@ MINS", diveInfoOfSelf.duration];
-    lblSpotCountryCity.text = [NSString stringWithFormat:@"%@ - %@", diveInfoOfSelf.spotInfo.countryName, diveInfoOfSelf.spotInfo.locationName];
-=======
-    if (diveLengthUnit == 0) {
-        lblSpotDepth.text = [NSString stringWithFormat:@"%.2f ft", [diveInfoOfSelf.maxDepth intValue] * 3.2808f];
-    } else {
-        lblSpotDepth.text = [NSString stringWithFormat:@"%.2f m", [diveInfoOfSelf.maxDepth floatValue]];
-    }
     
     lblSpotDuration.text = [NSString stringWithFormat:@"%@ mins", diveInfoOfSelf.duration];
-    lblSpotCountryCity.text = [NSString stringWithFormat:@"%@ - %@", diveInfoOfSelf.spotInfo.counttyName, diveInfoOfSelf.spotInfo.locationName];
->>>>>>> f116b808100db9173d4da918a9db656ed7e10130
+    lblSpotCountryCity.text = [NSString stringWithFormat:@"%@ - %@", diveInfoOfSelf.spotInfo.countryName, diveInfoOfSelf.spotInfo.locationName];
     lblTripName.text = diveInfoOfSelf.tripName;
     if (diveInfoOfSelf.tripName.length == 0) {
         [viewTripBox setHidden:YES];
