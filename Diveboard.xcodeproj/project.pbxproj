@@ -1336,8 +1336,18 @@
 		3CE0477118BCB83100FA47FF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+<<<<<<< HEAD
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+=======
+<<<<<<< HEAD
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+=======
+				CODE_SIGN_IDENTITY = "iPhone Developer: qingsong jin (ZYC3293G46)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: qingsong jin (ZYC3293G46)";
+>>>>>>> 685ccbd31b49cbe284c2f1c0074f39fcac1849d8
+>>>>>>> f2f4947a1bb9f814a5b150efbed05c72f41c6d70
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

@@ -10,7 +10,14 @@
                 <outlet property="btnAccessSudo" destination="2yr-wY-1iD" id="Q9c-ww-ZdQ"/>
                 <outlet property="btnPendingRequest" destination="g01-t2-s18" id="qjj-Fq-Ahj"/>
                 <outlet property="btnUnit" destination="R3X-lO-ejU" id="gYN-9o-OFL"/>
+<<<<<<< HEAD
                 <outlet property="lblPendingRequest" destination="uW9-5t-kOS" id="dFu-p1-c5E"/>
+=======
+<<<<<<< HEAD
+                <outlet property="lblPendingRequest" destination="uW9-5t-kOS" id="dFu-p1-c5E"/>
+=======
+>>>>>>> 685ccbd31b49cbe284c2f1c0074f39fcac1849d8
+>>>>>>> f2f4947a1bb9f814a5b150efbed05c72f41c6d70
                 <outlet property="lblVersionNumber" destination="slp-EC-O4s" id="ecq-HZ-iAX"/>
                 <outlet property="scrview" destination="4Ni-90-eqS" id="Ezf-uh-pJa"/>
                 <outlet property="view" destination="1" id="3"/>
