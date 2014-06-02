@@ -90,10 +90,6 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Diveboard/Classes/Home/DiveListViewController.m"
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> f2f4947a1bb9f814a5b150efbed05c72f41c6d70
             timestampString = "422941663.01337"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
@@ -116,17 +112,6 @@
             startingLineNumber = "829"
             endingLineNumber = "829"
             landmarkName = "-diveEditFinish:"
-<<<<<<< HEAD
-=======
-=======
-            timestampString = "419533175.363377"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "442"
-            endingLineNumber = "442"
-            landmarkName = "-scrollViewDidEndScrollingAnimation:"
->>>>>>> 685ccbd31b49cbe284c2f1c0074f39fcac1849d8
->>>>>>> f2f4947a1bb9f814a5b150efbed05c72f41c6d70
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

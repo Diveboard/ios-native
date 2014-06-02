@@ -282,15 +282,7 @@
     // if iOS 7, move offset to top by 20 pixcel
     if (SYSTEM_VERSION_LESS_THAN(@"7.0"))  rect = CGRectOffset(rect, 0, -20);
     
-<<<<<<< HEAD
     if (diveCount > 0) {
-=======
-<<<<<<< HEAD
-    if (diveCount > 0) {
-=======
-    if (appManager.loginResult.user.allDiveIDs.count > 0) {
->>>>>>> 685ccbd31b49cbe284c2f1c0074f39fcac1849d8
->>>>>>> f2f4947a1bb9f814a5b150efbed05c72f41c6d70
         
         // ruler create
         rulerView = [[DiveCountlineView alloc] initWithFrame:rect];
@@ -386,15 +378,7 @@
     // if iOS7, move offset to top by -20 pixcel
     if (SYSTEM_VERSION_LESS_THAN(@"7.0")) rect = CGRectOffset(rect, 0, -15);
 
-<<<<<<< HEAD
     if (diveCount > 0) {
-=======
-<<<<<<< HEAD
-    if (diveCount > 0) {
-=======
-    if (appManager.loginResult.user.allDiveIDs.count > 0) {
->>>>>>> 685ccbd31b49cbe284c2f1c0074f39fcac1849d8
->>>>>>> f2f4947a1bb9f814a5b150efbed05c72f41c6d70
         
         // create ruler
         rulerView = [[DiveCountlineView alloc] initWithFrame:rect];
@@ -590,25 +574,11 @@
     if (isPortrateScreen) {
         // orientation is portrate
         [self setLayoutControllersToPortrate];
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
     }
     else {
         // orientation is landscape
         [self setLayoutControllersToLandscape];
     }
-=======
->>>>>>> f2f4947a1bb9f814a5b150efbed05c72f41c6d70
-    }
-    else {
-        // orientation is landscape
-        [self setLayoutControllersToLandscape];
-    }
-<<<<<<< HEAD
-=======
->>>>>>> 685ccbd31b49cbe284c2f1c0074f39fcac1849d8
->>>>>>> f2f4947a1bb9f814a5b150efbed05c72f41c6d70
     
     currentDiveIndex = appManager.loginResult.user.allDiveIDs.count - 1;
     
