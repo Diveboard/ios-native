@@ -698,7 +698,7 @@
                                            @"temp_surface"  : txtSurface.text,
                                            @"temp_surface_value"    : txtSurface.text,
                                            @"temp_surface_unit"     : (diveLengthUnit == 0 ? @"F" : @"C"),
-                                           @"thumbnail_image_url"   : @"http://stage.diveboard.com/map_images/map_1.jpg?v=1394539383",
+                                           @"thumbnail_image_url"   :   [NSString stringWithFormat:@"%@/map_images/map_1.jpg?v=1394539383", SERVER_URL ],
                                            @"thumbnail_profile_url" : [NSNull null],
                                            @"time"          : lblTime.text,
                                            @"trip_name"     : txtTripName.text,
