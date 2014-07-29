@@ -244,8 +244,8 @@
 		3C539E1318EA46C200470897 /* icon72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon72.png; sourceTree = "<group>"; };
 		3C539E1418EA46C200470897 /* icon76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon76.png; sourceTree = "<group>"; };
 		3C539E1518EA46C200470897 /* icon80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon80.png; sourceTree = "<group>"; };
-		3C66AB0118F538C7000AB0D6 /* DiveOfflineModeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiveOfflineModeManager.h; sourceTree = "<group>"; };
-		3C66AB0218F538C7000AB0D6 /* DiveOfflineModeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiveOfflineModeManager.m; sourceTree = "<group>"; };
+		3C66AB0118F538C7000AB0D6 /* DiveOfflineModeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiveOfflineModeManager.h; path = ../Login/DiveOfflineModeManager.h; sourceTree = "<group>"; };
+		3C66AB0218F538C7000AB0D6 /* DiveOfflineModeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiveOfflineModeManager.m; path = ../Login/DiveOfflineModeManager.m; sourceTree = "<group>"; };
 		3C66AB0418F54378000AB0D6 /* updatelist.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = updatelist.plist; sourceTree = "<group>"; };
 		3CB7A19018C706FF008B66BF /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		3CB7A19E18C70CAB008B66BF /* DiveEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiveEditViewController.h; sourceTree = "<group>"; };
@@ -464,6 +464,117 @@
 			path = Reachability;
 			sourceTree = "<group>";
 		};
+		3C0B396D1982B64F00A3FB6F /* LoginVC */ = {
+			isa = PBXGroup;
+			children = (
+				3CF3375518BCD4FD001D2DF0 /* LoginViewController.h */,
+				3CF3375618BCD4FD001D2DF0 /* LoginViewController.m */,
+				3CF3375718BCD4FD001D2DF0 /* LoginViewController.xib */,
+				3C24E55618D7DEBE00215E9E /* LoginViewController-ipad.xib */,
+			);
+			name = LoginVC;
+			sourceTree = "<group>";
+		};
+		3C0B396E1982B65D00A3FB6F /* SignupVC */ = {
+			isa = PBXGroup;
+			children = (
+				3CF3377618BD21DE001D2DF0 /* SignupViewController.h */,
+				3CF3377718BD21DE001D2DF0 /* SignupViewController.m */,
+				3CF3377818BD21DE001D2DF0 /* SignupViewController.xib */,
+				3C24E55818D7E0D400215E9E /* SignupViewController-ipad.xib */,
+			);
+			name = SignupVC;
+			sourceTree = "<group>";
+		};
+		3C0B396F1982B66500A3FB6F /* DiveListVC */ = {
+			isa = PBXGroup;
+			children = (
+				3CF3377B18BD40C7001D2DF0 /* DiveListViewController.h */,
+				3CF3377C18BD40C7001D2DF0 /* DiveListViewController.m */,
+				3CF3377D18BD40C7001D2DF0 /* DiveListViewController.xib */,
+				3C24E55A18D7E66400215E9E /* DiveListViewController-ipad.xib */,
+			);
+			name = DiveListVC;
+			sourceTree = "<group>";
+		};
+		3C0B39701982B66D00A3FB6F /* DivePicturesVC */ = {
+			isa = PBXGroup;
+			children = (
+				3CD9FCBF18BFD6CE000EFAB4 /* DivePicturesViewController.h */,
+				3CD9FCC018BFD6CE000EFAB4 /* DivePicturesViewController.m */,
+				3CD9FCC118BFD6CE000EFAB4 /* DivePicturesViewController.xib */,
+				3C24E55C18D7E76E00215E9E /* DivePicturesViewController-ipad.xib */,
+			);
+			name = DivePicturesVC;
+			sourceTree = "<group>";
+		};
+		3C0B39711982B67500A3FB6F /* DiveCountlineView */ = {
+			isa = PBXGroup;
+			children = (
+				3CF3378118BD48FE001D2DF0 /* DiveCountlineView.h */,
+				3CF3378218BD48FE001D2DF0 /* DiveCountlineView.m */,
+				3CF3378418BD591F001D2DF0 /* DiveCountlineView.xib */,
+				3C24E56018D7F5F800215E9E /* DiveCountlineView-ipad.xib */,
+			);
+			name = DiveCountlineView;
+			sourceTree = "<group>";
+		};
+		3C0B39721982B68400A3FB6F /* OneDiveView */ = {
+			isa = PBXGroup;
+			children = (
+				3CE7914118BF0C1D00E4265A /* OneDiveView.h */,
+				3CE7914218BF0C1D00E4265A /* OneDiveView.m */,
+				3CE7914418BF0C2900E4265A /* OneDiveView.xib */,
+				3C1B31D518D7438700FE27BF /* OneDiveView-mini.xib */,
+				3CD9FCB618BF8578000EFAB4 /* OneDiveViewLand.xib */,
+				3C24E55E18D7ED1C00215E9E /* OneDiveView-ipad.xib */,
+				3C24E56218D7FAB500215E9E /* OneDiveView-ipadland.xib */,
+			);
+			name = OneDiveView;
+			sourceTree = "<group>";
+		};
+		3C0B39731982B69000A3FB6F /* DiveDetailVC */ = {
+			isa = PBXGroup;
+			children = (
+				3CCD100418C57EC2001AD995 /* DiveDetailViewController.h */,
+				3CCD100518C57EC2001AD995 /* DiveDetailViewController.m */,
+				3CCD100618C57EC2001AD995 /* DiveDetailViewController.xib */,
+				3C39C4AC18DE414B00C29BF1 /* DiveDetailViewController-ipad.xib */,
+			);
+			name = DiveDetailVC;
+			sourceTree = "<group>";
+		};
+		3C0B39741982B6A200A3FB6F /* DiveEditVC */ = {
+			isa = PBXGroup;
+			children = (
+				3CB7A19E18C70CAB008B66BF /* DiveEditViewController.h */,
+				3CB7A19F18C70CAB008B66BF /* DiveEditViewController.m */,
+				3CB7A1A018C70CAB008B66BF /* DiveEditViewController.xib */,
+				3CF3780618DD22CD00D832B3 /* DiveEditViewController-ipad.xib */,
+			);
+			name = DiveEditVC;
+			sourceTree = "<group>";
+		};
+		3C0B39751982B6AE00A3FB6F /* SettingVC */ = {
+			isa = PBXGroup;
+			children = (
+				3CD100EA18C99C0D0001B625 /* SettingViewController.h */,
+				3CD100EB18C99C0D0001B625 /* SettingViewController.m */,
+				3CD100EC18C99C0D0001B625 /* SettingViewController.xib */,
+			);
+			name = SettingVC;
+			sourceTree = "<group>";
+		};
+		3C0B39761982B6B600A3FB6F /* DBUnitSelectVC */ = {
+			isa = PBXGroup;
+			children = (
+				3C26F6DF18E463A800684349 /* DBUnitSelectViewController.h */,
+				3C26F6E018E463A800684349 /* DBUnitSelectViewController.m */,
+				3C26F6E118E463A800684349 /* DBUnitSelectViewController.xib */,
+			);
+			name = DBUnitSelectVC;
+			sourceTree = "<group>";
+		};
 		3C10768F18D0CCE1006F249F /* MMProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
@@ -536,10 +647,7 @@
 		3CB7A19D18C70C8D008B66BF /* DiveEdit */ = {
 			isa = PBXGroup;
 			children = (
-				3CB7A19E18C70CAB008B66BF /* DiveEditViewController.h */,
-				3CB7A19F18C70CAB008B66BF /* DiveEditViewController.m */,
-				3CB7A1A018C70CAB008B66BF /* DiveEditViewController.xib */,
-				3CF3780618DD22CD00D832B3 /* DiveEditViewController-ipad.xib */,
+				3C0B39741982B6A200A3FB6F /* DiveEditVC */,
 				3CD100DC18C922B90001B625 /* TKDatePickerView.h */,
 				3CD100DD18C922B90001B625 /* TKDatePickerView.m */,
 				3CD100E218C9321E0001B625 /* TKListPickerView.h */,
@@ -551,10 +659,7 @@
 		3CCD100318C57EC2001AD995 /* DiveDetail */ = {
 			isa = PBXGroup;
 			children = (
-				3CCD100418C57EC2001AD995 /* DiveDetailViewController.h */,
-				3CCD100518C57EC2001AD995 /* DiveDetailViewController.m */,
-				3CCD100618C57EC2001AD995 /* DiveDetailViewController.xib */,
-				3C39C4AC18DE414B00C29BF1 /* DiveDetailViewController-ipad.xib */,
+				3C0B39731982B69000A3FB6F /* DiveDetailVC */,
 				3CCD102318C598D8001AD995 /* UIUnderlineButton.h */,
 				3CCD102418C598D8001AD995 /* UIUnderlineButton.m */,
 			);
@@ -579,12 +684,8 @@
 		3CD100E918C99BF80001B625 /* Setting */ = {
 			isa = PBXGroup;
 			children = (
-				3CD100EA18C99C0D0001B625 /* SettingViewController.h */,
-				3CD100EB18C99C0D0001B625 /* SettingViewController.m */,
-				3CD100EC18C99C0D0001B625 /* SettingViewController.xib */,
-				3C26F6DF18E463A800684349 /* DBUnitSelectViewController.h */,
-				3C26F6E018E463A800684349 /* DBUnitSelectViewController.m */,
-				3C26F6E118E463A800684349 /* DBUnitSelectViewController.xib */,
+				3C0B39751982B6AE00A3FB6F /* SettingVC */,
+				3C0B39761982B6B600A3FB6F /* DBUnitSelectVC */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -704,6 +805,8 @@
 				3C13084618F3E1DC00D51AC7 /* DataRequestManager.m */,
 				3CE7FA4E1933731700D72A34 /* DiveBoardNavigationController.h */,
 				3CE7FA4F1933731700D72A34 /* DiveBoardNavigationController.m */,
+				3C66AB0118F538C7000AB0D6 /* DiveOfflineModeManager.h */,
+				3C66AB0218F538C7000AB0D6 /* DiveOfflineModeManager.m */,
 			);
 			path = Global;
 			sourceTree = "<group>";
@@ -711,14 +814,8 @@
 		3CE0477818BCB8B600FA47FF /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				3CF3377B18BD40C7001D2DF0 /* DiveListViewController.h */,
-				3CF3377C18BD40C7001D2DF0 /* DiveListViewController.m */,
-				3CF3377D18BD40C7001D2DF0 /* DiveListViewController.xib */,
-				3C24E55A18D7E66400215E9E /* DiveListViewController-ipad.xib */,
-				3CD9FCBF18BFD6CE000EFAB4 /* DivePicturesViewController.h */,
-				3CD9FCC018BFD6CE000EFAB4 /* DivePicturesViewController.m */,
-				3CD9FCC118BFD6CE000EFAB4 /* DivePicturesViewController.xib */,
-				3C24E55C18D7E76E00215E9E /* DivePicturesViewController-ipad.xib */,
+				3C0B396F1982B66500A3FB6F /* DiveListVC */,
+				3C0B39701982B66D00A3FB6F /* DivePicturesVC */,
 				3CF3378018BD48D6001D2DF0 /* DiveView */,
 			);
 			path = Home;
@@ -727,16 +824,8 @@
 		3CE0477918BCB8B600FA47FF /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				3CF3375518BCD4FD001D2DF0 /* LoginViewController.h */,
-				3CF3375618BCD4FD001D2DF0 /* LoginViewController.m */,
-				3CF3375718BCD4FD001D2DF0 /* LoginViewController.xib */,
-				3C24E55618D7DEBE00215E9E /* LoginViewController-ipad.xib */,
-				3CF3377618BD21DE001D2DF0 /* SignupViewController.h */,
-				3CF3377718BD21DE001D2DF0 /* SignupViewController.m */,
-				3CF3377818BD21DE001D2DF0 /* SignupViewController.xib */,
-				3C24E55818D7E0D400215E9E /* SignupViewController-ipad.xib */,
-				3C66AB0118F538C7000AB0D6 /* DiveOfflineModeManager.h */,
-				3C66AB0218F538C7000AB0D6 /* DiveOfflineModeManager.m */,
+				3C0B396D1982B64F00A3FB6F /* LoginVC */,
+				3C0B396E1982B65D00A3FB6F /* SignupVC */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -954,17 +1043,8 @@
 		3CF3378018BD48D6001D2DF0 /* DiveView */ = {
 			isa = PBXGroup;
 			children = (
-				3CF3378118BD48FE001D2DF0 /* DiveCountlineView.h */,
-				3CF3378218BD48FE001D2DF0 /* DiveCountlineView.m */,
-				3CF3378418BD591F001D2DF0 /* DiveCountlineView.xib */,
-				3C24E56018D7F5F800215E9E /* DiveCountlineView-ipad.xib */,
-				3CE7914118BF0C1D00E4265A /* OneDiveView.h */,
-				3CE7914218BF0C1D00E4265A /* OneDiveView.m */,
-				3CE7914418BF0C2900E4265A /* OneDiveView.xib */,
-				3C1B31D518D7438700FE27BF /* OneDiveView-mini.xib */,
-				3CD9FCB618BF8578000EFAB4 /* OneDiveViewLand.xib */,
-				3C24E55E18D7ED1C00215E9E /* OneDiveView-ipad.xib */,
-				3C24E56218D7FAB500215E9E /* OneDiveView-ipadland.xib */,
+				3C0B39711982B67500A3FB6F /* DiveCountlineView */,
+				3C0B39721982B68400A3FB6F /* OneDiveView */,
 			);
 			path = DiveView;
 			sourceTree = "<group>";

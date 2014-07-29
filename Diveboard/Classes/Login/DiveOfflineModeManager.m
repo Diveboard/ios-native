@@ -221,26 +221,31 @@ static DiveOfflineModeManager *_sharedManager;
 
 #pragma mark - One Dive information
 
-- (void) writeOneDiveInformation:(NSDictionary *)data overwrite:(BOOL)flag
+- (BOOL) writeOneDiveInformation:(NSDictionary *)data overwrite:(BOOL)flag
 {
-    NSString *diveID = getStringValue([[data objectForKey:@"result"] objectForKey:@"id"]);
-    NSData *oneDiveData = [NSKeyedArchiver archivedDataWithRootObject:data];
-    
-    NSString *dirName = [self getFullpathFilename:diveID];
-    
-    [self createDirectory:dirName];
-    
-    NSString *fileName = [dirName stringByAppendingString:@"/diveInfo.dat"];
-    
-    if (flag) {
-        [oneDiveData writeToFile:fileName atomically:YES];
-    } else {
-        if (![fileManager fileExistsAtPath:fileName]) {
+    id result = [data objectForKey:@"result"];
+    if (result && result != [NSNull null]) {
+        NSString *diveID = getStringValue([result objectForKey:@"id"]);
+        NSData *oneDiveData = [NSKeyedArchiver archivedDataWithRootObject:data];
+        
+        NSString *dirName = [self getFullpathFilename:diveID];
+        
+        [self createDirectory:dirName];
+        
+        NSString *fileName = [dirName stringByAppendingString:@"/diveInfo.dat"];
+        
+        if (flag) {
             [oneDiveData writeToFile:fileName atomically:YES];
+        } else {
+            if (![fileManager fileExistsAtPath:fileName]) {
+                [oneDiveData writeToFile:fileName atomically:YES];
+            }
         }
+        NSLog(@"One Dive filename : %@", fileName);
+        return YES;
+    } else {
+        return NO;
     }
-    NSLog(@"One Dive filename : %@", fileName);
-    
 
 }
 

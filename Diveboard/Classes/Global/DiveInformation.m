@@ -209,7 +209,7 @@
         self.date     = getStringValue([data objectForKey:@"date"]);
         self.time     = getStringValue([data objectForKey:@"time"]);
         self.duration = getStringValue([data objectForKey:@"duration"]);
-        self.maxDepth = getStringValue([data objectForKey:@"maxdepth"]);
+        self.maxDepth = getStringValue([data objectForKey:@"maxdepth_value"]);
         self.maxDepthUnit = getStringValue([data objectForKey:@"maxdepth_unit"]);
         self.imageURL = getStringValue([data objectForKey:@"thumbnail_image_url"]);
         self.spotInfo = [[DiveSpotInfo alloc] initWithDictionary:[data objectForKey:@"spot"]];

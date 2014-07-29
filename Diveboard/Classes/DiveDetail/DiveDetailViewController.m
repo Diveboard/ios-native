@@ -109,6 +109,8 @@
     [self photosViewRelayout];
 }
 
+#pragma mark Show Dive Information
+
 - (void) setDiveInformationToView
 {
     
@@ -342,17 +344,6 @@
     [self photosViewRelayout];
 }
 
-- (void) imageTapAction:(UITapGestureRecognizer *)sender
-{
-    int index = sender.view.tag - kPhotoImageViewTag;
-    DivePicturesViewController *viewController = [[DivePicturesViewController alloc] initWithPicturesData:diveInformation.divePictures];
-//    viewController.startIndex = index;
-    viewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    [self presentViewController:viewController animated:YES completion:^{
-        [viewController showPictureWithIndex:index];
-    }];
-}
-
 - (void) photosViewRelayout {
     int    unit;
     if (isPortrateScreen) {
@@ -430,9 +421,64 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - Button & Tap Actions
+
 - (IBAction)tapButtonAction:(id)sender {
     [self clickButtonWithName:(UIButton *)sender];
     
+}
+
+- (void) clickButtonWithName:(UIButton *)button
+{
+    [viewContent setContentOffset:CGPointMake(0, 0)];
+    if (button == btnDetails) {
+        viewDetailBox.backgroundColor = [UIColor whiteColor];
+        [imgviewDetailBtn setImage:[UIImage imageNamed:@"ic_details_grey"]];
+        lblDetailBtn.textColor = [UIColor blackColor];
+        [viewContent setBackgroundColor:[UIColor whiteColor]];
+        [viewContent setContentSize:viewDetail.frame.size];
+        [viewDetail setHidden:NO];
+    } else {
+        viewDetailBox.backgroundColor = [UIColor clearColor];
+        [imgviewDetailBtn setImage:[UIImage imageNamed:@"ic_details_white"]];
+        lblDetailBtn.textColor = [UIColor whiteColor];
+        [viewDetail setHidden:YES];
+    }
+    
+    if (button == btnPhotos) {
+        viewPhotosBox.backgroundColor = [UIColor whiteColor];
+        [imgviewPhotosBtn setImage:[UIImage imageNamed:@"ic_photos_grey"]];
+        lblPhotosBtn.textColor = [UIColor blackColor];
+        if (diveInformation.divePictures.count > 0) {
+            [viewContent setBackgroundColor:[UIColor blackColor]];
+        } else {
+            [viewContent setBackgroundColor:[UIColor whiteColor]];
+        }
+        
+        
+        [viewContent setContentSize:photosContent.frame.size];
+        [photosContent setHidden:NO];
+    } else {
+        viewPhotosBox.backgroundColor = [UIColor clearColor];
+        [imgviewPhotosBtn setImage:[UIImage imageNamed:@"ic_photos_white"]];
+        lblPhotosBtn.textColor = [UIColor whiteColor];
+        [photosContent setHidden:YES];
+    }
+    
+    if (button == btnMap) {
+        viewMapBox.backgroundColor = [UIColor whiteColor];
+        [imgviewMapBtn setImage:[UIImage imageNamed:@"ic_map_grey"]];
+        lblMapBtn.textColor = [UIColor blackColor];
+        [viewContent setBackgroundColor:[UIColor whiteColor]];
+        [viewContent setContentSize:viewContent.frame.size];
+        [mapView setHidden:NO];
+        
+    } else {
+        viewMapBox.backgroundColor = [UIColor clearColor];
+        [imgviewMapBtn setImage:[UIImage imageNamed:@"ic_map_white"]];
+        lblMapBtn.textColor = [UIColor whiteColor];
+        [mapView setHidden:YES];
+    }
 }
 
 - (IBAction)closeAction:(id)sender {
@@ -440,10 +486,15 @@
     [NSTimer scheduledTimerWithTimeInterval:0.1f target:self selector:@selector(gotoPrevViewController:) userInfo:nil repeats:NO];
 }
 
-- (void) gotoPrevViewController:(NSTimer *)dt
+- (void) imageTapAction:(UITapGestureRecognizer *)sender
 {
-    NSLog(@"--- prev ----");
-    [self.navigationController popViewControllerAnimated:YES];
+    int index = sender.view.tag - kPhotoImageViewTag;
+    DivePicturesViewController *viewController = [[DivePicturesViewController alloc] initWithPicturesData:diveInformation.divePictures];
+    //    viewController.startIndex = index;
+    viewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [self presentViewController:viewController animated:YES completion:^{
+        [viewController showPictureWithIndex:index];
+    }];
 }
 
 - (IBAction)diveEditAction:(id)sender {
@@ -455,18 +506,6 @@
         
     }];
 }
-
-- (void)diveEditFinish:(DiveInformation *)diveInfo
-{
-    NSLog(@"%@", diveInfo);
-    diveInformation = diveInfo;
-    [self.diveView setDiveInformation:diveInformation];
-    [self setDiveInformationToView];
-    [self updateMapView];
-    
-    [viewDetail setHidden:NO];
-}
-
 
 - (IBAction)diveDeleteAction:(id)sender {
     UIAlertView *deleteAlert = [[UIAlertView alloc] initWithTitle:@"Delete Dive"
@@ -487,6 +526,26 @@
         }
     }
 }
+
+- (void) gotoPrevViewController:(NSTimer *)dt
+{
+    NSLog(@"--- prev ----");
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+
+- (void)diveEditFinish:(DiveInformation *)diveInfo
+{
+    NSLog(@"%@", diveInfo);
+    diveInformation = diveInfo;
+    [self.diveView setDiveInformation:diveInformation];
+    [self setDiveInformationToView];
+    [self updateMapView];
+    
+    [viewDetail setHidden:NO];
+}
+
+#pragma mark - Dive delete
 
 - (void) diveDeleteRequest
 {
@@ -569,59 +628,6 @@
     [MMProgressHUD dismissWithSuccess:@"Deleted Dive" title:@"Success!"];
     [self.navigationController popViewControllerAnimated:YES];
 
-}
-
-- (void) clickButtonWithName:(UIButton *)button
-{
-    [viewContent setContentOffset:CGPointMake(0, 0)];
-    if (button == btnDetails) {
-        viewDetailBox.backgroundColor = [UIColor whiteColor];
-        [imgviewDetailBtn setImage:[UIImage imageNamed:@"ic_details_grey"]];
-        lblDetailBtn.textColor = [UIColor blackColor];
-        [viewContent setBackgroundColor:[UIColor whiteColor]];
-        [viewContent setContentSize:viewDetail.frame.size];
-        [viewDetail setHidden:NO];
-    } else {
-        viewDetailBox.backgroundColor = [UIColor clearColor];
-        [imgviewDetailBtn setImage:[UIImage imageNamed:@"ic_details_white"]];
-        lblDetailBtn.textColor = [UIColor whiteColor];
-        [viewDetail setHidden:YES];
-    }
-    
-    if (button == btnPhotos) {
-        viewPhotosBox.backgroundColor = [UIColor whiteColor];
-        [imgviewPhotosBtn setImage:[UIImage imageNamed:@"ic_photos_grey"]];
-        lblPhotosBtn.textColor = [UIColor blackColor];
-        if (diveInformation.divePictures.count > 0) {
-            [viewContent setBackgroundColor:[UIColor blackColor]];
-        } else {
-            [viewContent setBackgroundColor:[UIColor whiteColor]];
-        }
-        
-        
-        [viewContent setContentSize:photosContent.frame.size];
-        [photosContent setHidden:NO];
-    } else {
-        viewPhotosBox.backgroundColor = [UIColor clearColor];
-        [imgviewPhotosBtn setImage:[UIImage imageNamed:@"ic_photos_white"]];
-        lblPhotosBtn.textColor = [UIColor whiteColor];
-        [photosContent setHidden:YES];
-    }
-    
-    if (button == btnMap) {
-        viewMapBox.backgroundColor = [UIColor whiteColor];
-        [imgviewMapBtn setImage:[UIImage imageNamed:@"ic_map_grey"]];
-        lblMapBtn.textColor = [UIColor blackColor];
-        [viewContent setBackgroundColor:[UIColor whiteColor]];
-        [viewContent setContentSize:viewContent.frame.size];
-        [mapView setHidden:NO];
-
-    } else {
-        viewMapBox.backgroundColor = [UIColor clearColor];
-        [imgviewMapBtn setImage:[UIImage imageNamed:@"ic_map_white"]];
-        lblMapBtn.textColor = [UIColor whiteColor];
-        [mapView setHidden:YES];
-    }
 }
 
 @end

@@ -50,7 +50,8 @@ typedef enum _diveUpdateType
 - (NSDictionary *) getLoginResultData;
 
 // write one dive information to file
-- (void) writeOneDiveInformation:(NSDictionary *)data overwrite:(BOOL)flag;
+//- (void) writeOneDiveInformation:(NSDictionary *)data overwrite:(BOOL)flag;
+- (BOOL) writeOneDiveInformation:(NSDictionary *)data overwrite:(BOOL)flag;
 
 // load one dive information from file when offline mode
 - (NSDictionary *) getOneDiveInformation:(NSString *)diveID;

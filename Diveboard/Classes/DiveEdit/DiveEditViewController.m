@@ -200,13 +200,70 @@
 
 - (IBAction)backAction:(id)sender {
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:Nil
-                                                    message:@"Exit without save?"
-                                                   delegate:self
-                                          cancelButtonTitle:@"Cancel"
-                                          otherButtonTitles:@"OK", nil];
-    [alert setTag:400];
-    [alert show];
+    if ([self changedDiveInformation]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:Nil
+                                                        message:@"Exit without save?"
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                              otherButtonTitles:@"OK", nil];
+        [alert setTag:400];
+        [alert show];
+    } else {
+        [self dismissViewControllerAnimated:YES completion:^{
+            
+        }];
+    }
+}
+
+- (BOOL) changedDiveInformation
+{
+    if (![diveInformation.date isEqualToString:lblDate.text]) return YES;
+    // time
+    if (![diveInformation.time          isEqualToString:lblTime.text]) return YES;
+    // max depth
+    NSString *maxdepth = [DiveInformation unitOfLengthWithValue:diveInformation.maxDepth
+                                                    defaultUnit:diveInformation.maxDepthUnit
+                                                       showUnit:NO];
+    
+    if (![maxdepth      isEqualToString:txtDepth.text])  return YES;
+    
+    // duration
+    if (![diveInformation.duration      isEqualToString:txtDuration.text])  return YES;
+    // weight
+    NSString *actualWeight = [DiveInformation unitOfWeightWithValue:diveInformation.weight.weight
+                                                        defaultUnit:diveInformation.weight.unit
+                                                           showUnit:NO];
+    if (![actualWeight isEqualToString:txtWeight.text])  return YES;
+    // dive number
+    if (![diveInformation.number        isEqualToString:txtDiveNumber.text])  return YES;
+    // dive trip name
+    if (![diveInformation.tripName      isEqualToString:txtTripName.text]) return YES;
+    // visibility
+    if (![diveInformation.visibility    isEqualToString:lblVisibility.text]) return YES;
+    // current
+    if (![diveInformation.current       isEqualToString:lblCurrent.text]) return YES;
+    // surface temporature
+    NSString *tempSurface = [DiveInformation unitOfTempWithValue:diveInformation.temp.surface
+                                                     defaultUnit:diveInformation.temp.surfaceUnit
+                                                        showUnit:NO];
+    if (![tempSurface  isEqualToString:txtSurface.text]) return YES;
+    // bottom temporature
+    NSString *tempBottom = [DiveInformation unitOfTempWithValue:diveInformation.temp.bottom
+                                                    defaultUnit:diveInformation.temp.bottomUnit
+                                                       showUnit:NO];
+    if (![tempBottom  isEqualToString:txtBottom.text])  return YES;
+    // altitude
+    if (![diveInformation.altitude      isEqualToString:txtAltitude.text]) return YES;
+    // water
+    if (![diveInformation.water         isEqualToString:lblWater.text]) return YES;
+    // public
+    if ( [diveInformation.privacy boolValue] != !schPublic.isOn) return YES;
+    // dive note
+    if (![diveInformation.note   isEqualToString:txtviewNotes.text]) return YES;
+    // dive spot information
+    if (![diveInformation.spotInfo.name isEqualToString:lblCurrentSpot.text])  return YES;
+    
+    return NO;
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -328,6 +385,8 @@
     if (![diveInformation.spotInfo.name isEqualToString:lblCurrentSpot.text]) {
         if (selectedSpot) {
             [updateParams setObject:@{@"id": selectedSpot.ID} forKey:@"spot"];
+        } else {
+            [updateParams setObject:@{@"id": @"0"} forKey:@"spot"];
         }
     }
     
@@ -371,10 +430,14 @@
                 [manager POST:requestURLStr parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
                     NSLog(@"%@", responseObject);
                     
-                    [[DiveOfflineModeManager sharedManager] writeOneDiveInformation:responseObject overwrite:YES];
-                    
-                    [self updateDiveSuccess];
-                    
+                    BOOL success = [[DiveOfflineModeManager sharedManager] writeOneDiveInformation:responseObject overwrite:YES];
+                    if (success) {
+                        [self updateDiveSuccess];
+                    } else {
+                        [MMProgressHUD dismissWithSuccess:@"Failure" title:@"Update"];
+                        [self dismissViewControllerAnimated:YES completion:^{
+                        }];
+                    }
                 } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                     NSLog(@"error : %@", error);
                     
@@ -518,7 +581,7 @@
         [updateParams setObject:[lblWater.text lowercaseString] forKey:@"water"];
     
     // public
-    [updateParams setObject:(schPublic.isOn ? @"1" : @"0") forKey:@"privacy"];
+    [updateParams setObject:(schPublic.isOn ? @"0" : @"1") forKey:@"privacy"];
     
     // dive note
     if (txtviewNotes.text.length > 0)
@@ -547,9 +610,9 @@
             
             NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
             jsonString = [jsonString stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-            NSDictionary *params = @{@"auth_token": appManager.loginResult.token,
-                                     @"apikey" : API_KEY,
-                                     @"arg" : jsonString,
+            NSDictionary *params = @{@"auth_token"  : appManager.loginResult.token,
+                                     @"apikey"      : API_KEY,
+                                     @"arg"         : jsonString,
                                      };
             
             
@@ -698,7 +761,7 @@
                                            @"temp_surface"  : txtSurface.text,
                                            @"temp_surface_value"    : txtSurface.text,
                                            @"temp_surface_unit"     : (diveLengthUnit == 0 ? @"F" : @"C"),
-                                           @"thumbnail_image_url"   :   [NSString stringWithFormat:@"%@/map_images/map_1.jpg?v=1394539383", SERVER_URL ],
+                                           @"thumbnail_image_url"   : [NSString stringWithFormat:@"%@/map_images/map_1.jpg?v=1394539383", SERVER_URL ],
                                            @"thumbnail_profile_url" : [NSNull null],
                                            @"time"          : lblTime.text,
                                            @"trip_name"     : txtTripName.text,

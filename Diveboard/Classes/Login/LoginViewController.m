@@ -519,7 +519,8 @@
         NSString *bundle = [[NSBundle mainBundle] pathForResource:filename ofType:fileExt];
         [fileManager copyItemAtPath:bundle toPath:plistPath error:&error];
     }
-    NSDictionary *dic = [NSDictionary dictionaryWithDictionary:dictionary];
+    
+//    NSDictionary *dic = [NSDictionary dictionaryWithDictionary:dictionary];
 //    [dic writeToFile:plistPath atomically:NO];
     
     NSDictionary *dic2 = @{@"string1": @"string"};
