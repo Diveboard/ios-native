@@ -10,22 +10,26 @@
 	<string>Diveboard</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
+		<key>2776E86CE564810D287E54E385CAB8B3F8EF48FD</key>
+		<string>diveboard.plan.io:diveboard-iphone.git</string>
 		<key>9D2EEFDF-1DF3-4A62-A11D-A044D9B799FA</key>
 		<string>ssh://diveboard.plan.io/diveboard-iphone.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Diveboard.xcodeproj/project.xcworkspace</string>
+	<string>Diveboard.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>9D2EEFDF-1DF3-4A62-A11D-A044D9B799FA</key>
+		<key>2776E86CE564810D287E54E385CAB8B3F8EF48FD</key>
 		<string>../..</string>
+		<key>9D2EEFDF-1DF3-4A62-A11D-A044D9B799FA</key>
+		<string>../../../Diveboard</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>ssh://diveboard.plan.io/diveboard-iphone.git</string>
+	<string>diveboard.plan.io:diveboard-iphone.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>9D2EEFDF-1DF3-4A62-A11D-A044D9B799FA</string>
+	<string>2776E86CE564810D287E54E385CAB8B3F8EF48FD</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
@@ -35,6 +39,14 @@
 			<string>9D2EEFDF-1DF3-4A62-A11D-A044D9B799FA</string>
 			<key>IDESourceControlWCCName</key>
 			<string>Diveboard</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>2776E86CE564810D287E54E385CAB8B3F8EF48FD</string>
+			<key>IDESourceControlWCCName</key>
+			<string>diveboard-iphone</string>
 		</dict>
 	</array>
 </dict>

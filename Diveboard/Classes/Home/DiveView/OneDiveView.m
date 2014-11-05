@@ -13,9 +13,7 @@
 
 @interface OneDiveView()
 {
-    AppManager *appManager;
-    int         diveLengthUnit;
-    
+
     NSString *currentDiveID;
     float     subPicImageHeight;
     UIInterfaceOrientation orientation;
@@ -53,10 +51,7 @@
     
     if (self) {
         [self setFrame:frame];
-        appManager = [AppManager sharedManager];
         orientation = orien;
-        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-        diveLengthUnit = [[ud objectForKey:kDiveboardUnit] intValue];
         
         [self initMethod];
         
@@ -103,8 +98,8 @@
 
     
     [imgviewMainPhoto setBackgroundColor:[UIColor colorWithWhite:0.9f alpha:1.0f]];
-    lblLogedUserName.text = appManager.loginResult.user.nickName;
-    [imgviewAvator setImageWithURL:[NSURL URLWithString:appManager.loginResult.user.pictureSmall]];
+    lblLogedUserName.text = [AppManager sharedManager].loginResult.user.nickName;
+    [imgviewAvator setImageWithURL:[NSURL URLWithString:[AppManager sharedManager].loginResult.user.pictureSmall]];
 //                  placeholderImage:[UIImage imageNamed:@"default_user_photo"]];
     
     [viewLoadingScreen setHidden:NO];
@@ -132,8 +127,8 @@
 - (void)setDiveID:(NSString *)diveID
 {
     currentDiveID = diveID;
-    if (appManager.loadedDives) {
-        NSDictionary *diveInfo = [appManager.loadedDives objectForKey:currentDiveID];
+    if ([AppManager sharedManager].loadedDives) {
+        NSDictionary *diveInfo = [[AppManager sharedManager].loadedDives objectForKey:currentDiveID];
         if (diveInfo) {
             [self removeLoadingScreen];
             [self requestResultCheckingWithObject:diveInfo];
@@ -141,7 +136,7 @@
             [self loadDiveData:diveID];
         }
     } else {
-        appManager.loadedDives = [[NSMutableDictionary alloc] init];
+        [AppManager sharedManager].loadedDives = [[NSMutableDictionary alloc] init];
         [self loadDiveData:diveID];
     }
 }
@@ -161,7 +156,6 @@
 {
     [lblSpotDepth setText:[DiveInformation unitOfLengthWithValue:diveInfoOfSelf.maxDepth
                                                      defaultUnit:diveInfoOfSelf.maxDepthUnit]];
-    diveLengthUnit = type;
 }
 
 #pragma mark - Loading Dive Data
@@ -176,7 +170,7 @@
     
     
     [self addLoadingScreen];
-    NSString *authToken = appManager.loginResult.token;
+    NSString *authToken = [AppManager sharedManager].loginResult.token;
     
     NSString *requestURLString = [NSString stringWithFormat:@"%@/api/V2/dive/%@", SERVER_URL, diveID] ; //]@"77197"];
     
@@ -208,12 +202,12 @@
 {
     if (responseObject) {
         NSDictionary *data = [NSDictionary dictionaryWithDictionary:responseObject];
-        NSLog(@"%@", data);
         if ([[data objectForKey:@"success"] boolValue]) {
             diveInfoOfSelf = [[DiveInformation alloc] initWithDictionary:[data objectForKey:@"result"]];
-            [appManager.loadedDives setObject:responseObject forKey:currentDiveID];
+            [[AppManager sharedManager].loadedDives setObject:responseObject forKey:currentDiveID];
+            
+
             [[DiveOfflineModeManager sharedManager] writeOneDiveInformation:responseObject overwrite:NO];
-            NSLog(@"--- end ----");
             
             [self setDiveValueToSelf];
             
@@ -225,15 +219,60 @@
 
 - (void) setDiveValueToSelf
 {
-    lblSpotName.text = diveInfoOfSelf.spotInfo.name;
     lblSpotDate.text = diveInfoOfSelf.date;
     
+    /// graph
+
+    NSString *myNickName = [[AppManager sharedManager].loginResult.user.nickName stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSString *diveShakenID   = diveInfoOfSelf.shakenID;
     
-    [lblSpotDepth setText:[DiveInformation unitOfLengthWithValue:diveInfoOfSelf.maxDepth
+    NSString *graphThumbUrlString = [NSString stringWithFormat:@"%@/%@/%@/profile.png?g=mobile_v002&u=m", SERVER_URL, myNickName, diveShakenID];
+
+    NSString *graphLargeUrlString = [NSString stringWithFormat:@"%@/%@/%@/profile.png?g=mobile_v003&u=m", SERVER_URL, myNickName, diveShakenID];
+
+    
+    
+    if (![[DiveOfflineModeManager sharedManager] isExistImageWithURL:graphThumbUrlString]) {
+        
+        
+        if (![[AppManager sharedManager].remainingPictures containsObject:graphThumbUrlString]) {
+            
+            [[AppManager sharedManager].remainingPictures addObject:graphThumbUrlString];
+            
+        }
+        
+    }
+    
+    if (![[DiveOfflineModeManager sharedManager] isExistImageWithURL:graphLargeUrlString]) {
+        
+        
+        if (![[AppManager sharedManager].remainingPictures containsObject:graphLargeUrlString]) {
+            
+            [[AppManager sharedManager].remainingPictures addObject:graphLargeUrlString];
+            
+        }
+        
+    }
+    
+    
+    NSString* roundDepth = [NSString stringWithFormat:@"%d",[diveInfoOfSelf.maxDepth intValue]];
+    [lblSpotDepth setText:[DiveInformation unitOfLengthWithValue:roundDepth
                                                      defaultUnit:diveInfoOfSelf.maxDepthUnit]];
     
     lblSpotDuration.text = [NSString stringWithFormat:@"%@ mins", diveInfoOfSelf.duration];
-    lblSpotCountryCity.text = [NSString stringWithFormat:@"%@ - %@", diveInfoOfSelf.spotInfo.countryName, diveInfoOfSelf.spotInfo.locationName];
+    
+    if ([diveInfoOfSelf.spotInfo.ID floatValue] != 1) {
+        
+        lblSpotCountryCity.text = [[NSString stringWithFormat:@"%@ - %@", diveInfoOfSelf.spotInfo.countryName, diveInfoOfSelf.spotInfo.locationName] stringByReplacingOccurrencesOfString:@"(null)" withString:@""];
+        lblSpotName.text = diveInfoOfSelf.spotInfo.name;
+        
+    }else{
+        
+        lblSpotCountryCity.text = @"";
+        lblSpotName.text = @"";
+
+        
+    }
     lblTripName.text = diveInfoOfSelf.tripName;
     if (diveInfoOfSelf.tripName.length == 0) {
         [viewTripBox setHidden:YES];
@@ -241,41 +280,55 @@
         [viewTripBox setHidden:NO];
     }
     
+    for (UIView *view in viewSubPicturesBox.subviews) {
+        [view removeFromSuperview];
+    }
+    
+    
     if (diveInfoOfSelf.divePictures.count > 0) {
         UITapGestureRecognizer *tapGesture0 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageTapAction:)];
         [imgviewMainPhoto addGestureRecognizer:tapGesture0];
         [imgviewMainPhoto setUserInteractionEnabled:YES];
         
-        int subPicCount = diveInfoOfSelf.divePictures.count;
+        
+        int subPicCount = (int) diveInfoOfSelf.divePictures.count;
         if (subPicCount > 5) subPicCount = 5;
         float subPicSpace = subPicImageHeight * 0.1;
         float ww1 = (subPicImageHeight * subPicCount) + (subPicSpace * (subPicCount - 1));
         float ox  = (viewSubPicturesBox.frame.size.width - ww1) / 2;
         for (int i = 0; i < subPicCount; i ++) {
             CGRect picRect = CGRectMake(ox + (subPicImageHeight + subPicSpace) * i, 0, subPicImageHeight, subPicImageHeight);
-            //            UIImageView *subPicImageView = [[UIImageView alloc] initWithFrame:picRect];
-            AsyncUIImageView *subPicImageView = [[AsyncUIImageView alloc] initWithFrame:picRect];
-            [subPicImageView setContentMode:(UIViewContentModeScaleAspectFill)];
-            subPicImageView.clipsToBounds = YES;
-            subPicImageView.layer.cornerRadius = subPicImageHeight / 2;
-            subPicImageView.backgroundColor = [UIColor clearColor];
             DivePicture *onePicInfo = [diveInfoOfSelf.divePictures objectAtIndex:i];
-            NSURL *picURL = [NSURL URLWithString:onePicInfo.smallURL];
-            //            [subPicImageView setImageWithURL:picURL]; // placeholderImage:[UIImage imageNamed:@"preload"]];
-            [subPicImageView setImageURL:picURL placeholder:nil]; // loadImageFromURL:picURL];
-            
-//            UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageTapAction:)];
-//            [subPicImageView addGestureRecognizer:tapGesture];
-            
-            [subPicImageView setUserInteractionEnabled:NO];
-            
-            [viewSubPicturesBox addSubview:subPicImageView];
-            if (i == 0) {
-                [imgviewMainPhoto setImageURL:picURL placeholder:nil]; // setImageWithURL:[NSURL URLWithString:onePicInfo.largeURL]];
+
+            if (onePicInfo.isLocal) {
+                UIImageView *subPicImageView = [[UIImageView alloc] initWithFrame:picRect];
+                [subPicImageView setContentMode:(UIViewContentModeScaleAspectFill)];
+                subPicImageView.clipsToBounds = YES;
+                subPicImageView.layer.cornerRadius = subPicImageHeight / 2;
+                subPicImageView.backgroundColor = [UIColor clearColor];
+                [subPicImageView setImage:[[DiveOfflineModeManager sharedManager] getLocalDivePicture:onePicInfo.urlString]];
+                [subPicImageView setUserInteractionEnabled:NO];
+                [viewSubPicturesBox addSubview:subPicImageView];
+                if (i == 0) {
+                    [imgviewMainPhoto setImage:[[DiveOfflineModeManager sharedManager] getLocalDivePicture:onePicInfo.urlString]];
+                }
+            }else{
+                AsyncUIImageView *subPicImageView = [[AsyncUIImageView alloc] initWithFrame:picRect];
+                [subPicImageView setContentMode:(UIViewContentModeScaleAspectFill)];
+                subPicImageView.clipsToBounds = YES;
+                subPicImageView.layer.cornerRadius = subPicImageHeight / 2;
+                subPicImageView.backgroundColor = [UIColor clearColor];
+                NSURL *picURL = [NSURL URLWithString:onePicInfo.smallURL];
+                [subPicImageView setImageURL:picURL placeholder:nil];;
+                [subPicImageView setUserInteractionEnabled:NO];
+                [viewSubPicturesBox addSubview:subPicImageView];
+                if (i == 0) {
+                    [imgviewMainPhoto setImageWithURL:picURL placeholderImage:nil];
+                }
             }
         }
     } else {
-        [imgviewMainPhoto setImageURL:[NSURL URLWithString:diveInfoOfSelf.imageURL] placeholder:nil];
+        [imgviewMainPhoto setImageWithURL:[NSURL URLWithString:diveInfoOfSelf.imageURL] placeholderImage:nil];
     }
     
     self.isLoadedData = YES;

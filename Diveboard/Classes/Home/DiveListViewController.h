@@ -24,13 +24,14 @@
 @property (strong, nonatomic) IBOutlet UILabel *lblCoordinate;
 @property (strong, nonatomic) IBOutlet UIImageView *imgviewBackground;
 
-
-
 - (IBAction)menuAction:(id)sender;
 
 - (void)setCoordinateValue:(DiveInformation *)diveInfoOfSelf;
 
 - (void) diveViewsUpdate;
 - (void) updateUnit;
+- (void) refreshAction;
+- (void) currentDiveViewUpdate;
+
 
 @end

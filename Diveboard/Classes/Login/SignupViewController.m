@@ -9,19 +9,17 @@
 #define kCOLOR(r, g, b, a) [UIColor colorWithRed:r green:g blue:b alpha:a]
 
 #import "SignupViewController.h"
-#import "MBProgressHUD.h"
+#import "SVProgressHUD.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "AFNetworking.h"
 #import "DiveListViewController.h"
-
-
+#import "DrawerMenuViewController.h"
+#import "OSBlurSlideMenu.h"
 @interface SignupViewController ()
 {
     BOOL isKeep, isAgree;
-    AppManager *appManager;
     NSUserDefaults *userDefault;
     
-    FBSession *fbSession;
 }
 @end
 
@@ -45,9 +43,7 @@
 //    UIFont *QuicksandRegular_small = [UIFont fontWithName:@"Quicksand-Regular" size:9.0f];
 //    UIFont *QuicksandBold =         [UIFont fontWithName:@"Quicksand-Bold" size:17.0f];
 
-    appManager = [AppManager sharedManager];
     userDefault = [NSUserDefaults standardUserDefaults];
-    fbSession = appManager.fbSession;
     
     [self initMethod];
     
@@ -138,7 +134,7 @@
 {
     BOOL result = NO;
     
-    if (_txtEmail.text.length < 6) {
+    if (![self IsValidEmail:_txtEmail.text]) {
         [self alertViewShow:@"Please enter correct email address."];
     }
     else if (_txtPassword.text.length < 5 || _txtPassword.text.length > 20) {
@@ -147,9 +143,9 @@
     else if (![_txtPassword.text isEqualToString:_txtConfirmPassword.text]) {
         [self alertViewShow:@"Please enter correct password."];
     }
-    else if (_txtDiveboardURL.text.length < 5) {
-        [self alertViewShow:@"Please enter correct Diveboard URL address."];
-    }
+//    else if (_txtDiveboardURL.text.length < 5) {
+//        [self alertViewShow:@"Please enter correct Diveboard URL address."];
+//    }
     else if (_txtNickname.text.length < 3 || _txtNickname.text.length > 20) {
         [self alertViewShow:@"Please enter ninkname from 3 to 20 characters."];
     }
@@ -181,13 +177,14 @@
     NSString *requestURLString = [NSString stringWithFormat:@"%@/api/register_email", SERVER_URL];
     NSString * email         = _txtEmail.text;
     NSString * password      = _txtPassword.text;
-    NSString * diveURL       = _txtDiveboardURL.text;
+//    NSString * diveURL       = _txtDiveboardURL.text;
     NSString * nickName      = _txtNickname.text;
     NSString * keep          = (isKeep ? @"true" : @"false");
 
     NSDictionary *params = @{@"apikey": API_KEY,
                              @"email" : email,
-                             @"vanity_url" : diveURL,
+//                             @"vanity_url" : diveURL,
+                             @"assign_vanity_url":@"true",
                              @"password" : password,
                              @"password_check" : password,
                              @"nickname" : nickName,
@@ -197,13 +194,11 @@
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager POST:requestURLString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-        NSLog(@"---- signup result ---\n%@", operation.responseString);
         
         [self signUpFinishAction:responseObject];
         
         [self internetConnecting:NO];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"%@", error);
         [[[UIAlertView alloc] initWithTitle:@"Sorry"
                                     message:@"A connection failure occurred"
                                    delegate:Nil
@@ -220,7 +215,6 @@
         NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseObject
                                                              options:NSJSONReadingAllowFragments
                                                                error:nil];
-        NSLog(@"%@", data);
         
         BOOL signUpSuccess = [[data objectForKey:@"success"] boolValue];
         
@@ -256,24 +250,38 @@
         [userDefault setObject:@{@"email": _txtEmail.text, @"password": _txtPassword.text} forKey:kLoginUserInfo];
         [userDefault synchronize];
 
-        appManager.loginResult = [[LoginResult alloc] initWithDictionary:data];
-        appManager.loginResult.user.allDiveIDs = [NSMutableArray arrayWithArray:[[appManager.loginResult.user.allDiveIDs reverseObjectEnumerator] allObjects]];
+        [AppManager sharedManager].loginResult = [[LoginResult alloc] initWithDictionary:data];
+        [AppManager sharedManager].loginResult.user.allDiveIDs = [NSMutableArray arrayWithArray:[[[AppManager sharedManager].loginResult.user.allDiveIDs reverseObjectEnumerator] allObjects]];
+        [[AppManager sharedManager].loadedDives removeAllObjects];
+    if (![AppManager sharedManager].diveListVC) {
         
-        DiveListViewController *viewController;
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-            viewController = [[DiveListViewController alloc] initWithNibName:@"DiveListViewController" bundle:Nil];
+            [AppManager sharedManager].diveListVC = [[DiveListViewController alloc] initWithNibName:@"DiveListViewController" bundle:Nil];
         } else {
-            viewController = [[DiveListViewController alloc] initWithNibName:@"DiveListViewController-ipad" bundle:Nil];
+            [AppManager sharedManager].diveListVC = [[DiveListViewController alloc] initWithNibName:@"DiveListViewController-ipad" bundle:Nil];
         }
         
-        [self.navigationController pushViewController:viewController animated:YES];
+    }
+    
+    UINavigationController* navigationController = [[UINavigationController alloc] initWithRootViewController:[AppManager sharedManager].diveListVC];
+    
+    [navigationController setNavigationBarHidden:YES];
+    
+    DrawerMenuViewController *drawerMenu = [DrawerMenuViewController sharedMenu];
+    [drawerMenu setMenuIndex:0];
+
+    OSBlurSlideMenuController* slideController = [[OSBlurSlideMenuController alloc] initWithMenuViewController:drawerMenu andContentViewController:navigationController];
+    
+    slideController.slideDirection = OSBlurSlideMenuControllerSlideFromLeftToRight;
+    
+    [self.view.window setRootViewController:slideController];
     
 }
 
 #pragma mark - Facebook Login
 
 - (IBAction)fbConnect:(id)sender {
-        [self internetConnecting:YES];
+//        [self internetConnecting:YES];
         //    [NSTimer timerWithTimeInterval:0.1f target:self selector:@selector(facebookConnecting) userInfo:Nil repeats:NO];
         [NSTimer scheduledTimerWithTimeInterval:0.1f target:self selector:@selector(facebookConnecting) userInfo:nil repeats:NO];
 }
@@ -282,16 +290,16 @@
 
 - (void) facebookConnecting
 {
-    if (fbSession.isOpen) {
-        [fbSession closeAndClearTokenInformation];
+    if ([AppManager sharedManager].fbSession.isOpen) {
+        [[AppManager sharedManager].fbSession closeAndClearTokenInformation];
     }
     else
     {
-        if (fbSession.state != FBSessionStateCreated || !fbSession) {
-            fbSession = [[FBSession alloc] init];
+        if ([AppManager sharedManager].fbSession.state != FBSessionStateCreated || ![AppManager sharedManager].fbSession) {
+            [AppManager sharedManager].fbSession = [[FBSession alloc] init];
         }
         
-        [fbSession openWithCompletionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+        [[AppManager sharedManager].fbSession openWithCompletionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
             NSDictionary *fbUserInfo = [self LoadingFacebookInformation];
             if (fbUserInfo) {
                 [userDefault setObject:kLoginModeFB forKey:kLoginMode];
@@ -308,37 +316,36 @@
 
 -(NSDictionary *) LoadingFacebookInformation
 {
-    if (fbSession.isOpen)
+    if ([AppManager sharedManager].fbSession.isOpen)
     {
         
-        NSLog(@"--- access token is ---: %@", fbSession.accessTokenData.accessToken);
         
-        NSString *requestURL = [NSString stringWithFormat:@"https://graph.facebook.com/me?access_token=%@", fbSession.accessTokenData.accessToken];
+        NSString *requestURL = [NSString stringWithFormat:@"https://graph.facebook.com/me?access_token=%@", [AppManager sharedManager].fbSession.accessTokenData.accessToken];
         NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:requestURL]];
         
         NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-        NSString *returnString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-        NSLog(@"FACEBOOK USER INFORMATION : %@", returnString);
+//        NSString *returnString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
         
         if (returnData) {
             NSDictionary *data = [NSJSONSerialization JSONObjectWithData:returnData
                                                                  options:NSJSONReadingAllowFragments
                                                                    error:nil];
             NSDictionary *loginInfo = @{@"fbid":     [data objectForKey:@"id"],
-                                        @"fbtoken" : fbSession.accessTokenData.accessToken,
+                                        @"fbtoken" : [AppManager sharedManager].fbSession.accessTokenData.accessToken,
                                         };
             return loginInfo;
         }
     }
     else
     {
-        NSLog(@"access token is not get.");
     }
     return Nil;
 }
 
 - (void) loginActionWithFacebookUser:(NSDictionary *)info
 {
+    [self internetConnecting:YES];
+    
     NSString *fbLoginURLString = [NSString stringWithFormat:@"%@/api/login_fb", SERVER_URL];
     NSDictionary *params = @{@"apikey": API_KEY,
                              @"flavour" : FLAVOUR,
@@ -353,7 +360,6 @@
             NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseObject
                                                                  options:NSJSONReadingAllowFragments
                                                                    error:nil];
-            NSLog(@"%@", data);
             if ([[data objectForKey:@"success"] boolValue]) {
                 [self requestResultCheckingWithObject:data];
             } else {
@@ -363,7 +369,6 @@
 
         [self internetConnecting:NO];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"%@", error);
         [self internetConnecting:NO];
     }];
 }
@@ -375,6 +380,27 @@
 
 #pragma mark - UITextField delegate
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    if (textField == _txtEmail) {
+
+        [_txtPassword becomeFirstResponder];
+        
+    }else if (textField == _txtPassword){
+        
+        [_txtConfirmPassword becomeFirstResponder];
+        
+    }else if (textField == _txtConfirmPassword){
+        
+        [_txtNickname becomeFirstResponder];
+        
+    }else if (textField == _txtNickname){
+        
+        [textField resignFirstResponder];
+        
+    }
+    return YES;
+}
 
 #pragma mark -
 
@@ -382,11 +408,22 @@
 {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = flag;
     if (flag) {
-        MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        HUD.labelText = @"Connecting...";
+        
+        [SVProgressHUD showWithStatus:@"Connecting..." maskImage:[UIImage imageNamed:@"progress_mask"]];
+        
     } else {
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
+        [SVProgressHUD dismiss];
     }
+}
+-(BOOL) IsValidEmail:(NSString *)checkString
+{
+    BOOL stricterFilter = YES;
+    NSString *stricterFilterString = @"[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}";
+    NSString *laxString = @".+@([A-Za-z0-9]+\\.)+[A-Za-z]{2}[A-Za-z]*";
+    NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:checkString];
 }
 
 

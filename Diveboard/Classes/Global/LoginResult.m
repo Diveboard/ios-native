@@ -8,7 +8,7 @@
 
 #import "LoginResult.h"
 
-
+#import "DiveInformation.h"
 
 @implementation UserData
 
@@ -221,6 +221,7 @@
 - (id)initWithDictionary:(NSDictionary *)data;
 {
     self = [super init];
+    NSLog(@"%@",data);
     if (self) {
         if (![data isEqual:[NSNull null]]) {
             self.about          = getStringValue([data objectForKey:@"about"]);
@@ -278,6 +279,26 @@
             for (NSDictionary *elem in userGears) {
                 [self.userGears addObject:[[UserGear alloc] initWithDictionary:elem]];
             }
+            
+            
+            if ([data objectForKey:@"wallet_picture_ids"]) {
+                
+                self.walletPictureIDs     = [[NSMutableArray alloc] initWithArray:[data objectForKey:@"wallet_picture_ids"]];
+            }
+            else {
+                self.walletPictureIDs = [[NSMutableArray alloc] init];
+            }
+            
+            self.walletPictures = [[NSMutableArray alloc] init];
+            NSArray* arrWallet = [data objectForKey:@"wallet_pictures"];
+            
+            for (NSDictionary* elem in arrWallet) {
+
+                [self.walletPictures addObject:[[DivePicture alloc] initWithDictionary:elem]];
+            }
+
+            
+            
         }
         
     }
@@ -292,6 +313,28 @@
     else {
         return _allDiveIDs;
     }
+}
+
+- (NSDictionary *)getDataDictionary{
+    
+    NSMutableDictionary* dataDic = [[NSMutableDictionary alloc] init];
+    
+    [dataDic setObject:self.ID forKey:@"id"];
+
+    [dataDic setObject:self.walletPictureIDs forKey:@"wallet_picture_ids"];
+    NSMutableArray* arrWallet = [[NSMutableArray alloc] init];
+    
+    for (DivePicture* divePicture in self.walletPictures) {
+        
+        
+        [arrWallet addObject:[divePicture getDataDictionary]];
+        
+    }
+    
+    [dataDic setObject:arrWallet forKey:@"wallet_pictures"];
+
+    
+    return dataDic;
 }
 
 @end
@@ -314,6 +357,18 @@
     return self;
 }
 
+-(NSDictionary *)getDataDictionary{
+    
+    NSMutableDictionary* dataDic = [[NSMutableDictionary alloc] init];
+    
+    
+    [dataDic setObject:self.distance forKey:@"distance"];
+    [dataDic setObject:self.pressure forKey:@"pressure"];
+    [dataDic setObject:self.temperature forKey:@"temperature"];
+    [dataDic setObject:self.weight forKey:@"weight"];
+    
+    return dataDic;
+}
 @end
 
 
@@ -345,6 +400,29 @@
         }
     }
     return self;
+}
+
+-(NSDictionary *)getDataDictionary{
+    
+    NSMutableDictionary* dataDic = [[NSMutableDictionary alloc] init];
+
+//    [dataDic setObject:self.expirations forKey:@"expiration"];
+//    
+//    [dataDic setObject:self.ID forKey:@"id"];
+//    
+//    [dataDic setObject:self.anewAccount forKey:@"new_account"];
+//    
+//    [dataDic setObject:[self.preferredUnits getDataDictionary]  forKey:@"preferred_units"];
+//    
+//    [dataDic setObject:self.token forKey:@"token"];
+//    
+//    [dataDic setObject:[self.units getDataDictionary] forKey:@"units"];
+//    
+//    //            self.user        = [[UserInfomation alloc] initWithDictionary:[data objectForKey:@"user"]];
+//    masterUser       = [[UserInfomation alloc] initWithDictionary:[data objectForKey:@"user"]];
+//    [dataDic setObject:@"" forKey:@"user"];
+    
+    return dataDic;
 }
 
 - (UserInfomation *)user{

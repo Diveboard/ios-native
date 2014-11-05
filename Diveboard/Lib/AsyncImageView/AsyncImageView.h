@@ -12,7 +12,6 @@
 
 #import <UIKit/UIKit.h>
 
-//@class AppManager;
 
 @interface AsyncImageView : UIView {
     NSURLConnection *connection;

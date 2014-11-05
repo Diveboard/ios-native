@@ -22,7 +22,7 @@
     IBOutlet UILabel        *lblLogedUserName;
     
     IBOutlet UIView         *viewMain;
-    IBOutlet AsyncUIImageView    *imgviewMainPhoto;
+    IBOutlet UIImageView    *imgviewMainPhoto;
     IBOutlet UILabel        *lblSpotName;
     IBOutlet UILabel        *lblSpotCountryCity;
     IBOutlet UILabel        *lblSpotDate;

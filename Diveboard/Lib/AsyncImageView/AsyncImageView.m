@@ -108,7 +108,6 @@ static ImageCache *imageCache = nil;
 //    NSLog(@"%f,%f",self.frame.size.width,self.frame.size.height);
     
 	[spinny startAnimating];
-//    [[AppManager sharedAppManager] addConnecting];
     [self addSubview:spinny];
     [spinny release];
    
@@ -133,7 +132,6 @@ static ImageCache *imageCache = nil;
     UIView *spinny = [self viewWithTag:SPINNY_TAG];
     [spinny removeFromSuperview];
     
-//    [[AppManager sharedAppManager] removeConnecting];
     
     if ([[self subviews] count] > 0) {
         [[[self subviews] objectAtIndex:0] removeFromSuperview];

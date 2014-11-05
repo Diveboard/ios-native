@@ -39,12 +39,18 @@ typedef enum _diveUpdateType
 // pending request count
 @property (nonatomic, readonly)     int  pendingRequestCount;
 
+
+@property (nonatomic)               BOOL isRefresh;
+
 // if network is online
 //@property (nonatomic)               BOOL isOnline;
 
 
 // write login result to file
 - (void) writeLoginResultData:(NSDictionary *)data;
+
+// Delete login result file;
+- (void) deleteLoginResultData;
 
 // load login information when offline mode
 - (NSDictionary *) getLoginResultData;
@@ -62,8 +68,16 @@ typedef enum _diveUpdateType
 // load image from file when offline mode
 - (UIImage *) getImageWithUrl:(NSString *)urlString;
 
+- (BOOL) removeImageWithUrl:(NSString *)urlString;
+
+-(BOOL)isExistImageWithURL:(NSString*)URLString;
+
+- (NSDictionary*) writeLocalDivePicture:(UIImage*) picture;
+
+- (UIImage *) getLocalDivePicture:(NSString *)urlString;
+
 //
-- (void) diveEdit:(NSDictionary *)data;
+- (void) diveEdit:(NSDictionary *)data :(BOOL)isLocal :(NSString*)diveID;
 
 //
 - (void) createNewDive:(NSDictionary *)data;
@@ -76,5 +90,17 @@ typedef enum _diveUpdateType
 
 //
 - (void) updateLocalDiveToServer:(void (^)())finish;
+
+- (void) clearCache;
+
+
+
+-(NSDictionary*) offlinesearchRegionLocaitonsLat:(NSString*)lat lng:(NSString*)lng dist:(NSString*)dist;
+
+-(NSDictionary*) offlineSearchSpotText: (NSString*)term :(NSString*) lat :(NSString*) lng :(NSString*) latSW : (NSString*)latNE :(NSString*)lngSW :(NSString*)lngNE;
+
+- (BOOL) checkUpdateDive;
+
+
 
 @end

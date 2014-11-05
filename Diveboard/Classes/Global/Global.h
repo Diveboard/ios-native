@@ -9,8 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <FacebookSDK/FacebookSDK.h>
 #import <BugSense-iOS/BugSenseController.h>
+#import <CoreLocation/CoreLocation.h>
 #import "LoginResult.h"
-
+#import "DiveListViewController.h"
 
 
 
@@ -26,12 +27,18 @@
 #define kLoginUserInfo          @"loginUserInformation"
 #define kLoginUserID            @"loginUserID"
 #define kDiveboardUnit          @"diveboardUnit"
+#define kPictureQuality         @"pictureQuality"
+#define kDownloadMethod         @"downloadMethod"
+#define kSpotDBUpdateDate       @"spotDBUpdateDate"
 
+#define kAPP_STORE_ID           @"497339427"
 
 #define kLoadedDiveData(userid) [NSString stringWithFormat:@"userid_%@_loadedDiveData", userid]
 
 #define kMainDefaultColor [UIColor colorWithRed:1.0f green:0.68f blue:0.1f alpha:1.0f]
 #define getStringValue(v)     (v == nil || [v isEqual:[NSNull null]] || [v isEqual:@"<null>"] || [v isEqual:@"(null)"]  || [v isEqual:@"Null"] ? @"" : [NSString stringWithFormat:@"%@", v])
+#define getIntegerValue(v)    (v == [NSNull null] || v == nil) ? 0 : [v integerValue]
+#define getDoubleValue(v)     (v == [NSNull null] || v == nil) ? 0 : [v doubleValue]
 
 #define kDefaultFontName        @"Quicksand-Regular"
 #define kDefaultFontNameBold    @"Quicksand-Bold"
@@ -52,16 +59,44 @@
 @end
 
 
+#pragma mark - UserSettings Class
+enum {
+    UserSettingUnitTypeImperial = 0,
+    UserSettingUnitTypeMetric = 1
+};
+typedef NSUInteger UserSettingUnitType;
 
+enum {
+    UserSettingPictureQualityTypeMedium = 0,
+    UserSettingPictureQualityTypeHigh = 1
+};
+
+typedef NSUInteger UserSettingPictureQualityType;
+
+enum {
+    UserSettingDownloadTypeWifi = 0,
+    UserSettingDownloadTypeWWAN = 1
+};
+
+typedef NSUInteger UserSettingDownloadType;
+
+
+@interface UserSettings : NSObject
+
+@property (nonatomic) int unit;
+@property (nonatomic) int pictureQuality;
+@property (nonatomic) int downloadMethod;
+
+@end
 
 #pragma mark - AppManager class
 
 //@class LoginResult;
-
 @interface AppManager : NSObject
 {
     NSMutableDictionary *loadedDivesofMaster;
     NSMutableDictionary *loadedDivesofSudo;
+    
 }
 
 + (AppManager *)sharedManager;
@@ -70,6 +105,14 @@
 @property (nonatomic, strong) FBSession   *fbSession;
 @property (nonatomic, strong) NSMutableDictionary *loadedDives;
 @property (nonatomic)         int           currentSudoID;
+@property (nonatomic, strong) CLLocation* currentLocation;
+@property (nonatomic, strong) NSMutableArray* remainingPictures;
+@property (nonatomic, strong) UserSettings* userSettings;
+@property (nonatomic, strong) DiveListViewController* diveListVC;
+
+-(void) getUserData:(NSDictionary*)loginResultData;
+
+//-(void) startPreloadDiveData;
 
 @end
 
@@ -80,7 +123,13 @@
 + (void) setRoundView:(UIView *)view cornorRadious:(float)rad borderColor:(UIColor *)color border:(float)border;
 
 + (NSString *) encodeValueToFloat:(NSString *)value;
++ (void)setBorderView:(UIView*)view borderColor:(UIColor *)color borderWidth:(float)borderWidth position:(NSString*)position;
+
 
 @end
+
+
+
+
 
 

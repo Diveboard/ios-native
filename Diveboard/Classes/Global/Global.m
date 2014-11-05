@@ -7,6 +7,7 @@
 //
 
 #import "Global.h"
+#import "AFNetworking.h"
 //#import "LoginResult.h"
 
 
@@ -16,9 +17,15 @@
 
 
 #pragma mark - AppManager class
+@interface AppManager()<CLLocationManagerDelegate>
+{
+    CLLocationManager*  m_LocationManager;
+    NSMutableArray* arrPictureDownloadOperations;
+}
 
+@end
 @implementation AppManager
-
+@synthesize currentLocation;
 static AppManager *_sharedManager;
 + (AppManager *) sharedManager
 {
@@ -32,11 +39,61 @@ static AppManager *_sharedManager;
 {
     self = [super init];
     if (self) {
+        m_LocationManager = [[CLLocationManager alloc] init];
+        m_LocationManager.delegate = self;
+        m_LocationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        _remainingPictures = [[NSMutableArray alloc] init];
+
+        if ([m_LocationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+            
+            [m_LocationManager requestWhenInUseAuthorization];
+            
+        }
+        
+        
+        [m_LocationManager startUpdatingLocation];
+        _userSettings = [[UserSettings alloc] init];
+        
+        [NSTimer scheduledTimerWithTimeInterval:3.0f
+                                         target:self
+                                       selector:@selector(downloadPictures)
+                                       userInfo:Nil
+                                        repeats:YES];
+        
         
     }
     return self;
 }
 
+- (void)downloadPictures
+{
+    
+
+    if (self.remainingPictures.count < 1) {
+        return;
+    }
+    
+    NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.remainingPictures.lastObject]];
+    AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    requestOperation.responseSerializer = [AFImageResponseSerializer serializer];
+    [requestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        
+        [[DiveOfflineModeManager sharedManager] writeImage:responseObject url:operation.request.URL.absoluteString];
+        [arrPictureDownloadOperations removeObject:operation];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        
+        [arrPictureDownloadOperations removeObject:operation];
+    }];
+    
+    [requestOperation start];
+    
+    [arrPictureDownloadOperations addObject:requestOperation];
+    
+    
+    
+}
 - (void)setLoadedDives:(NSMutableDictionary *)loadedDives
 {
     if (_currentSudoID > 0) {
@@ -57,6 +114,96 @@ static AppManager *_sharedManager;
     }
 }
 
+-(void)getUserData:(NSDictionary *)loginResultData
+{
+    
+    
+    NSMutableDictionary* loginResult = [NSMutableDictionary dictionaryWithDictionary:loginResultData];
+    
+    NSDictionary* updateParams = @{@"id": self.loginResult.user.ID};
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:updateParams
+                                                       options:NSJSONWritingPrettyPrinted // Pass 0 if you don't care about the readability of the generated string
+                                                         error:&error];
+    
+    if (jsonData) {
+
+        NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        NSDictionary *params = @{@"auth_token": self.loginResult.token,
+                                 @"apikey" : API_KEY,
+                                 @"flavour"     : FLAVOUR,
+                                 @"arg" : jsonString,
+                                 };
+        
+        
+        NSString *requestURLStr = [NSString stringWithFormat:@"%@/api/V2/user", SERVER_URL];
+        
+        
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        
+        [manager POST:requestURLStr parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            
+            if (responseObject) {
+                NSDictionary *data;
+                if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                    data = [NSDictionary dictionaryWithDictionary:responseObject];
+                    
+                }
+                else {
+                    
+                    data = [NSJSONSerialization JSONObjectWithData:responseObject
+                                                           options:NSJSONReadingAllowFragments
+                                                             error:nil];
+                }
+                
+                if ([[data objectForKey:@"success"] boolValue]) {
+                    
+                    [loginResult setObject:[data objectForKey:@"result"] forKey:@"user"];
+                    
+                    
+                    if (![DiveOfflineModeManager sharedManager].isOffline) {
+                        [[DiveOfflineModeManager sharedManager] writeLoginResultData:loginResult];
+                    }
+                    
+                    self.loginResult = [[LoginResult alloc] initWithDictionary:loginResult];
+                    self.loginResult.user.allDiveIDs = [NSMutableArray arrayWithArray:[[self.loginResult.user.allDiveIDs reverseObjectEnumerator] allObjects]];
+                
+                }
+                
+                
+            
+            }
+            
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            
+            NSLog(@"%@",error);
+            
+        }];
+        
+
+        
+    }
+    
+    
+    
+}
+
+
+
+#pragma mark - CLLocationManagerDelegate
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
+    
+    self.currentLocation = [locations objectAtIndex:0];
+    
+}
+
+-(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
+    
+    self.currentLocation = nil;
+//    NSLog(@"Error: %@", error);
+    NSLog(@"Failed to get location! :(");
+
+}
 @end
 
 
@@ -77,4 +224,107 @@ static AppManager *_sharedManager;
     
     return nil;
 }
++ (void)setBorderView:(UIView*)view borderColor:(UIColor *)color borderWidth:(float)borderWidth position:(NSString*)position{
+    
+    CGSize mainViewSize = view.bounds.size;
+    
+    
+    UIView *borderView = [[UIView alloc] init];
+    
+    borderView.opaque = YES;
+    borderView.backgroundColor = color;
+    
+    CGRect frame = CGRectMake(0, 0, 0, 0);
+
+    if ([position isEqualToString:@"top"]) {
+        
+        frame = CGRectMake(0, 0, mainViewSize.width, borderWidth);
+        borderView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        
+    }else if([position isEqualToString:@"bottom"]){
+        
+        frame = CGRectMake(0, mainViewSize.height - borderWidth, mainViewSize.width, borderWidth);
+        borderView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        
+    }else if([position isEqualToString:@"left"]){
+        
+        frame = CGRectMake(0, 0, borderWidth, mainViewSize.height);
+        borderView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleRightMargin;
+        
+    }else if([position isEqualToString:@"right"]){
+        
+        frame = CGRectMake(mainViewSize.width - borderWidth, 0, borderWidth, mainViewSize.height);
+        
+        borderView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin;
+        
+    }
+    
+    
+    [borderView setFrame:frame];
+    
+    [view addSubview:borderView];
+    
+}
+
+
 @end
+
+#pragma mark UserSettings class
+
+@implementation UserSettings
+
+
+-(int) unit
+{
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    return [ud objectForKey:kDiveboardUnit] == nil ? 1 : [[ud objectForKey:kDiveboardUnit] intValue];
+    
+}
+
+-(void)setUnit:(int)unit{
+
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    if (self.unit != unit) {
+        [ud setObject:@(unit) forKey:kDiveboardUnit];
+        [ud synchronize];
+        if ([AppManager sharedManager].diveListVC) {
+           
+            [[AppManager sharedManager].diveListVC updateUnit];
+            
+        }
+        
+    }
+    
+}
+
+-(int)pictureQuality
+{
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    return  [ud objectForKey:kPictureQuality] == nil ? 0 : [[ud objectForKey:kPictureQuality] intValue];
+    
+}
+-(void)setPictureQuality:(int)pictureQuality{
+    
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    if (self.pictureQuality != pictureQuality) {
+        [ud setObject:@(pictureQuality) forKey:kPictureQuality];
+        [ud synchronize];
+    }
+    
+}
+-(int)downloadMethod{
+
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    return [ud objectForKey:kDownloadMethod] == nil ? 0 : [[ud objectForKey:kDownloadMethod] intValue];
+    
+}
+-(void)setDownloadMethod:(int)downloadMethod{
+    
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    [ud setObject:@(downloadMethod) forKey:kDownloadMethod];
+    [ud synchronize];
+    
+}
+
+@end
+

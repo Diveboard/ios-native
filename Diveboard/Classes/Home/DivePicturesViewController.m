@@ -116,21 +116,39 @@
     
     for (int i = 0; i < picCount; i ++) {
         DivePicture *picture = [divePictures objectAtIndex:(picCount - 1 - i)];
+        
         CGRect rect = CGRectMake(rootSize.width * 0.2, rootSize.height * 0.2, rootSize.width * 0.6, rootSize.height * 0.6);
-        AsyncUIImageView *imgview = [[AsyncUIImageView alloc] initWithFrame:rect];
-        [imgview setAlpha:0.0f];
-        [imgview setContentMode:(UIViewContentModeScaleAspectFit)];
-        [imgview setBackgroundColor:[UIColor colorWithWhite:0.1f alpha:0.2f]];
-        [imgview setIndicatorStyle:(UIActivityIndicatorViewStyleWhite)];
-        [imgview setImageURL:[NSURL URLWithString:picture.largeURL] placeholder:nil];
-//        [imgview loadImageFromURL:[NSURL URLWithString:picture.largeURL]];
-        [imgview setUserInteractionEnabled:YES];
-        [viewMain addSubview:imgview];
-        [imgviewArray addObject:imgview];
-        
-        UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(imagePanGestureAction:)];
-        [imgview addGestureRecognizer:panGesture];
-        
+        if (picture.isLocal) {
+            
+            UIImageView *imgview = [[UIImageView alloc] initWithFrame:rect];
+            [imgview setAlpha:0.0f];
+            [imgview setContentMode:(UIViewContentModeScaleAspectFit)];
+            [imgview setBackgroundColor:[UIColor colorWithWhite:0.1f alpha:0.2f]];
+            [imgview setImage:[[DiveOfflineModeManager sharedManager] getLocalDivePicture:picture.urlString]];
+            [imgview setUserInteractionEnabled:YES];
+            [viewMain addSubview:imgview];
+            [imgviewArray addObject:imgview];
+            
+            UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(imagePanGestureAction:)];
+            [imgview addGestureRecognizer:panGesture];
+            
+            
+        }else{
+            AsyncUIImageView *imgview = [[AsyncUIImageView alloc] initWithFrame:rect];
+            [imgview setAlpha:0.0f];
+            [imgview setContentMode:(UIViewContentModeScaleAspectFit)];
+            [imgview setBackgroundColor:[UIColor colorWithWhite:0.1f alpha:0.2f]];
+            [imgview setIndicatorStyle:(UIActivityIndicatorViewStyleWhite)];
+            [imgview setImageURL:[NSURL URLWithString:picture.urlString] placeholder:nil];
+            [imgview setUserInteractionEnabled:YES];
+            [viewMain addSubview:imgview];
+            [imgviewArray addObject:imgview];
+            
+            UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(imagePanGestureAction:)];
+            [imgview addGestureRecognizer:panGesture];
+            
+            
+        }
     }
     
 //    [self showPictureWithIndex:0];

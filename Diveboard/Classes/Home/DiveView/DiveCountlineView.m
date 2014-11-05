@@ -7,14 +7,16 @@
 //
 
 #import "DiveCountlineView.h"
-
+#import "OSBlurSlideMenuController.h"
+#import "UIView+FindUIViewController.h"
+#import "CMPopTipView.h"
+#import "DiveInformation.h"
 #define rulerPixelWidth (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 7.0f : 3.5f)
 //#define rulerPixelWidth     3.5f
 #define rulerPixelHeight    rulerPixelWidth * 4.7
 
 @interface DiveCountlineView()
 {
-    CGSize   winSize;
     float    defaultRulerY;
     CGRect   rulersRect;
     int      rulerCount;
@@ -25,7 +27,7 @@
 @end
 
 @implementation DiveCountlineView
-
+@synthesize tipView;
 - (id)initWithFrame:(CGRect)frame
 {
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
@@ -39,17 +41,29 @@
     
     if (self) {
         
-//        [self setFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, 30.0f)];
 
         self.backgroundColor = [UIColor clearColor];
         
-        winSize = [UIScreen mainScreen].bounds.size;
         defaultRulerY = self.frame.size.height * 0.35;
-        
     }
     return self;
 }
 
+-(UIView*)tipView{
+    if (!tipView) {
+        tipView = [[CMPopTipView alloc] initWithCustomView:m_viewBubble];
+        [tipView setHas3DStyle:NO];
+        [tipView setHasGradientBackground:NO];
+        [tipView setHasShadow:NO];
+        [tipView setCornerRadius:1.0];
+        [tipView setBackgroundColor:[UIColor colorWithRed:50.0/255.0 green:55.0/255.0 blue:60.0/255.0 alpha:1.0]];
+        [tipView setBorderColor:[UIColor clearColor]];
+        [tipView setPointerSize:6];
+    
+    }
+    return tipView;
+    
+}
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
@@ -117,7 +131,10 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    UIViewController* vc = [self firstAvailableUIViewController];
+    [vc.slideMenuController setPanGestureEnabled:NO];
     UITouch *aTouch = [touches anyObject];
+    
     CGPoint point = [aTouch locationInView:self];
     [self rulerTouch:point];
 }
@@ -140,12 +157,19 @@
             [self.delegate diveCountlineView:self Number:currentValue];
         }
     }
+    [self.tipView dismissAnimated:NO];
+    tipView = nil;
+    UIViewController* vc = [self firstAvailableUIViewController];
+    [vc.slideMenuController setPanGestureEnabled:YES];
+
 }
 
 - (void) rulerTouch:(CGPoint)point
 {
     if (CGRectContainsPoint(rulersRect, point)) {
+        
         int index = 0;
+        UIView* sel_view;
         for (UIView *ruler in rulerPixels) {
             index++;
             CGRect rulerRect = CGRectInset(ruler.frame, -rulerPixelWidth * 1.37 * 0.5, -rulerPixelHeight * 0.6);
@@ -156,6 +180,7 @@
             if (CGRectContainsPoint(rulerRect, point)) {
                 [ruler setFrame:CGRectMake(ruler.frame.origin.x, 5, ruler.frame.size.width, ruler.frame.size.height)];
                 [ruler setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:1.0f]];
+                sel_view = ruler;
                 
                 if (maxValue > rulerCount) {
                     float dt = (rulersRect.size.width + rulerPixelWidth) / maxValue;
@@ -164,9 +189,45 @@
                     if (currentValue > maxValue) currentValue = maxValue;
                 } else {
                     currentValue = index;
+                    
                 }
             }
         }
+        
+        NSString* diveId = [[AppManager sharedManager].loginResult.user.allDiveIDs objectAtIndex:currentValue-1];
+            
+            NSDictionary *diveInfo ;
+            
+            if ([AppManager sharedManager].loadedDives) {
+                
+                diveInfo = [[AppManager sharedManager].loadedDives objectForKey:diveId];
+                
+                if (!diveInfo) {
+                    
+                    diveInfo = [[DiveOfflineModeManager sharedManager] getOneDiveInformation:diveId];
+                    if (diveInfo) {
+                        [[AppManager sharedManager].loadedDives setObject:diveInfo forKey:diveId];
+                    }
+                    
+                }
+            }
+//            } else {
+//                
+//                appManager.loadedDives = [[NSMutableDictionary alloc] init];
+//                
+//                [appManager.loadedDives setObject:diveInfo forKey:diveId];
+//                
+//            }
+            
+            
+            DiveInformation *dive = [[DiveInformation alloc] initWithDictionary:[diveInfo objectForKey:@"result"]];
+        
+        m_lblDateBubble.text = dive.date;
+        m_lblCountryNameBubble.text = dive.spotInfo.countryName;
+        m_lblTripNamBubblee.text = dive.tripName;
+        
+        [self.tipView presentPointingAtView:sel_view inView:self.superview animated:NO];
+        
         [_lblCurrentDiveNum setText:[NSString stringWithFormat:@"%d", currentValue]];
     }
     

@@ -7,77 +7,26 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TPKeyboardAvoidingScrollView.h"
 #import "DiveInformation.h"
-#import "TKDatePickerView.h"
-#import "TKListPickerView.h"
-
-
+#import "JPTabViewController.h"
 @protocol DiveEditViewControllerDelegate <NSObject>
 
 - (void) diveEditFinish:(DiveInformation *)diveInfo;
 
 @end
 
-@interface DiveEditViewController : UIViewController <UITextFieldDelegate, TKDatePickerViewDelegate, TKListPickerViewDelegate, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
+@interface DiveEditViewController : JPTabViewController <UIAlertViewDelegate,JPTabViewControllerDelegate>
 {
     IBOutlet UILabel *lblTitle;
-    IBOutlet UIScrollView *scrviewMain;
-    
     // detail view
-    IBOutlet UIView *viewContent;
-    IBOutlet UILabel        *lblDate;
-    IBOutlet UILabel        *lblTime;
-    IBOutlet UITextField    *txtDepth;
-    IBOutlet UILabel *lblMaxdepthUnit;
-    IBOutlet UITextField    *txtDuration;
-    IBOutlet UITextField    *txtWeight;
-    IBOutlet UILabel        *lblWeightUnit;
-    IBOutlet UITextField    *txtDiveNumber;
-    IBOutlet UITextField    *txtTripName;
-    IBOutlet UILabel        *lblVisibility;
-    IBOutlet UILabel        *lblCurrent;
-    IBOutlet UITextField    *txtSurface;
-    IBOutlet UITextField    *txtBottom;
-    IBOutlet UILabel        *lblSurfaceUnit;
-    IBOutlet UILabel        *lblBottomUnit;
-    IBOutlet UITextField    *txtAltitude;
-    IBOutlet UILabel        *lblAltitudeUnit;
-    IBOutlet UILabel        *lblWater;
-    IBOutlet UISwitch       *schPublic;
-    IBOutlet UIButton *btnDiveEditCloseKeyboard;
-    
-    // note view
-    IBOutlet UIView *viewNotes;
-    IBOutlet UITextView *txtviewNotes;
-    IBOutlet UIButton *btnNoteDone;
-    
-    // spots view
-    IBOutlet UIView *viewSpots;
-    IBOutlet UILabel *lblCurrentSpot;
-    IBOutlet UIButton *btnSpotDelete;
-    IBOutlet UITextField *txtSearchSpot;
-    IBOutlet UITableView *tblSpotList;
-    IBOutlet UILabel *lblNoResult;
-    
-    
-    
-    IBOutlet UIView *viewButtonBox;
-    IBOutlet UIButton *btnDetails;
-    IBOutlet UIButton *btnNotes;
-    IBOutlet UIButton *btnSpots;
+    IBOutlet UIButton* m_btnBack;
+    IBOutlet UIButton* m_btnDrawer;
 }
-- (IBAction)backAction:(id)sender;
-- (IBAction)saveAction:(id)sender;
+- (IBAction)onDrawer:(id)sender;
+- (IBAction)onSave:(id)sender;
+- (IBAction)onBack:(id)sender;
 
-- (IBAction)tapButtonAction:(id)sender;
-
-- (IBAction)noteDoneAction:(id)sender;
-- (IBAction)diveEditDoneAction:(id)sender;
-
-- (IBAction)spotDeleteAction:(id)sender;
-
-@property (nonatomic, strong) id<DiveEditViewControllerDelegate> delegate;
+@property (nonatomic, strong) id<DiveEditViewControllerDelegate> editDelegate;
 
 - (id)initWithDiveData:(DiveInformation *)diveInfo;
 

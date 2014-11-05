@@ -12,18 +12,14 @@
 #import "DiveListViewController.h"
 
 
-@interface SettingViewController : UIViewController
+@interface SettingViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>
 {
-    IBOutlet UIScrollView *scrview;
-    IBOutlet UIButton *btnUnit;
-    IBOutlet UILabel  *lblVersionNumber;
-    IBOutlet UILabel  *lblPendingRequest;
-    IBOutlet UIButton *btnPendingRequest;
-    IBOutlet UIButton *btnAccessSudo;
+    
+    IBOutlet UITableView* m_tableView;
     
 }
 
-@property (nonatomic, strong) DiveListViewController *parent;
-- (IBAction)backActions:(id)sender;
+
+-(IBAction)onDrawer:(id)sender;
 
 @end

@@ -14,7 +14,7 @@
 
 @protocol TKListPickerViewDelegate <NSObject>
 
-- (void) listPickerView:(TKListPickerView*)view selectedString:(NSString *)string index:(int)index targetLabel:(UILabel *)label;
+- (void) listPickerView:(TKListPickerView*)view selectedString:(NSString *)string index:(int)index ;
 
 @end
 
@@ -25,7 +25,6 @@
 
 @property (nonatomic, strong) id<TKListPickerViewDelegate> delegate;
 
-- (id)initWithTarget:(UIView *)parentView title:(NSString *)title list:(NSArray *)list sender:(UILabel *)sender;
-- (void) show;
+- (id)initWithTitle:(NSString *)title list:(NSArray *)list;
 
 @end

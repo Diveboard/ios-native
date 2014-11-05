@@ -160,9 +160,12 @@
 @property (nonatomic, strong) NSMutableArray    *userGears;
 @property (nonatomic, strong) NSString          *vanityURL;
 @property (nonatomic, strong) NSString          *adminRight;
+@property (nonatomic, strong) NSMutableArray    *walletPictureIDs;
+@property (nonatomic, strong) NSMutableArray    *walletPictures;
+
 
 - (id)initWithDictionary:(NSDictionary *)data;
-
+- (NSDictionary *)getDataDictionary;
 @end
 
 #pragma mark - UnitOfDive
@@ -175,6 +178,7 @@
 @property (nonatomic, strong) NSString *weight;
 
 - (id)initWithDictionary:(NSDictionary *)data;
+- (NSDictionary *)getDataDictionary;
 
 @end
 
@@ -191,5 +195,6 @@
 @property (nonatomic, strong) UserInfomation *user;
 
 - (id)initWithDictionary:(NSDictionary *)data;
+- (NSDictionary *)getDataDictionary;
 
 @end

@@ -5,22 +5,22 @@
 //  Created by Vladimir Popov on 2/25/14.
 //  Copyright (c) 2014 Vladimir Popov. All rights reserved.
 //
-
+#import "Global.h"
 #import "LoginViewController.h"
 #import "AFNetworking.h"
-#import "MBProgressHUD.h"
+#import "SVProgressHUD.h"
 #import "LoginResult.h"
 #import "SignupViewController.h"
 #import "DiveListViewController.h"
 #import "Reachability.h"
 #import "DiveOfflineModeManager.h"
+#import "OSBlurSlideMenu.h"
+#import "DrawerMenuViewController.h"
 
 
 @interface LoginViewController ()
 {
     NSUserDefaults *userDefault;
-    AppManager *appManager;
-    FBSession  *fbSession;
     
     Reachability *internetReachableFoo;
     
@@ -45,10 +45,11 @@
     [super viewDidLoad];
     
     userDefault = [NSUserDefaults standardUserDefaults];
-    appManager = [AppManager sharedManager];
     offlineManager = [DiveOfflineModeManager sharedManager];
     
-    fbSession  = appManager.fbSession;
+    [SVProgressHUD setBackgroundColor:[UIColor blackColor]];
+    [SVProgressHUD setForegroundColor:[UIColor whiteColor]];
+
     
     [self initMethod];
     
@@ -63,6 +64,7 @@
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES];
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -214,7 +216,7 @@
 }
 
 - (IBAction)facebookLoginAction:(id)sender {
-    [self internetConnecting:YES];
+//    [self internetConnecting:YES];
 //    [NSTimer timerWithTimeInterval:0.1f target:self selector:@selector(facebookConnecting) userInfo:Nil repeats:NO];
     [NSTimer scheduledTimerWithTimeInterval:0.1f target:self selector:@selector(facebookConnecting) userInfo:nil repeats:NO];
 }
@@ -242,7 +244,7 @@
     } else if (_txtPassword.text.length == 0) {
         [self alertViewShowWithMessage:@"Please enter your password."];
         [_txtPassword becomeFirstResponder];
-    } else if (_txtEmail.text.length < 5) {
+    } else if (![self IsValidEmail:_txtEmail.text]) {
         [self alertViewShowWithMessage:@"Incorrect your email address"];
         [_txtEmail resignFirstResponder];
     } else {
@@ -259,11 +261,14 @@
 - (void) internetConnecting:(BOOL)flag
 {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = flag;
+
     if (flag) {
-        MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        HUD.labelText = @"Connecting...";
+        
+        [SVProgressHUD showWithStatus:@"Connecting..." maskImage:[UIImage imageNamed:@"progress_mask"]];
+        
     } else {
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
+        [SVProgressHUD dismiss];
     }
     
 }
@@ -280,7 +285,6 @@
     
     NSString     *requestURLString = [NSString stringWithFormat:@"%@/api/login_email", SERVER_URL];
     NSDictionary *params = @{@"apikey"      : API_KEY,
-                             @"flavour"     : FLAVOUR,
                              @"email"       : email,
                              @"password"    : password,
                              };
@@ -367,6 +371,8 @@
 
 - (void) requestResultCheckingWithObject:(id)responseObject
 {
+    
+    
     if (responseObject) {
         NSDictionary *data;
         if ([responseObject isKindOfClass:[NSDictionary class]]) {
@@ -386,28 +392,52 @@
                 [offlineManager writeLoginResultData:data];
             }
             
-            appManager.loginResult = [[LoginResult alloc] initWithDictionary:data];
-            appManager.loginResult.user.allDiveIDs = [NSMutableArray arrayWithArray:[[appManager.loginResult.user.allDiveIDs reverseObjectEnumerator] allObjects]];
+            [AppManager sharedManager].loginResult = [[LoginResult alloc] initWithDictionary:data];
+            [AppManager sharedManager].loginResult.user.allDiveIDs = [NSMutableArray arrayWithArray:[[[AppManager sharedManager].loginResult.user.allDiveIDs reverseObjectEnumerator] allObjects]];
             
-            DiveListViewController *viewController;
+            
+            [[AppManager sharedManager] getUserData:data];
+            
             if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-                viewController = [[DiveListViewController alloc] initWithNibName:@"DiveListViewController" bundle:Nil];
+                [AppManager sharedManager].diveListVC = [[DiveListViewController alloc] initWithNibName:@"DiveListViewController" bundle:Nil];
             } else {
-                viewController = [[DiveListViewController alloc] initWithNibName:@"DiveListViewController-ipad" bundle:Nil];
+                [AppManager sharedManager].diveListVC = [[DiveListViewController alloc] initWithNibName:@"DiveListViewController-ipad" bundle:Nil];
             }
+            
+            
+            UINavigationController* navigationController = [[UINavigationController alloc] initWithRootViewController:[AppManager sharedManager].diveListVC];
+            
+            [navigationController setNavigationBarHidden:YES];
+            
+            DrawerMenuViewController *drawerMenu = [DrawerMenuViewController sharedMenu];
+            
+            
+            OSBlurSlideMenuController* slideController = [[OSBlurSlideMenuController alloc] initWithMenuViewController:drawerMenu andContentViewController:navigationController];
+            [drawerMenu setMenuIndex:0];
+            slideController.slideDirection = OSBlurSlideMenuControllerSlideFromLeftToRight;
+            
+            [self.view.window setRootViewController:slideController];
 
-            [self.navigationController pushViewController:viewController animated:YES];
+            
             self.txtPassword.text = @"";
             
         } else {
-            NSString *errorMessage = [data objectForKey:@"message"];
-            [[[UIAlertView alloc] initWithTitle:@"Can't Login"
-                                        message:errorMessage
+//            NSString *errorMessage = [data objectForKey:@"message"];
+            [[[UIAlertView alloc] initWithTitle:nil
+                                        message:@"Incorrect login or password."
                                        delegate:nil
                               cancelButtonTitle:@"OK"
                               otherButtonTitles: nil]
              show];
         }
+    }else{
+        [[[UIAlertView alloc] initWithTitle:nil
+                                    message:@"Could not connect to Diveboard. Please check your network connectivity."
+                                   delegate:nil
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles: nil]
+        show];
+        
     }
 }
 
@@ -415,16 +445,16 @@
 
 - (void) facebookConnecting
 {
-    if (fbSession.isOpen) {
-        [fbSession closeAndClearTokenInformation];
+    if ([AppManager sharedManager].fbSession.isOpen) {
+        [[AppManager sharedManager].fbSession closeAndClearTokenInformation];
     }
     else
     {
-        if (fbSession.state != FBSessionStateCreated || !fbSession) {
-            fbSession = [[FBSession alloc] init];
+        if ([AppManager sharedManager].fbSession.state != FBSessionStateCreated || ![AppManager sharedManager].fbSession) {
+            [AppManager sharedManager].fbSession = [[FBSession alloc] init];
         }
-        
-        [fbSession openWithCompletionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+        [[AppManager sharedManager].fbSession openWithCompletionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+            
             NSDictionary *fbUserInfo = [self LoadingFacebookInformation];
             if (fbUserInfo) {
                 [userDefault setObject:kLoginModeFB forKey:kLoginMode];
@@ -441,12 +471,12 @@
 
 -(NSDictionary *) LoadingFacebookInformation
 {
-    if (fbSession.isOpen)
+    if ([AppManager sharedManager].fbSession.isOpen)
     {
         
-        NSLog(@"--- access token is ---: %@", fbSession.accessTokenData.accessToken);
+        NSLog(@"--- access token is ---: %@", [AppManager sharedManager].fbSession.accessTokenData.accessToken);
         
-        NSString *requestURL = [NSString stringWithFormat:@"https://graph.facebook.com/me?access_token=%@", fbSession.accessTokenData.accessToken];
+        NSString *requestURL = [NSString stringWithFormat:@"https://graph.facebook.com/me?access_token=%@", [AppManager sharedManager].fbSession.accessTokenData.accessToken];
         NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:requestURL]];
         
         NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
@@ -458,7 +488,7 @@
                                                                  options:NSJSONReadingAllowFragments
                                                                    error:nil];
             NSDictionary *loginInfo = @{@"fbid":     [data objectForKey:@"id"],
-                                        @"fbtoken" : fbSession.accessTokenData.accessToken,
+                                        @"fbtoken" : [AppManager sharedManager].fbSession.accessTokenData.accessToken,
                                         };
             return loginInfo;
         }
@@ -472,6 +502,7 @@
 
 - (void) loginActionWithFacebookUser:(NSDictionary *)info
 {
+    [self internetConnecting:YES];
     NSString *fbLoginURLString = [NSString stringWithFormat:@"%@/api/login_fb", SERVER_URL];
     NSDictionary *params = @{@"apikey": API_KEY,
                              @"flavour" : FLAVOUR,
@@ -481,11 +512,15 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager POST:fbLoginURLString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        [self internetConnecting:NO];
         NSLog(@"%@", operation.responseString);
         [self requestResultCheckingWithObject:responseObject];
         
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+
+        [self internetConnecting:NO];
         offlineManager.isOffline = YES;
         [self requestResultCheckingWithObject:offlineManager.getLoginResultData];
 
@@ -554,5 +589,16 @@
         [ self.view setFrame : CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)] ;
     }];
 }
+
+-(BOOL) IsValidEmail:(NSString *)checkString
+{
+    BOOL stricterFilter = YES;
+    NSString *stricterFilterString = @"[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}";
+    NSString *laxString = @".+@([A-Za-z0-9]+\\.)+[A-Za-z]{2}[A-Za-z]*";
+    NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:checkString];
+}
+
 
 @end

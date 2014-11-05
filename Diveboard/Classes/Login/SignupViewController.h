@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <BugSense-iOS/BugSenseController.h>
 
-#import "MBProgressHUD.h"
+#import "SVProgressHUD.h"
 #import "TPKeyboardAvoidingScrollView.h"
 
 
@@ -23,7 +23,7 @@
 @property (retain, nonatomic) IBOutlet UITextField *txtEmail;
 @property (retain, nonatomic) IBOutlet UITextField *txtPassword;
 @property (retain, nonatomic) IBOutlet UITextField *txtConfirmPassword;
-@property (retain, nonatomic) IBOutlet UITextField *txtDiveboardURL;
+//@property (retain, nonatomic) IBOutlet UITextField *txtDiveboardURL;
 @property (retain, nonatomic) IBOutlet UITextField *txtNickname;
 @property (retain, nonatomic) IBOutlet UIButton *btnSignup;
 @property (retain, nonatomic) IBOutlet UIButton *btnFBLogin;

@@ -8,8 +8,8 @@
 
 #import "DBAppDelegate.h"
 #import "LoginViewController.h"
-
-@interface DBAppDelegate()
+#import "Appirater.h"
+@interface DBAppDelegate() <AppiraterDelegate>
 {
 //    DBLoginViewController *loginVC;
 
@@ -19,8 +19,17 @@
 
 @implementation DBAppDelegate
 
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    
+    
+    [Appirater setAppId:kAPP_STORE_ID];
+    [Appirater setDaysUntilPrompt:3];
+    [Appirater setUsesUntilPrompt:10];
+    
+    [Appirater setDebug:NO];
+    
     
     [DiveOfflineModeManager sharedManager];
     
@@ -30,7 +39,7 @@
 
     [BugSenseController setLogMessagesCount:10];
     [BugSenseController setLogMessagesLevel:8];
-
+    
     LoginViewController *loginVC;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         loginVC = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:Nil];
@@ -39,16 +48,20 @@
 
     }
     
-    UINavigationController *navVC = [[UINavigationController alloc] initWithRootViewController:loginVC];
+    
+    UINavigationController* navigationController = [[UINavigationController alloc] initWithRootViewController:loginVC];
 //    DiveBoardNavigationController *navVC = [[DiveBoardNavigationController alloc] initWithRootViewController:loginVC sudoID:0];
-    [navVC setNavigationBarHidden:YES];
+    [navigationController setNavigationBarHidden:YES];
+    
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.window.rootViewController = navVC;
+    
+    self.window.rootViewController = navigationController;
     
     [self.window makeKeyAndVisible];
     
     [AppManager sharedManager].currentSudoID = 0;
     
+    [Appirater appLaunched:YES];
     return YES;
 }
 							
@@ -75,6 +88,8 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    [Appirater appEnteredForeground:YES];
+    
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -97,5 +112,8 @@
     return [FBAppCall handleOpenURL:url sourceApplication:sourceApplication withSession:[AppManager sharedManager].fbSession];
     
 }
+
+
+
 
 @end
