@@ -2,8 +2,8 @@
 //  WalletViewController.m
 //  Diveboard
 //
-//  Created by XingYing on 10/5/14.
-//  Copyright (c) 2014 threek. All rights reserved.
+//  Created by Vladimir Popov on 10/5/14.
+//  Copyright (c) 2014 Vladimir Popov. All rights reserved.
 //
 
 #import "WalletViewController.h"

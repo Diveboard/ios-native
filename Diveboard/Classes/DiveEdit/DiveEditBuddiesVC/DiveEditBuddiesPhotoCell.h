@@ -2,8 +2,8 @@
 //  DiveEditBuddiesPhotoCell.h
 //  Diveboard
 //
-//  Created by XingYing on 9/29/14.
-//  Copyright (c) 2014 threek. All rights reserved.
+//  Created by Vladimir Popov on 9/29/14.
+//  Copyright (c) 2014 Vladimir Popov. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

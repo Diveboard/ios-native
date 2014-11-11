@@ -2,8 +2,8 @@
 //  DiveEditSpotViewController.m
 //  Diveboard
 //
-//  Created by VladimirKonstantinov on 9/17/14.
-//  Copyright (c) 2014 threek. All rights reserved.
+//  Created by Vladimir Popov on 9/17/14.
+//  Copyright (c) 2014 Vladimir Popov. All rights reserved.
 //
 
 #import "DiveEditSpotViewController.h"
