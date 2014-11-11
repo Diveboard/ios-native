@@ -264,7 +264,12 @@
 - (NSString*) maxDepthValueWithUnit;
 
 + (NSString *) unitOfWeightWithValue:(NSString *)value defaultUnit:(NSString *)unit;
+
 + (NSString *) unitOfLengthWithValue:(NSString *)value defaultUnit:(NSString *)unit;
+
++ (NSString *) unitOfLengthWithValue:(NSString *)value defaultUnit:(NSString *)unit;
+
+
 + (NSString *) unitOfTempWithValue  :(NSString *)value defaultUnit:(NSString *)unit;
 + (NSString *) unitOfWeightWithValue:(NSString *)value defaultUnit:(NSString *)unit showUnit:(BOOL)flag;
 + (NSString *) unitOfLengthWithValue:(NSString *)value defaultUnit:(NSString *)unit showUnit:(BOOL)flag;

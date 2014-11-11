@@ -1103,6 +1103,7 @@
     return result;
 }
 
+
 + (NSString *)unitOfLengthWithValue:(NSString *)value defaultUnit:(NSString *)unit showUnit:(BOOL)flag
 {
     NSString *result = [DiveInformation unitOfLengthWithValue:value defaultUnit:unit];

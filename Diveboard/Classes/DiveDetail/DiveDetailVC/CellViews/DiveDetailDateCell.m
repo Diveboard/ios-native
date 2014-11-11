@@ -3,7 +3,7 @@
 //  Diveboard
 //
 //  Created by SergeyPetrov on 11/2/14.
-//  Copyright (c) 2014 Vladimir Popov. All rights reserved.
+//  Copyright (c) 2014 threek. All rights reserved.
 //
 
 #import "DiveDetailDateCell.h"
@@ -80,13 +80,29 @@
         
         [m_viewTempBox setHidden:NO];
         
-        NSString* roundSURF   = [NSString stringWithFormat:@"%d",[m_DiveInformation.temp.surfaceValue intValue]];
-        NSString* roundBottom = [NSString stringWithFormat:@"%d",[m_DiveInformation.temp.bottomValue intValue]];
         
-        [m_lblTemp setText:[NSString stringWithFormat:@"SURF %@ | BOTTOM %@",
-                                   [DiveInformation unitOfTempWithValue:roundSURF defaultUnit:m_DiveInformation.temp.surfaceUnit],
-                                   [DiveInformation unitOfTempWithValue:roundBottom defaultUnit:m_DiveInformation.temp.bottomUnit]
-                                   ]];
+        NSString* roundSURF = [DiveInformation unitOfTempWithValue:m_DiveInformation.temp.surfaceValue defaultUnit:m_DiveInformation.temp.surfaceUnit showUnit:NO];
+        
+        NSString* roundBottom = [DiveInformation unitOfTempWithValue:m_DiveInformation.temp.bottomValue defaultUnit:m_DiveInformation.temp.bottomUnit];
+
+        NSString* surfStr = @"";
+        NSString* bottomStr = @"";
+        
+        if ([AppManager sharedManager].userSettings.unit == UserSettingUnitTypeImperial) {
+            // unit is imperial
+
+            surfStr = [NSString stringWithFormat:@"%d °F",[roundSURF intValue]];
+            bottomStr = [NSString stringWithFormat:@"%d °F",[roundBottom intValue]];
+            
+        }else{
+            
+            surfStr = [NSString stringWithFormat:@"%d °C",[roundSURF intValue]];
+            bottomStr = [NSString stringWithFormat:@"%d °C",[roundBottom intValue]];
+            
+        }
+        
+        
+        [m_lblTemp setText:[NSString stringWithFormat:@"SURF %@ | BOTTOM %@",surfStr,bottomStr]];
         
         frame.origin.y = CGRectGetMaxY(frame);
         

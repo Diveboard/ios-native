@@ -2,8 +2,8 @@
 //  CheckListPickerViewController.m
 //  Diveboard
 //
-//  Created by Vladimir Popov on 9/18/14.
-//  Copyright (c) 2014 Vladimir Popov. All rights reserved.
+//  Created by VladimirKonstantinov on 9/18/14.
+//  Copyright (c) 2014 threek. All rights reserved.
 //
 
 #import "CheckListPickerView.h"

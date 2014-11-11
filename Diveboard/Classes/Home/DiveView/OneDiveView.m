@@ -154,8 +154,22 @@
 
 - (void)changeDepthUnit:(int)type
 {
-    [lblSpotDepth setText:[DiveInformation unitOfLengthWithValue:diveInfoOfSelf.maxDepth
-                                                     defaultUnit:diveInfoOfSelf.maxDepthUnit]];
+    NSString* roundDepth = [DiveInformation unitOfLengthWithValue:diveInfoOfSelf.maxDepth defaultUnit:diveInfoOfSelf.maxDepthUnit showUnit:NO];
+    
+    NSString* strDepth = @"";
+    
+    if ([AppManager sharedManager].userSettings.unit == UserSettingUnitTypeImperial) {   // unit is imperial
+        
+        strDepth = [NSString stringWithFormat:@"%d FEET", [roundDepth intValue]];
+        
+    }else{
+        
+        strDepth = [NSString stringWithFormat:@"%d METERS", [roundDepth intValue]];
+        
+    }
+    
+    
+    [lblSpotDepth setText:strDepth];
 }
 
 #pragma mark - Loading Dive Data
@@ -255,9 +269,23 @@
     }
     
     
-    NSString* roundDepth = [NSString stringWithFormat:@"%d",[diveInfoOfSelf.maxDepth intValue]];
-    [lblSpotDepth setText:[DiveInformation unitOfLengthWithValue:roundDepth
-                                                     defaultUnit:diveInfoOfSelf.maxDepthUnit]];
+    
+    NSString* roundDepth = [DiveInformation unitOfLengthWithValue:diveInfoOfSelf.maxDepth defaultUnit:diveInfoOfSelf.maxDepthUnit showUnit:NO];
+
+    NSString* strDepth = @"";
+    
+    if ([AppManager sharedManager].userSettings.unit == UserSettingUnitTypeImperial) {   // unit is imperial
+        
+        strDepth = [NSString stringWithFormat:@"%d FEET", [roundDepth intValue]];
+
+    }else{
+        
+        strDepth = [NSString stringWithFormat:@"%d METERS", [roundDepth intValue]];
+        
+    }
+    
+
+    [lblSpotDepth setText:strDepth];
     
     lblSpotDuration.text = [NSString stringWithFormat:@"%@ mins", diveInfoOfSelf.duration];
     

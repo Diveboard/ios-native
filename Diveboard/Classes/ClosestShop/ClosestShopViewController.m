@@ -2,8 +2,8 @@
 //  ClosestShopViewController.m
 //  Diveboard
 //
-//  Created by Vladimir Popov on 10/2/14.
-//  Copyright (c) 2014 Vladimir Popov. All rights reserved.
+//  Created by XingYing on 10/2/14.
+//  Copyright (c) 2014 threek. All rights reserved.
 //
 
 #import "ClosestShopViewController.h"

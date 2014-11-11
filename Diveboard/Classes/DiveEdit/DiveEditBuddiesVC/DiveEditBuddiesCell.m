@@ -2,8 +2,8 @@
 //  DiveEditBuddiesCell.m
 //  Diveboard
 //
-//  Created by Vladimir Popov on 9/29/14.
-//  Copyright (c) 2014 Vladimir Popov. All rights reserved.
+//  Created by XingYing on 9/29/14.
+//  Copyright (c) 2014 threek. All rights reserved.
 //
 
 #import "DiveEditBuddiesCell.h"
@@ -17,6 +17,10 @@
 {
     NIDropDown* m_dropDown;
     int m_editState;
+    UITextField* m_currentText;
+    CGPoint m_prevScrollPoint;
+    CGSize  m_prevContentSize;
+
 }
 @property (retain, nonatomic) FBFriendPickerViewController *friendPickerController;
 
@@ -61,6 +65,8 @@
     [btn_NameNotifyCheck setSelected:YES];
     m_editState = 0;
     
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     
     [self changeEditState:m_editState];
 
@@ -148,24 +154,23 @@
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField{
     
-    UICollectionView* cv =(UICollectionView*)self.superview;
-    CGPoint cellPoint = self.frame.origin;
-    [cv setContentOffset:cellPoint animated:YES];
+    
+    m_currentText = textField;
     
 }
 -(void)textFieldDidEndEditing:(UITextField *)textField{
     
-    UICollectionView* cv =(UICollectionView*)self.superview;
-    
-    float y = cv.contentSize.height-cv.frame.size.height;
-    
-    if (y < 0 ) {
-        
-        y = 0;
-    }
-    
-    
-    [cv setContentOffset:CGPointMake(0,y) animated:YES];
+//    UICollectionView* cv =(UICollectionView*)self.superview;
+//    
+//    float y = cv.contentSize.height-cv.frame.size.height;
+//    
+//    if (y < 0 ) {
+//        
+//        y = 0;
+//    }
+//    
+//    
+//    [cv setContentOffset:CGPointMake(0,y) animated:YES];
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
@@ -348,6 +353,64 @@
     }
     return YES;
 }
+
+-(void)keyboardWillHide:(NSNotification *)_notification
+{
+    
+    UICollectionView* cv =(UICollectionView*)self.superview;
+    [cv setContentOffset:m_prevScrollPoint animated:YES];
+    
+}
+
+
+-(void)keyboardWillShow:(NSNotification *)_notification
+{
+    
+    UICollectionView* cv =(UICollectionView*)self.superview;
+    
+    
+    m_prevScrollPoint = cv.contentOffset;
+    CGRect aRect = cv.frame;
+    
+    aRect.origin.x = 0;
+    
+    CGSize keyboardSize = [[[_notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    
+    UIInterfaceOrientation orientation =[[UIApplication sharedApplication] statusBarOrientation];
+    
+    float keyboardHeight = keyboardSize.height;
+    
+    if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight ) {
+        
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] < 8.0) {
+            keyboardHeight = keyboardSize.width;
+        }
+        
+    }
+    
+    aRect.size.height -= keyboardHeight;
+    
+    
+    CGPoint origin = [m_currentText.superview convertPoint:m_currentText.frame.origin toView:cv];
+    
+    
+    origin.y +=m_prevScrollPoint.y;
+    //    origin.y +=m_currentEditView.frame.size.height;
+    
+    
+    if (!CGRectContainsPoint(aRect, origin) ) {
+        
+        CGPoint scrollPoint = CGPointMake(0.0,origin.y - aRect.size.height);
+        [cv setContentOffset:scrollPoint animated:YES];
+        
+    }
+    
+    
+    
+}
+
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

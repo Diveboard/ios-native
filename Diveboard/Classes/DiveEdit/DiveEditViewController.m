@@ -418,14 +418,14 @@
 {
     
     // MaxDepth
-    if ([diveInformation.maxDepth doubleValue] < 1) {
+    if ([diveInformation.maxDepth doubleValue] < 0) {
         
         [[[UIAlertView alloc] initWithTitle:nil message:@"Please enter value of Max Depth." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
         return NO;
         
     }
     // Duration
-    if ([diveInformation.duration doubleValue] < 1)
+    if ([diveInformation.duration doubleValue] < 0)
     {
         [[[UIAlertView alloc] initWithTitle:nil message:@"Please enter value of Duration." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
         return NO;

@@ -2,8 +2,8 @@
 //  DiveEditSpotViewController.m
 //  Diveboard
 //
-//  Created by Vladimir Popov on 9/17/14.
-//  Copyright (c) 2014 Vladimir Popov. All rights reserved.
+//  Created by VladimirKonstantinov on 9/17/14.
+//  Copyright (c) 2014 threek. All rights reserved.
 //
 
 #import "DiveEditSpotViewController.h"
@@ -150,6 +150,7 @@
     if ([m_tableView respondsToSelector:@selector(setLayoutMargins:)]) {
         [m_tableView setLayoutMargins:UIEdgeInsetsZero];
     }
+    
     
     // Do any additional setup after loading the view from its nib.
 }
@@ -563,12 +564,21 @@
 
 -(void)onChangeSpot:(id)sender{
     
+    if (m_dropDown) {
+        [m_dropDown hideDropDown:m_dropDown.btnSender];
+        m_dropDown = nil;
+    }
+
     m_DiveInformation.spotInfo = [[DiveSpotInfo alloc] initWithEmptySpot];
     [self setSearchState];
     
 }
 - (void)onAddConfirm:(id)sender{
     
+    if (m_dropDown) {
+        [m_dropDown hideDropDown:m_dropDown.btnSender];
+        m_dropDown = nil;
+    }
     DiveSpotInfo* newSpot = [[DiveSpotInfo alloc] initWithDictionary:nil];
     
     newSpot.name = m_txtSpotName.text;
