@@ -104,16 +104,10 @@
 {
     DiveEditPhotoCell *cell=[collectionView dequeueReusableCellWithReuseIdentifier:@"PhotoCell" forIndexPath:indexPath];
     
-    if (indexPath.row == m_DiveInformation.divePictures.count) {
-        
-        [cell setAddButton:indexPath];
-        
-    }else{
-        
+    
         DivePicture* divePicture = [m_DiveInformation.divePictures objectAtIndex:indexPath.row];
         [cell setDivePicture:indexPath:divePicture];
         
-    }
     return cell;
     
     

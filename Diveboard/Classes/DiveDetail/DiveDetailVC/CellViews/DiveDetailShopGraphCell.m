@@ -8,7 +8,6 @@
 
 #import "DiveDetailShopGraphCell.h"
 #import "UIImageView+AFNetworking.h"
-#import "AsyncUIImageView.h"
 #import "DiveGraphViewController.h"
 @implementation DiveDetailShopGraphCell
 
@@ -35,7 +34,9 @@
     }
     
     if (m_DiveInformation.diveShop.picture.length > 0) {
-        [imgviewShop setImageURL:[NSURL URLWithString:m_DiveInformation.diveShop.picture] placeholder:nil];
+        
+        [imgviewShop setImageWithURL:[NSURL URLWithString:m_DiveInformation.diveShop.picture]];
+        
     }
     
     

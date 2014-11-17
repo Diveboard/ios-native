@@ -145,10 +145,6 @@
 		C325A77019E4E8750024BF5E /* UIProgressView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = C325A76619E4E8750024BF5E /* UIProgressView+AFNetworking.m */; };
 		C325A77119E4E8750024BF5E /* UIRefreshControl+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = C325A76819E4E8750024BF5E /* UIRefreshControl+AFNetworking.m */; };
 		C325A77219E4E8750024BF5E /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = C325A76A19E4E8750024BF5E /* UIWebView+AFNetworking.m */; };
-		C325A7AE19E4F2E60024BF5E /* AsyncImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = C325A7A719E4F2E60024BF5E /* AsyncImageView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		C325A7AF19E4F2E60024BF5E /* AsyncUIImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = C325A7A919E4F2E60024BF5E /* AsyncUIImageView.m */; };
-		C325A7B019E4F2E60024BF5E /* ImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C325A7AB19E4F2E60024BF5E /* ImageCache.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		C325A7B119E4F2E60024BF5E /* ImageCacheObject.m in Sources */ = {isa = PBXBuildFile; fileRef = C325A7AD19E4F2E60024BF5E /* ImageCacheObject.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C34CAB0E19E3880200BD0214 /* RadioPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C34CAB0C19E3880200BD0214 /* RadioPickerViewController.m */; };
 		C34CAB0F19E3880200BD0214 /* RadioPickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C34CAB0D19E3880200BD0214 /* RadioPickerViewController.xib */; };
 		C36D415019DA5685003CBFE5 /* XDPopupListView.m in Sources */ = {isa = PBXBuildFile; fileRef = C36D414F19DA5685003CBFE5 /* XDPopupListView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -481,14 +477,6 @@
 		C325A76819E4E8750024BF5E /* UIRefreshControl+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIRefreshControl+AFNetworking.m"; sourceTree = "<group>"; };
 		C325A76919E4E8750024BF5E /* UIWebView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWebView+AFNetworking.h"; sourceTree = "<group>"; };
 		C325A76A19E4E8750024BF5E /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
-		C325A7A619E4F2E60024BF5E /* AsyncImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncImageView.h; sourceTree = "<group>"; };
-		C325A7A719E4F2E60024BF5E /* AsyncImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncImageView.m; sourceTree = "<group>"; };
-		C325A7A819E4F2E60024BF5E /* AsyncUIImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncUIImageView.h; sourceTree = "<group>"; };
-		C325A7A919E4F2E60024BF5E /* AsyncUIImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncUIImageView.m; sourceTree = "<group>"; };
-		C325A7AA19E4F2E60024BF5E /* ImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCache.h; sourceTree = "<group>"; };
-		C325A7AB19E4F2E60024BF5E /* ImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCache.m; sourceTree = "<group>"; };
-		C325A7AC19E4F2E60024BF5E /* ImageCacheObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCacheObject.h; sourceTree = "<group>"; };
-		C325A7AD19E4F2E60024BF5E /* ImageCacheObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCacheObject.m; sourceTree = "<group>"; };
 		C34CAB0B19E3880200BD0214 /* RadioPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RadioPickerViewController.h; path = RadioPickerVC/RadioPickerViewController.h; sourceTree = "<group>"; };
 		C34CAB0C19E3880200BD0214 /* RadioPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RadioPickerViewController.m; path = RadioPickerVC/RadioPickerViewController.m; sourceTree = "<group>"; };
 		C34CAB0D19E3880200BD0214 /* RadioPickerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RadioPickerViewController.xib; path = RadioPickerVC/RadioPickerViewController.xib; sourceTree = "<group>"; };
@@ -1099,7 +1087,6 @@
 				C5BBA85D19F996CD0015CC85 /* SVProgressHUD */,
 				C5B734CD19F6C1F7005FA191 /* UserVoiceSDK-3.2.1 */,
 				C3DE681119EA03E000696A5B /* appirater */,
-				C325A7A519E4F2E60024BF5E /* AsyncImageView */,
 				C325A75919E4E8750024BF5E /* UIKit+AFNetworking */,
 				C325A73C19E4E86E0024BF5E /* AFNetworking */,
 				C31B7A9D19DE465700BE6239 /* GZIP */,
@@ -1324,21 +1311,6 @@
 				C325A76A19E4E8750024BF5E /* UIWebView+AFNetworking.m */,
 			);
 			path = "UIKit+AFNetworking";
-			sourceTree = "<group>";
-		};
-		C325A7A519E4F2E60024BF5E /* AsyncImageView */ = {
-			isa = PBXGroup;
-			children = (
-				C325A7A619E4F2E60024BF5E /* AsyncImageView.h */,
-				C325A7A719E4F2E60024BF5E /* AsyncImageView.m */,
-				C325A7A819E4F2E60024BF5E /* AsyncUIImageView.h */,
-				C325A7A919E4F2E60024BF5E /* AsyncUIImageView.m */,
-				C325A7AA19E4F2E60024BF5E /* ImageCache.h */,
-				C325A7AB19E4F2E60024BF5E /* ImageCache.m */,
-				C325A7AC19E4F2E60024BF5E /* ImageCacheObject.h */,
-				C325A7AD19E4F2E60024BF5E /* ImageCacheObject.m */,
-			);
-			path = AsyncImageView;
 			sourceTree = "<group>";
 		};
 		C34CAB0A19E387DA00BD0214 /* RadioPickerVC */ = {
@@ -1993,7 +1965,6 @@
 				3CE7FA501933731700D72A34 /* DiveBoardNavigationController.m in Sources */,
 				3C13084718F3E1DC00D51AC7 /* DataRequestManager.m in Sources */,
 				C36D417019DDA5FE003CBFE5 /* UIView+FindUIViewController.m in Sources */,
-				C325A7B019E4F2E60024BF5E /* ImageCache.m in Sources */,
 				C52794A61A070962001A1091 /* DiveBrowserCell.m in Sources */,
 				C325A75719E4E86E0024BF5E /* AFURLResponseSerialization.m in Sources */,
 				3CF3378318BD48FE001D2DF0 /* DiveCountlineView.m in Sources */,
@@ -2033,7 +2004,6 @@
 				C325A75019E4E86E0024BF5E /* AFHTTPRequestOperation.m in Sources */,
 				3CF3375218BCD28C001D2DF0 /* TPKeyboardAvoidingScrollView.m in Sources */,
 				3CD100E418C9321E0001B625 /* TKListPickerView.m in Sources */,
-				C325A7AE19E4F2E60024BF5E /* AsyncImageView.m in Sources */,
 				3CE7914318BF0C1D00E4265A /* OneDiveView.m in Sources */,
 				C52794781A06D4B4001A1091 /* DiveDetailPhotosViewController.m in Sources */,
 				C325A77219E4E8750024BF5E /* UIWebView+AFNetworking.m in Sources */,
@@ -2050,7 +2020,6 @@
 				3CD100DE18C922B90001B625 /* TKDatePickerView.m in Sources */,
 				E012565A19CFB158008D9A0B /* DiveEditTanksUsedViewController.m in Sources */,
 				3CE047E618BCBBB000FA47FF /* UIImageView+LBBlurredImage.m in Sources */,
-				C325A7AF19E4F2E60024BF5E /* AsyncUIImageView.m in Sources */,
 				E0B1D5A319C98BFC0007C481 /* DiveEditPhotosViewController.m in Sources */,
 				E0B1D58B19C98AD70007C481 /* DiveEditDetailViewController.m in Sources */,
 				C36D416C19DD4AFB003CBFE5 /* ClosestShopViewController.m in Sources */,
@@ -2065,7 +2034,6 @@
 				C325A75819E4E86E0024BF5E /* AFURLSessionManager.m in Sources */,
 				E0B1D59719C98B910007C481 /* DiveEditShopViewController.m in Sources */,
 				C5B7350019F6C1F7005FA191 /* README.md in Sources */,
-				C325A7B119E4F2E60024BF5E /* ImageCacheObject.m in Sources */,
 				C36D415019DA5685003CBFE5 /* XDPopupListView.m in Sources */,
 				C52794811A06D4B4001A1091 /* DiveGraphViewController.m in Sources */,
 				E0A25C8E19C5F9D90043A849 /* DrawerMenuViewController.m in Sources */,
@@ -2268,6 +2236,8 @@
 		3CE0477118BCB83100FA47FF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Mark Bremmers (5QG646M7DU)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Mark Bremmers (5QG646M7DU)";
 				COPY_PHASE_STRIP = YES;
@@ -2295,6 +2265,8 @@
 		3CE0477218BCB83100FA47FF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Mark Bremmers (5QG646M7DU)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Mark Bremmers (5QG646M7DU)";
 				FRAMEWORK_SEARCH_PATHS = (

@@ -8,10 +8,9 @@
 
 #import "DivePicturesViewController.h"
 #import "DiveInformation.h"
-//#import "UIImageView+AFNetworking.h"
-#import "AsyncImageView.h"
-#import "AsyncUIImageView.h"
-
+#import "UIImageView+AFNetworking.h"
+//#import "AsyncUIImageView.h"
+#import "MRZoomScrollView.h"
 
 #define kAnimationTime     0.3f
 
@@ -21,10 +20,9 @@
     NSArray *divePictures;
     
     CGPoint touchStartPoint;
-//    UIImageView *mainImageView, *secondImageView;
-//    AsyncImageView *mainImageView, *secondImageView;
-    AsyncUIImageView *mainImageView, *secondImageView;
-    AsyncUIImageView *prevImageView, *nextImageView;
+    
+    UIView *mainImageView, *secondImageView;
+    UIView *prevImageView, *nextImageView;
     
     NSMutableArray *imgviewArray;
     
@@ -75,40 +73,6 @@
     
 }
 
-//- (void) initMethod
-//{
-////    mainImageView = [[UIImageView alloc] initWithFrame:viewMain.frame];
-//    mainImageView = [[AsyncImageView alloc] initWithFrame:viewMain.frame]; // contentMode:(UIViewContentModeScaleAspectFit)];
-//    mainImageView.contentMode = UIViewContentModeScaleAspectFit;
-//    [viewMain insertSubview:mainImageView belowSubview:btnClose];
-//    DivePicture *picture = [divePictures objectAtIndex:0];
-////    [mainImageView setImageWithURL:[NSURL URLWithString:picture.largeURL]];
-////                  placeholderImage:[UIImage imageNamed:@"preload"]];
-//    [mainImageView loadImageFromURL:[NSURL URLWithString:picture.largeURL]];
-//    currentPictureIndex = 0;
-//    
-//    [mainImageView setUserInteractionEnabled:YES];
-//    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(imagePanGestureAction:)];
-//    [mainImageView addGestureRecognizer:panGesture];
-//    
-//    if (divePictures.count > 1) {
-////        secondImageView = [[UIImageView alloc] initWithFrame:viewMain.frame];
-//        secondImageView = [[AsyncImageView alloc] initWithFrame:viewMain.frame]; // contentMode:(UIViewContentModeScaleAspectFit)];
-//        
-//        secondImageView.contentMode = UIViewContentModeScaleAspectFit;
-//        secondImageView.userInteractionEnabled = NO;
-//        [viewMain insertSubview:secondImageView belowSubview:mainImageView];
-//        DivePicture *picture1 = [divePictures objectAtIndex:1];
-////        [secondImageView setImageWithURL:[NSURL URLWithString:picture1.largeURL]];
-////                      placeholderImage:[UIImage imageNamed:@"preload"]];
-//        [secondImageView loadImageFromURL:[NSURL URLWithString:picture1.largeURL]];
-//        secondPictureIndex = 1;
-//        
-//        UIPanGestureRecognizer *panGesture1 = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(imagePanGestureAction:)];
-//        [secondImageView addGestureRecognizer:panGesture1];
-//
-//    }
-//}
 
 - (void) initMethod0303 {
     imgviewArray = [[NSMutableArray alloc] init];
@@ -134,57 +98,68 @@
             
             
         }else{
-            AsyncUIImageView *imgview = [[AsyncUIImageView alloc] initWithFrame:rect];
-            [imgview setAlpha:0.0f];
-            [imgview setContentMode:(UIViewContentModeScaleAspectFit)];
-            [imgview setBackgroundColor:[UIColor colorWithWhite:0.1f alpha:0.2f]];
-            [imgview setIndicatorStyle:(UIActivityIndicatorViewStyleWhite)];
-            [imgview setImageURL:[NSURL URLWithString:picture.urlString] placeholder:nil];
-            [imgview setUserInteractionEnabled:YES];
-            [viewMain addSubview:imgview];
-            [imgviewArray addObject:imgview];
+            
+            UIView* containerView = [[UIView alloc] initWithFrame:viewMain.frame];
+//            [containerView setBackgroundColor:[UIColor redColor]];
+            [containerView setAlpha:0.0f];
+            
+            MRZoomScrollView *zoomView = [[MRZoomScrollView alloc] initWithFrame:viewMain.frame];
+            
+            [zoomView.imageView setContentMode:(UIViewContentModeScaleAspectFit)];
+            [zoomView.imageView setBackgroundColor:[UIColor colorWithWhite:0.1f alpha:0.2f]];
+            
+            UIActivityIndicatorView* indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+            
+            [indicator setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
+            
+            [indicator setCenter:containerView.center];
+            [indicator startAnimating];
+            [zoomView addSubview:indicator];
+            
+            UIImageView *imgview = zoomView.imageView;
+            
+            NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:picture.urlString]];
+            
+            [zoomView.imageView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                
+                [imgview setImage:image];
+                [indicator stopAnimating];
+                
+                
+            } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                
+                [imgview setImage:[[DiveOfflineModeManager sharedManager] getImageWithUrl:request.URL.absoluteString]];
+                [indicator stopAnimating];
+                
+            }];
+            
+            [containerView addSubview:zoomView];
+            [viewMain addSubview:containerView];
+            
+            [imgviewArray addObject:containerView];
             
             UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(imagePanGestureAction:)];
-            [imgview addGestureRecognizer:panGesture];
+            [containerView addGestureRecognizer:panGesture];
             
             
         }
     }
     
-//    [self showPictureWithIndex:0];
-//    
-//    currentPictureIndex = picCount - 1;
-//    prevPicIndex = currentPictureIndex + 1;
-//    nextPicIndex = currentPictureIndex - 1;
-//    
-//    mainImageView = [imgviewArray lastObject];
-//    [mainImageView setFrame:viewMain.bounds];
-//    [mainImageView setAlpha:1.0f];
-//    prevImageView = nil;
-//    nextImageView = (imgviewArray.count > 1 ? [imgviewArray objectAtIndex:nextPicIndex] : nil);
-//    
-//    AsyncUIImageView *imgview = [imgviewArray lastObject];
-//    [imgview setFrame:viewMain.bounds];
-//    [imgview setAlpha:1.0f];
-//    
-//    mainImageView = imgview;
-//    [mainImageView setUserInteractionEnabled:YES];
-//    if (picCount > 1) {
-//        AsyncUIImageView *imgview = [imgviewArray objectAtIndex:(picCount - 2)];
-//        secondImageView = imgview;
-//    } else {
-//        secondImageView = nil;
-//    }
 
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
+    MRZoomScrollView* zoomView = [mainImageView subviews][0];
+    [zoomView setZoomScale:zoomView.minimumZoomScale];
     rootSize  = viewMain.frame.size;
 //    for (AsyncUIImageView *view in imgviewArray) {
 //        view.center = viewMain.center;
+    
 //    }
     [mainImageView setFrame:viewMain.frame];
+    [zoomView setFrame:mainImageView.frame];
+    [zoomView setContentSize:zoomView.imageView.frame.size];
 //    [secondImageView setFrame:viewMain.frame];
 }
 
@@ -225,15 +200,6 @@
     
     if (translatedPoint.x > 0) {  // ->
         
-//        [self setSecondImageIndex:(currentPictureIndex - 1)];
-//        
-//        [mainImageView setFrame:rect1];
-//        [mainImageView setAlpha:alpha1];
-//        
-//        if (currentPictureIndex > 0) {
-//            [viewMain bringSubviewToFront:secondImageView];
-//            [secondImageView setFrame:rect3];
-//        }
         
         [mainImageView setFrame:rect1];
         [mainImageView setAlpha:alpha1];
@@ -245,14 +211,6 @@
         
     } else {        // <-
         
-//        [self setSecondImageIndex:(currentPictureIndex + 1)];
-//        [viewMain bringSubviewToFront:mainImageView];
-//        [mainImageView setFrame:rect2];
-//        
-//        if (currentPictureIndex < (divePictures.count - 1)) {
-//            [secondImageView setFrame:rect4];
-//            [secondImageView setAlpha:alpha2];
-//        }
         [mainImageView setFrame:rect2];
         
         if (nextImageView) {
@@ -262,69 +220,6 @@
         
     }
     
-//    if ([sender state] == UIGestureRecognizerStateEnded) {
-//        CGFloat velocityX = (0.15 * [sender velocityInView:self.view].x);
-//        
-//        if (velocityX > 100) {   // ->
-//            if (currentPictureIndex > 0) {
-//                [self slideAnimationToFadeOut:mainImageView swapView:YES];
-//                if (secondPictureIndex < divePictures.count) {
-//                    [self slideAnimationToRight:secondImageView swapView:NO];
-//
-//                }
-//            } else {  //if ( currentPictureIndex == 0 )
-//                [self slideAnimationToRight:mainImageView swapView:NO];
-//                
-//            }
-//            
-//        } else if (velocityX < -100) {  //  <-
-//            if (currentPictureIndex < (divePictures.count - 1)) {
-//                [self slideAnimationToLeft:mainImageView swapView:YES];
-//                if (secondPictureIndex < divePictures.count) {
-//                    [self slideAnimationToFadeIn:secondImageView swapView:NO];
-//                }
-//
-//            } else {
-//                [self slideAnimationToRight:mainImageView swapView:NO];
-//            }
-//            
-//        } else if (mainImageView.frame.origin.x < -rootSize.width * 0.4) {   // <|-
-//            
-//            if (currentPictureIndex < (divePictures.count - 1)) {
-//                [self slideAnimationToLeft:mainImageView swapView:YES];
-//                if (secondPictureIndex < divePictures.count) {
-//                    [self slideAnimationToFadeIn:secondImageView swapView:NO];
-//                }
-//                
-//            } else {
-//                [self slideAnimationToRight:mainImageView swapView:NO];
-//            }
-//            
-//            
-//        } else if (mainImageView.frame.origin.x > rootSize.width * 0.2) {   // -|>
-//            
-//            if (currentPictureIndex > 0) {
-//                [self slideAnimationToFadeOut:mainImageView swapView:YES];
-//                if (secondPictureIndex < divePictures.count) {
-//                    [self slideAnimationToRight:secondImageView swapView:NO];
-//                    
-//                }
-//            } else {  //if ( currentPictureIndex == 0 )
-//                [self slideAnimationToRight:mainImageView swapView:NO];
-//                
-//            }
-//            
-//        } else {    // restore
-//            
-//            [self slideAnimationToRight:mainImageView swapView:NO];
-//            if (currentPictureIndex > secondPictureIndex) {
-//                [self slideAnimationToLeft:secondImageView swapView:NO];
-//            } else {
-//                [self slideAnimationToFadeOut:secondImageView swapView:NO];
-//            }
-//        }
-//        
-//    }
     if ([sender state] == UIGestureRecognizerStateEnded) {
         CGFloat velocityX = (0.15 * [sender velocityInView:self.view].x);
         
@@ -415,6 +310,8 @@
     [UIView animateWithDuration:kAnimationTime animations:^{
         CGRect rect = CGRectMake(-rootSize.width, 0, rootSize.width, rootSize.height);
         [view setFrame:rect];
+        
+        
     } completion:^(BOOL finished) {
         if (flag) {
             [self swapViewWithIncrease:-1];
@@ -428,6 +325,12 @@
         CGRect rect = CGRectMake(0, 0, rootSize.width, rootSize.height);
         [view setAlpha:1.0f];
         [view setFrame:rect];
+        
+        MRZoomScrollView* zoomView = [view subviews][0];
+        [zoomView setFrame:view.frame];
+        [zoomView setContentSize:zoomView.imageView.frame.size];
+        
+        
     } completion:^(BOOL finished) {
         
     }];
@@ -451,7 +354,13 @@
     [UIView animateWithDuration:kAnimationTime animations:^{
         CGRect rect = CGRectMake(0, 0, rootSize.width, rootSize.height);
         [view setFrame:rect];
+        
+        MRZoomScrollView* zoomView = [view subviews][0];
+        [zoomView setFrame:view.frame];
+        [zoomView setContentSize:zoomView.imageView.frame.size];
+        
         [view setAlpha:1.0f];
+        
     } completion:^(BOOL finished) {
         
     }];
@@ -459,10 +368,6 @@
 
 - (void) swapViewWithIncrease:(int)inc
 {
-//    id temp = mainImageView;
-//    mainImageView = secondImageView;
-//    secondImageView = temp;
-//    secondPictureIndex = currentPictureIndex;
     currentPictureIndex += inc;
     if (0 <= currentPictureIndex && currentPictureIndex < divePictures.count) {
         mainImageView = [imgviewArray objectAtIndex:currentPictureIndex];
@@ -477,9 +382,6 @@
             prevImageView = nil;
         }
     }
-//    [mainImageView setUserInteractionEnabled:YES];
-//    [secondImageView setUserInteractionEnabled:NO];
-//    secondImageView.image = nil;
 }
 
 - (IBAction)closeAction:(id)sender {

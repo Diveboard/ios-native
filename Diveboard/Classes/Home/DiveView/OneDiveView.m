@@ -9,7 +9,6 @@
 #import "OneDiveView.h"
 #import "AFNetworking.h"
 #import "UIImageView+AFNetworking.h"
-#import "AsyncImageView.h"
 
 @interface OneDiveView()
 {
@@ -26,6 +25,7 @@
 
 - (id)initWithFrame:(CGRect)frame diveID:(NSString *)diveID rotate:(UIInterfaceOrientation)orien
 {
+    
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         if (orien == UIInterfaceOrientationPortrait) {
@@ -47,7 +47,7 @@
         }
 
     }
-
+    
     
     if (self) {
         [self setFrame:frame];
@@ -341,13 +341,15 @@
                     [imgviewMainPhoto setImage:[[DiveOfflineModeManager sharedManager] getLocalDivePicture:onePicInfo.urlString]];
                 }
             }else{
-                AsyncUIImageView *subPicImageView = [[AsyncUIImageView alloc] initWithFrame:picRect];
+                UIImageView *subPicImageView = [[UIImageView alloc] initWithFrame:picRect];
                 [subPicImageView setContentMode:(UIViewContentModeScaleAspectFill)];
                 subPicImageView.clipsToBounds = YES;
                 subPicImageView.layer.cornerRadius = subPicImageHeight / 2;
                 subPicImageView.backgroundColor = [UIColor clearColor];
-                NSURL *picURL = [NSURL URLWithString:onePicInfo.smallURL];
-                [subPicImageView setImageURL:picURL placeholder:nil];;
+                NSURL *picURL = [NSURL URLWithString:onePicInfo.urlString];
+                
+                [subPicImageView setImageWithURL:picURL];
+                
                 [subPicImageView setUserInteractionEnabled:NO];
                 [viewSubPicturesBox addSubview:subPicImageView];
                 if (i == 0) {

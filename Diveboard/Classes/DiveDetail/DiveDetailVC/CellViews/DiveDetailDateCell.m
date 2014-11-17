@@ -137,20 +137,32 @@
             
         }
         
-        [m_lblDiveType setText:strDiveType];
-        m_lblDiveType.frame = CGRectMake(m_lblDiveType.frame.origin.x, m_lblDiveType.frame.origin.y, m_lblDiveType.frame.size.width, 0);
-        m_lblDiveType.lineBreakMode = NSLineBreakByWordWrapping;
-        m_lblDiveType.numberOfLines = 0;
-        [m_lblDiveType sizeToFit];
+        
+        
+
+        float width = UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) ? 274.0f : 150.0f;
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {  // iPad
+            
+            width = UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) ? 492.0f : 364.0f;
+            
+        }
+        
+        CGSize sizeText = [strDiveType sizeWithFont:[UIFont fontWithName:kDefaultFontName size:10]
+                                      constrainedToSize:CGSizeMake(width, CGFLOAT_MAX)
+                                          lineBreakMode:NSLineBreakByWordWrapping];
         
         frame = m_lblDiveType.frame;
+        frame.size = sizeText;
         
         if (frame.size.height < 15) {
             
             frame.size.height = 15;
-            [m_lblDiveType setFrame:frame];
             
         }
+        [m_lblDiveType setFrame:frame];
+        
+        [m_lblDiveType setText:strDiveType];
         
         CGRect tempFrame = m_viewDiveTypeBox.frame;
         tempFrame.size.height = CGRectGetMaxY(m_lblDiveType.frame);

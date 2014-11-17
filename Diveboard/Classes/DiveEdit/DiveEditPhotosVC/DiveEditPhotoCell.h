@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "DiveInformation.h"
-#import "AsyncUIImageView.h"
 
 @protocol DiveEditPhotoCellDelegate <NSObject>
 
@@ -20,7 +19,7 @@
 
 @interface DiveEditPhotoCell : UICollectionViewCell
 {
-    IBOutlet AsyncUIImageView* m_imgDivePicture;
+    IBOutlet UIImageView* m_imgDivePicture;
     IBOutlet UIButton* m_btnAdd;
 }
 @property (nonatomic, strong) id<DiveEditPhotoCellDelegate> delegate;

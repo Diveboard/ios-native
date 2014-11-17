@@ -20,7 +20,7 @@
 {
     IBOutlet UILabel        *vdlblDiveShop;
     IBOutlet UILabel        *vdlblShopContent;
-    IBOutlet AsyncUIImageView *imgviewShop;
+    IBOutlet UIImageView *imgviewShop;
     IBOutlet UILabel        *vdlblGraphTitle;
     IBOutlet UIImageView    *vdimgviewGraph;
     IBOutlet UILabel        *vdlblDepthTitle;

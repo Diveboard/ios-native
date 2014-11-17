@@ -12,7 +12,6 @@
 #define kPhotoImageViewTag  100
 
 #import "DiveDetailContainerController.h"
-#import "AsyncUIImageView.h"
 #import <CoreLocation/CoreLocation.h>
 #import "DiveEditViewController.h"
 #import "AFNetworking.h"

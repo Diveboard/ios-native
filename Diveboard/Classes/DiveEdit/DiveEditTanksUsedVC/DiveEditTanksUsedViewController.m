@@ -313,6 +313,11 @@
 
 -(void)onOk:(id)sender{
     
+    if(![self checkIsValid]){
+        return;
+    }
+        
+    
     if ([m_viewEdit isHidden]) {
         
         if (self.delegate && [self.delegate respondsToSelector:@selector(didChangeTanksUsed:)]) {
@@ -590,5 +595,39 @@
     
 }
 
+- (BOOL) checkIsValid
+{
+    
+    
+    if (!([[DiveInformation convertInternationalFormatValue:m_txtVolume.text] doubleValue] > 0)) {
+        
+        [[[UIAlertView alloc] initWithTitle:nil message:@"Please enter value of Volume." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
+        return NO;
+    }
+    
+    if (!([[DiveInformation convertInternationalFormatValue:m_txtStartPressure.text] doubleValue] > 0))
+    {
+        [[[UIAlertView alloc] initWithTitle:nil message:@"Please enter value of Start pressure." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
+        return NO;
+    }
+    
+    if (!([[DiveInformation convertInternationalFormatValue:m_txtEndPressure.text] doubleValue] > 0))
+    {
+        [[[UIAlertView alloc] initWithTitle:nil message:@"Please enter value of End pressure." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
+        return NO;
+    }
+    
+    if (![m_viewStartTimeRow isHidden]) {
+       
+        if ([[DiveInformation convertInternationalFormatValue:m_txtStartTime.text] doubleValue] < 1)
+        {
+            [[[UIAlertView alloc] initWithTitle:nil message:@"Please enter value of Start time." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
+            return NO;
+        }
+        
+    }
+    
+    return YES;
+}
 
 @end

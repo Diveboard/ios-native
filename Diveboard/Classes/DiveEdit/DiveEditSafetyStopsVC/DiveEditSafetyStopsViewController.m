@@ -140,6 +140,10 @@
 
 -(void)onOK:(id)sender{
     
+    if (![self checkIsValid]) {
+        return;
+    }
+    
     if ([m_viewEdit isHidden]) {
     
         if (self.delegate && [self.delegate respondsToSelector:@selector(didChangeSafetyStops:)]) {
@@ -246,8 +250,31 @@
     
 }
 
+
+
 -(void)doneWithNumberPad{
     
     [self.view endEditing:YES];
+}
+
+- (BOOL) checkIsValid
+{
+    
+    // MaxDepth
+    
+    if (!([[DiveInformation convertInternationalFormatValue:m_txtDepth.text] doubleValue] > 0)) {
+        
+        [[[UIAlertView alloc] initWithTitle:nil message:@"Please enter value of Depth." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
+        return NO;
+        
+    }
+    // Duration
+    if ([[DiveInformation convertInternationalFormatValue:m_txtDuration.text] doubleValue] < 1)
+    {
+        [[[UIAlertView alloc] initWithTitle:nil message:@"Please enter value of Duration." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
+        return NO;
+    }
+    
+    return YES;
 }
 @end

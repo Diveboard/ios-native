@@ -18,6 +18,7 @@
 #import "DiveGraphViewController.h"
 #import "UIView+FindUIViewController.h"
 #import "Global.h"
+#import "UIImageView+AFNetworking.h"
 @interface DiveDetailViewController () <DiveDetailShopGraphCellDelegate>
 
 {
@@ -102,8 +103,9 @@
     
     [m_tableData removeAllObjects];
     // username , photo
-    [vdimgUserAvator setImageURL:[NSURL URLWithString:[AppManager sharedManager].loginResult.user.pictureSmall]
-                     placeholder:Nil];
+
+    [vdimgUserAvator setImageWithURL:[NSURL URLWithString:[AppManager sharedManager].loginResult.user.pictureSmall]];
+    
     vdimgUserAvator.layer.cornerRadius = vdimgUserAvator.frame.size.width / 2;
     
     
@@ -116,6 +118,10 @@
         } else {
             [vdlblCountry setText:@""];
         }
+        
+    }else{
+        
+        [vdlblCountry setText:@""];
         
     }
     
@@ -184,11 +190,11 @@
     
     
     
-    [NSTimer scheduledTimerWithTimeInterval:0.2
-                                     target:m_tableView
-                                   selector:@selector(reloadData)
-                                   userInfo:nil
-                                    repeats:NO];
+//    [NSTimer scheduledTimerWithTimeInterval:0.2
+//                                     target:m_tableView
+//                                   selector:@selector(reloadData)
+//                                   userInfo:nil
+//                                    repeats:NO];
 }
 
 -(void)viewWillLayoutSubviews

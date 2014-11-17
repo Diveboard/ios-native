@@ -11,8 +11,8 @@
 #import "DiveEditBuddiesCell.h"
 #import "DiveInformation.h"
 #import "XDPopupListView.h"
-#import "AsyncUIImageView.h"
 #import "DrawerMenuViewController.h"
+#import "UIImageView+AFNetworking.h"
 @interface DiveEditBuddiesViewController () <DiveEditBuddiesCellDelegate,XDPopupListViewDataSource,XDPopupListViewDelegate>
 {
     DiveInformation* m_DiveInformation;
@@ -20,7 +20,7 @@
     NSArray* m_arrUsers;
     XDPopupListView* m_AutoCompleteList;
     DiveEditBuddiesCell* editcell;
-    UIView* m_viewBoundAudoComplete;
+//    UIView* m_viewBoundAudoComplete;
 }
 @end
 
@@ -79,7 +79,14 @@
 
 -(void)viewWillLayoutSubviews{
     
+    
     [m_CollectionViewBuddies reloadData];
+    
+    
+    if ([m_AutoCompleteList isShowing]) {
+        [self didSearchUsers:m_arrUsers];
+    }
+    
 }
 
 #pragma mark UICollectionView DataSource & Delegate
@@ -303,19 +310,24 @@
 -(void)didSearchUsers:(NSArray *)arrUser{
     
     m_arrUsers = arrUser;
-    if (!m_viewBoundAudoComplete) {
-        m_viewBoundAudoComplete = [[UIView alloc] initWithFrame:CGRectMake(8, editcell.frame.origin.y+60, 305, 30)];
-    }
+//    if (!m_viewBoundAudoComplete) {
+//        m_viewBoundAudoComplete = [[UIView alloc] initWithFrame:CGRectMake(8, editcell.frame.origin.y+60, 305, 30)];
+//        [m_viewBoundAudoComplete setBackgroundColor:[UIColor orangeColor]];
+//    }
+//    
+//    [m_viewBoundAudoComplete setFrame:CGRectMake(8, editcell.frame.origin.y+60, 305, 30)];
     
-    [m_viewBoundAudoComplete setFrame:CGRectMake(8, editcell.frame.origin.y+60, 305, 30)];
-    [m_CollectionViewBuddies addSubview:m_viewBoundAudoComplete];
+//    [m_CollectionViewBuddies addSubview:m_viewBoundAudoComplete];
+
     
-    [m_AutoCompleteList setBoundView:m_viewBoundAudoComplete];
+    UITextField* txt = (UITextField*)[editcell viewWithTag:500];
+
+    [m_AutoCompleteList setBoundView:txt];
     [m_AutoCompleteList show];
     
     [m_AutoCompleteList reloadListData];
     
-    [m_CollectionViewBuddies setScrollEnabled:NO];
+//    [m_CollectionViewBuddies setScrollEnabled:NO];
 
     
 }
@@ -431,8 +443,8 @@
 
 -(void)didDismissXDPopupList{
 
-    [m_viewBoundAudoComplete removeFromSuperview];
-    [m_CollectionViewBuddies setScrollEnabled:YES];
+//    [m_viewBoundAudoComplete removeFromSuperview];
+//    [m_CollectionViewBuddies setScrollEnabled:YES];
 
     
 }
@@ -444,16 +456,15 @@
     static NSString *identifier = @"AutoCompleteCell";
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     NSDictionary* user = m_arrUsers[indexPath.row];
-    AsyncUIImageView* imgPhoto;
+    UIImageView* imgPhoto;
     UILabel* lbl_name;
     
-    imgPhoto =(AsyncUIImageView*)[cell viewWithTag:100];
+    imgPhoto =(UIImageView*)[cell viewWithTag:100];
     lbl_name =(UILabel*)[cell viewWithTag:200];
     
     if (!imgPhoto) {
-        imgPhoto = [[AsyncUIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+        imgPhoto = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
         [imgPhoto setBackgroundColor:[UIColor lightGrayColor]];
-        [imgPhoto setIndicatorStyle:UIActivityIndicatorViewStyleWhite];
         [imgPhoto setTag:100];
         [cell.contentView addSubview:imgPhoto];
     }
@@ -463,7 +474,8 @@
         [lbl_name setTag:200];
         [cell.contentView addSubview:lbl_name];
     }
-    [imgPhoto setImageURL:[NSURL URLWithString:[user objectForKey:@"picture"]] placeholder:nil];
+    
+    [imgPhoto setImageWithURL:[NSURL URLWithString:[user objectForKey:@"picture"]]];
     lbl_name.text = [user objectForKey:@"name"];
 
     

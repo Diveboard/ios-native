@@ -16,5 +16,7 @@
 
 @property (nonatomic, retain) UIImageView *imageView;
 
+- (CGRect)zoomRectForScale:(float)scale withCenter:(CGPoint)center;
+
 
 @end

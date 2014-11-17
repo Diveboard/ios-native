@@ -10,7 +10,6 @@
 #import <BugSense-iOS/BugSenseController.h>
 
 #import "DiveInformation.h"
-#import "AsyncUIImageView.h"
 
 @protocol OneDiveViewDelegate;
 

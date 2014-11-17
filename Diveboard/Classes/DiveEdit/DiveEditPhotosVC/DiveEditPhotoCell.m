@@ -7,6 +7,7 @@
 //
 
 #import "DiveEditPhotoCell.h"
+#import "UIImageView+AFNetworking.h"
 
 @interface DiveEditPhotoCell ()
 {
@@ -31,9 +32,10 @@
     if (divePicture.isLocal) {
 
         [m_imgDivePicture setImage:[[DiveOfflineModeManager sharedManager] getLocalDivePicture:divePicture.urlString]];
+        
     }else{
-        [m_imgDivePicture setImageURL:[NSURL URLWithString:divePicture.urlString] placeholder:Nil];
-        [m_imgDivePicture setIndicatorStyle:(UIActivityIndicatorViewStyleWhite)];
+        
+        [m_imgDivePicture setImageWithURL:[NSURL URLWithString:divePicture.urlString]];
         
     }
     

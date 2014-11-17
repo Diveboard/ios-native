@@ -36,20 +36,34 @@
         
     }
     
+    float width = UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) ? 528.0f : 280.0f;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {  // iPad
+        
+        width = UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) ? 964.0f : 708.0f;
+        
+    }
+    
+    CGSize sizeText = [strNote sizeWithFont:[UIFont fontWithName:kDefaultFontName size:10]
+                              constrainedToSize:CGSizeMake(width, CGFLOAT_MAX)
+                                  lineBreakMode:NSLineBreakByWordWrapping];
+    
+    
+    
+    
     [vdlblNoteContent setText:strNote];
-    vdlblNoteContent.frame = CGRectMake(vdlblNoteContent.frame.origin.x, vdlblNoteContent.frame.origin.y, vdlblNoteContent.frame.size.width, 0);
-    vdlblNoteContent.lineBreakMode = NSLineBreakByWordWrapping;
-    vdlblNoteContent.numberOfLines = 0;
-    [vdlblNoteContent sizeToFit];
+    
     
     CGRect frame = vdlblNoteContent.frame;
+    frame.size = sizeText;
+    
     if (frame.size.height < 20) {
         
         frame.size.height = 20;
-        [vdlblNoteContent setFrame:frame];
-        
-        
     }
+    
+    [vdlblNoteContent setFrame:frame];
+
     
     frame = self.frame;
     

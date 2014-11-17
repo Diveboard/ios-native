@@ -262,7 +262,7 @@ static DiveOfflineModeManager *_sharedManager;
                 [oneDiveData writeToFile:fileName atomically:YES];
             }
         }
-        NSLog(@"One Dive filename : %@", fileName);
+//        NSLog(@"One Dive filename : %@", fileName);
         return YES;
     } else {
         return NO;

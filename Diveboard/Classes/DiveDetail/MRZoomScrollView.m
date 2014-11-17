@@ -13,7 +13,6 @@
 
 @interface MRZoomScrollView (Utility)
 
-- (CGRect)zoomRectForScale:(float)scale withCenter:(CGPoint)center;
 
 @end
 
@@ -28,6 +27,7 @@
         
         self.delegate = self;
 //        self.frame = CGRectMake(0, 0, MRScreenWidth, MRScreenHeight);
+        [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight ];
         [self setMaximumZoomScale:3];
         [self initImageView];
     }
@@ -42,6 +42,9 @@
     imageView.frame = CGRectMake(0, 0, self.frame.size.width * 2.5, self.frame.size.height * 2.5);
     imageView.userInteractionEnabled = YES;
     imageView.contentMode = UIViewContentModeScaleAspectFit;
+    
+    [imageView setAutoresizingMask: UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight ];
+    
     [self addSubview:imageView];
     
     // Add gesture,double tap zoom imageView.
@@ -85,6 +88,7 @@
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale
 {
+    NSLog(@"%f",scale);
     [scrollView setZoomScale:scale animated:NO];
 }
 

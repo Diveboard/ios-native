@@ -176,13 +176,12 @@
 // portrate layout
 - (void) setLayoutControllersToPortrate
 {
+
     [self.imgviewBackground setImage:nil];
+    
     CGSize deviceSize = [UIScreen mainScreen].bounds.size;
     CGSize rootSize = deviceSize;
     
-//    oneDiveView = [[OneDiveView alloc] initWithFrame:CGRectMake(20, 40, 280, 420)
-//                                              diveID:[appManager.loginResult.user.allDiveIDs lastObject]];
-//    [self.view addSubview:oneDiveView];
  
     diveCount = (int)[AppManager sharedManager].loginResult.user.allDiveIDs.count;
     if (diveCount == 0) {

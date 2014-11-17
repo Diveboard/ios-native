@@ -418,14 +418,14 @@
 {
     
     // MaxDepth
-    if ([diveInformation.maxDepth doubleValue] < 0) {
+    if (!([diveInformation.maxDepth doubleValue] > 0)) {
         
         [[[UIAlertView alloc] initWithTitle:nil message:@"Please enter value of Max Depth." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
         return NO;
         
     }
     // Duration
-    if ([diveInformation.duration doubleValue] < 0)
+    if ([diveInformation.duration doubleValue] < 1)
     {
         [[[UIAlertView alloc] initWithTitle:nil message:@"Please enter value of Duration." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
         return NO;
@@ -435,7 +435,7 @@
     
    float max_depth = [[DiveInformation unitOfLengthWithValue:diveInformation.maxDepth defaultUnit:diveInformation.maxDepthUnit showUnit:NO] floatValue];
     BOOL flag = NO;
-    
+    double totalDuration = 0;
     for (SafetyStop* safetyStop in diveInformation.SafetyStops) {
         
         float depth = [[DiveInformation unitOfLengthWithValue:safetyStop.depth defaultUnit:safetyStop.depthUnit showUnit:NO] floatValue];
@@ -445,10 +445,12 @@
             flag = YES;
         }
         
+        totalDuration +=[safetyStop.duration doubleValue];
+        
         
     }
     
-    if (flag) {
+    if (flag || totalDuration > [diveInformation.duration doubleValue]) {
         
         [[[UIAlertView alloc] initWithTitle:nil message:@"Please enter correct values of Safety Stops." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
         return NO;

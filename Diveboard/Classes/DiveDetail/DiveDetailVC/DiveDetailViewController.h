@@ -20,7 +20,7 @@
 
 {
     IBOutlet UIView         *vdTopBox;
-    IBOutlet AsyncUIImageView *vdimgUserAvator;
+    IBOutlet UIImageView *vdimgUserAvator;
     IBOutlet UILabel        *vdlblNickname;
     IBOutlet UILabel        *vdlblCountry;
     IBOutlet UIButton       *vdbtnEdit;
