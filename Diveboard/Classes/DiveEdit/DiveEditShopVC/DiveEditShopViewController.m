@@ -152,7 +152,7 @@
         
     }
     NSDictionary *shop = [m_arrShop objectAtIndex:indexPath.row];
-    [cell.textLabel setText:[NSString stringWithFormat:@"%d: %@",indexPath.row+1,getStringValue([shop objectForKey:@"name"])]];
+    [cell.textLabel setText:[NSString stringWithFormat:@"%d: %@",(int)indexPath.row+1,getStringValue([shop objectForKey:@"name"])]];
     [cell.detailTextLabel setText:getStringValue([shop objectForKey:@"cname"])];
     return cell;
 }
@@ -221,7 +221,7 @@
     if (m_editShopState == DiveEditShopStateSearch) {
         
         MKPointAnnotation *annotation = view.annotation;
-        int index = [m_arrAnnotations indexOfObject:annotation];
+        int index = (int)[m_arrAnnotations indexOfObject:annotation];
         
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
         [m_tableView scrollToRowAtIndexPath:indexPath

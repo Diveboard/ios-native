@@ -20,6 +20,7 @@
 @interface DiveEditPhotoCell : UICollectionViewCell
 {
     IBOutlet UIImageView* m_imgDivePicture;
+    
     IBOutlet UIButton* m_btnAdd;
 }
 @property (nonatomic, strong) id<DiveEditPhotoCellDelegate> delegate;

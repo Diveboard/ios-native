@@ -114,8 +114,12 @@
 - (void)setImageWithURL:(NSURL *)url
        placeholderImage:(UIImage *)placeholderImage
 {
+ 
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     
-    self.image = [[DiveOfflineModeManager sharedManager] getImageWithUrl:url.absoluteString];
+        self.image = [[DiveOfflineModeManager sharedManager] getImageWithUrl:url.absoluteString];
+        
+    });
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request addValue:@"image/*" forHTTPHeaderField:@"Accept"];
@@ -141,7 +145,11 @@
             self.image = cachedImage;
         }
         
-        [[DiveOfflineModeManager sharedManager] writeImage:cachedImage url:urlRequest.URL.absoluteString];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+            [[DiveOfflineModeManager sharedManager] writeImage:cachedImage url:urlRequest.URL.absoluteString];
+            
+        });
 
         self.af_imageRequestOperation = nil;
     } else {
@@ -156,7 +164,11 @@
             __strong __typeof(weakSelf)strongSelf = weakSelf;
             if ([[urlRequest URL] isEqual:[strongSelf.af_imageRequestOperation.request URL]]) {
 
-                [[DiveOfflineModeManager sharedManager] writeImage:strongSelf.image url:urlRequest.URL.absoluteString];
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    
+                    [[DiveOfflineModeManager sharedManager] writeImage:strongSelf.image url:urlRequest.URL.absoluteString];
+                    
+                });
                 
                 if (success) {
                     success(urlRequest, operation.response, responseObject);

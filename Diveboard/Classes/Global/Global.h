@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <FacebookSDK/FacebookSDK.h>
-#import <BugSense-iOS/BugSenseController.h>
+//#import <BugSense-iOS/BugSenseController.h>
 #import <CoreLocation/CoreLocation.h>
 #import "LoginResult.h"
 #import "DiveListViewController.h"

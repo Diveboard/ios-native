@@ -229,7 +229,7 @@
     imgView = [[UIImageView alloc] initWithImage:c.imageView.image];
     imgView.frame = CGRectMake(5, 5, 25, 25);
     [btnSender addSubview:imgView];
-    [self myDelegate : indexPath.row];
+    [self myDelegate : (int)indexPath.row];
 }
 
 - (void) myDelegate : (int)selectedRow {

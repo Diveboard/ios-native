@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <BugSense-iOS/BugSenseController.h>
+//#import <BugSense-iOS/BugSenseController.h>
 #import "CMPopTipView.h"
 
 @protocol DiveCountlineDelegate;

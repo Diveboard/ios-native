@@ -94,7 +94,7 @@
 {
     
     
-    m_selectedIndex = indexPath.row;
+    m_selectedIndex = (int)indexPath.row;
     [tableView reloadData];
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(didSelectRadioIndex:pickerViewController:)]) {

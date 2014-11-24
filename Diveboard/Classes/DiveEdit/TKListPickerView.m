@@ -98,7 +98,7 @@
 
 - (void) buttonAction:(UIButton *)sender
 {
-    int index = sender.tag - buttonTag;
+    int index = (int)sender.tag - buttonTag;
     if (self.delegate && [self.delegate respondsToSelector:@selector(listPickerView:selectedString:index:)]) {
         NSString *string = [[sender.titleLabel.text componentsSeparatedByString:@" ("] objectAtIndex:0];
         [self.delegate listPickerView:self selectedString:string index:index];

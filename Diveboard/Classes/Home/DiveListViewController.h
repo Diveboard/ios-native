@@ -8,21 +8,27 @@
 
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
-#import <BugSense-iOS/BugSenseController.h>
+//#import <BugSense-iOS/BugSenseController.h>
 
 #import "DiveCountlineView.h"
 #import "OneDiveView.h"
+#import "iCarousel.h"
 
-@interface DiveListViewController : UIViewController <DiveCountlineDelegate, OneDiveViewDelegate,  UIScrollViewDelegate, MFMailComposeViewControllerDelegate>
+@interface DiveListViewController : UIViewController <DiveCountlineDelegate, OneDiveViewDelegate,  UIScrollViewDelegate, MFMailComposeViewControllerDelegate, iCarouselDataSource, iCarouselDelegate>
 {
     
+    
+    
 }
-@property (strong, nonatomic) IBOutlet UIScrollView *scrviewMain;
+@property (strong, nonatomic) IBOutlet iCarousel *carousel;
 @property (strong, nonatomic) IBOutlet UIView *viewBottom;
 @property (strong, nonatomic) IBOutlet UIButton *btnMenu;
 @property (strong, nonatomic) IBOutlet UILabel *lblBottomTitle;
 @property (strong, nonatomic) IBOutlet UILabel *lblCoordinate;
 @property (strong, nonatomic) IBOutlet UIImageView *imgviewBackground;
+
+@property (nonatomic, strong)  NSMutableArray *preloadRequestManagers;
+
 
 - (IBAction)menuAction:(id)sender;
 

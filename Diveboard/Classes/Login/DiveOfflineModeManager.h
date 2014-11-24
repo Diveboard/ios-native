@@ -95,9 +95,9 @@ typedef enum _diveUpdateType
 
 
 
--(NSDictionary*) offlinesearchRegionLocaitonsLat:(NSString*)lat lng:(NSString*)lng dist:(NSString*)dist;
+-(void) offlinesearchRegionLocaitonsLat:(NSString*)lat lng:(NSString*)lng dist:(NSString*)dist success:(void (^)(NSDictionary* resultRegionLocations))success;
 
--(NSDictionary*) offlineSearchSpotText: (NSString*)term :(NSString*) lat :(NSString*) lng :(NSString*) latSW : (NSString*)latNE :(NSString*)lngSW :(NSString*)lngNE;
+- (void) offlineSearchSpotText: (NSString*)term :(NSString*) lat :(NSString*) lng :(NSString*) latSW : (NSString*)latNE :(NSString*)lngSW :(NSString*)lngNE success:(void (^)(NSDictionary* resultSpotText))success;
 
 - (BOOL) checkUpdateDive;
 

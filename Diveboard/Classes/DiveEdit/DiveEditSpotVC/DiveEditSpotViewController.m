@@ -302,7 +302,7 @@
     if (m_editSpotState == DiveEditSpotStateSearch) {
         
         MKPointAnnotation *annotation = view.annotation;
-        int index = [m_arrAnnotations indexOfObject:annotation];
+        int index = (int)[m_arrAnnotations indexOfObject:annotation];
         
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
         [m_tableView scrollToRowAtIndexPath:indexPath
@@ -372,8 +372,11 @@
 
     if ([DiveOfflineModeManager sharedManager].isOffline) {
         
-       NSDictionary *data = [[DiveOfflineModeManager sharedManager] offlineSearchSpotText:[params objectForKey:@"term"] :[params objectForKey:@"lat"] :[params objectForKey:@"lng"] :[params objectForKey:@"latSW"] :[params objectForKey:@"latNE"] :[params objectForKey:@"lngSW"] :[params objectForKey:@"lngNE"]];
-        [self filterSearchResult:data];
+       [[DiveOfflineModeManager sharedManager] offlineSearchSpotText:[params objectForKey:@"term"] :[params objectForKey:@"lat"] :[params objectForKey:@"lng"] :[params objectForKey:@"latSW"] :[params objectForKey:@"latNE"] :[params objectForKey:@"lngSW"] :[params objectForKey:@"lngNE"] success:^(NSDictionary *resultSpotText) {
+           
+           [self filterSearchResult:resultSpotText];
+           
+       }];
 
         
     }else{
@@ -391,8 +394,12 @@
             
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            NSDictionary *data = [[DiveOfflineModeManager sharedManager] offlineSearchSpotText:[params objectForKey:@"term"] :[params objectForKey:@"lat"] :[params objectForKey:@"lng"] :[params objectForKey:@"latSW"] :[params objectForKey:@"latNE"] :[params objectForKey:@"lngSW"] :[params objectForKey:@"lngNE"]];
-            [self filterSearchResult:data];
+            
+            [[DiveOfflineModeManager sharedManager] offlineSearchSpotText:[params objectForKey:@"term"] :[params objectForKey:@"lat"] :[params objectForKey:@"lng"] :[params objectForKey:@"latSW"] :[params objectForKey:@"latNE"] :[params objectForKey:@"lngSW"] :[params objectForKey:@"lngNE"] success:^(NSDictionary *resultSpotText) {
+                
+                [self filterSearchResult:resultSpotText];
+                
+            }];
             
         }];
     }
@@ -505,7 +512,7 @@
         
     }
     DiveSpotInfo *spotInfo = [spotSearchResultArray objectAtIndex:indexPath.row];
-    [cell.textLabel setText:[NSString stringWithFormat:@"%d: %@",indexPath.row+1,spotInfo.name]];
+    [cell.textLabel setText:[NSString stringWithFormat:@"%d: %@",(int)indexPath.row+1,spotInfo.name]];
     [cell.detailTextLabel setText:[NSString stringWithFormat:@"%@, %@", spotInfo.locationName,spotInfo.countryName]];
     return cell;
 }
@@ -570,6 +577,8 @@
     }
 
     m_DiveInformation.spotInfo = [[DiveSpotInfo alloc] initWithEmptySpot];
+    [DrawerMenuViewController sharedMenu].isEditedDive = YES;
+    
     [self setSearchState];
     
 }
@@ -673,8 +682,10 @@
     
     if ([DiveOfflineModeManager sharedManager].isOffline) {
         
-        NSDictionary*  data =[[DiveOfflineModeManager sharedManager] offlinesearchRegionLocaitonsLat:[NSString stringWithFormat:@"%f",lat] lng:[NSString stringWithFormat:@"%f",lng] dist:@"2.0"];
-        [self setRegionLocaitons:data];
+        [[DiveOfflineModeManager sharedManager] offlinesearchRegionLocaitonsLat:[NSString stringWithFormat:@"%f",lat] lng:[NSString stringWithFormat:@"%f",lng] dist:@"2.0" success:^(NSDictionary *resultRegionLocations) {
+            
+            [self setRegionLocaitons:resultRegionLocations];
+        }];
         
     }else{
         
@@ -693,8 +704,11 @@
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             
-            NSDictionary*  data =[[DiveOfflineModeManager sharedManager] offlinesearchRegionLocaitonsLat:[NSString stringWithFormat:@"%f",lat] lng:[NSString stringWithFormat:@"%f",lng] dist:@"2.0"];
-            [self setRegionLocaitons:data];
+            [[DiveOfflineModeManager sharedManager] offlinesearchRegionLocaitonsLat:[NSString stringWithFormat:@"%f",lat] lng:[NSString stringWithFormat:@"%f",lng] dist:@"2.0" success:^(NSDictionary *resultRegionLocations) {
+                
+                [self setRegionLocaitons:resultRegionLocations];
+                
+            }];
             
             
         }];

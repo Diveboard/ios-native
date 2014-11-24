@@ -92,6 +92,7 @@
     [scrollView setZoomScale:scale animated:NO];
 }
 
+
 #pragma mark - View cycle
 //- (void)dealloc
 //{

@@ -79,7 +79,7 @@
             
             DXStarRatingView *ratingView = [[DXStarRatingView alloc] init];
             [ratingView setDisable:YES];
-            [ratingView setStars:[[data objectForKey:markKey] integerValue]];
+            [ratingView setStars:(int)[[data objectForKey:markKey] integerValue]];
             
             frame = CGRectMake(120, 25 * idx, 250, 21);
             

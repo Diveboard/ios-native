@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <BugSense-iOS/BugSenseController.h>
+//#import <BugSense-iOS/BugSenseController.h>
 
 
 
@@ -267,7 +267,6 @@
 
 + (NSString *) unitOfLengthWithValue:(NSString *)value defaultUnit:(NSString *)unit;
 
-+ (NSString *) unitOfLengthWithValue:(NSString *)value defaultUnit:(NSString *)unit;
 
 
 + (NSString *) unitOfTempWithValue  :(NSString *)value defaultUnit:(NSString *)unit;

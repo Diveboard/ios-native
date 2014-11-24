@@ -359,13 +359,30 @@
 -(void)didClickedEditButton
 
 {
-    DiveEditViewController *viewController = [[DiveEditViewController alloc] initWithDiveData:m_DiveInformation];
-    viewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    [viewController setEditDelegate:self];
+    [SVProgressHUD show];
     
+    __block DiveEditViewController *viewController;
     
-    [self.navigationController pushViewController:viewController animated:YES];
-    [SVProgressHUD dismiss];
+    dispatch_queue_t dqueue = dispatch_queue_create("com.diveboard.gotodiveedit", 0);
+    
+    dispatch_async(dqueue, ^{
+        
+        viewController = [[DiveEditViewController alloc] initWithDiveData:m_DiveInformation];
+
+        [viewController setEditDelegate:self];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            viewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+            
+            [self.navigationController pushViewController:viewController animated:YES];
+            
+            [SVProgressHUD dismiss];
+            
+        });
+        
+    });
+    
     
 }
 -(void)diveEditFinish:(DiveInformation *)diveInfo{

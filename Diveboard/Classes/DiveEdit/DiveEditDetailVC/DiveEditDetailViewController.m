@@ -235,11 +235,11 @@
         
         if (m_DiveInformation.tanksUsed.count > 1) {
             
-            strTanksUsed = [NSString stringWithFormat:@"%d tanks used",m_DiveInformation.tanksUsed.count];
+            strTanksUsed = [NSString stringWithFormat:@"%d tanks used",(int)m_DiveInformation.tanksUsed.count];
             
         }else{
             
-            strTanksUsed = [NSString stringWithFormat:@"%d tank used",m_DiveInformation.tanksUsed.count];
+            strTanksUsed = [NSString stringWithFormat:@"%d tank used",(int)m_DiveInformation.tanksUsed.count];
             
         }
         
@@ -401,7 +401,7 @@
 {
     
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    m_currentSelectedRow = indexPath.row;
+    m_currentSelectedRow = (int)indexPath.row;
     
     switch (indexPath.row) {
         case 0:

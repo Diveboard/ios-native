@@ -90,7 +90,7 @@
     //    viewController.startIndex = index;
     viewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [self presentViewController:viewController animated:YES completion:^{
-        [viewController showPictureWithIndex:indexPath.row];
+        [viewController showPictureWithIndex:(int)indexPath.row];
     }];
     
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
@@ -322,7 +322,7 @@
         CGRect rect1 = CGRectIntersection(m_btnShare.frame, actionlayerFrame);
         if (!CGRectIsNull(rect)) {
             
-            [self removeWallet:indexPath.row];
+            [self removeWallet:(int)indexPath.row];
             
         }else if (!CGRectIsNull(rect1)) {
 

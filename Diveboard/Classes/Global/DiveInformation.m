@@ -1226,9 +1226,9 @@
 {
     NSString* value = [string stringByReplacingOccurrencesOfString:@" " withString:@""];
     
-    int commaIndex = [value rangeOfString:@","].location;
+    int commaIndex = (int)[value rangeOfString:@","].location;
     
-    int periodIndex = [value rangeOfString:@"."].location;
+    int periodIndex =(int)[value rangeOfString:@"."].location;
     
     if (commaIndex < periodIndex) {
         

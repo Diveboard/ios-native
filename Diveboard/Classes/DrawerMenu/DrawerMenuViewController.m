@@ -17,6 +17,8 @@
 #import "Global.h"
 #import "Appirater.h"
 #import "UserVoice.h"
+#import "SVProgressHUD.h"
+#import "AFNetworking.h"
 @interface DrawerMenuViewController ()<UIAlertViewDelegate>
 {
 
@@ -270,11 +272,27 @@ static DrawerMenuViewController *sharedMenu = nil;
 }
 -(void) newDiveAction{
     
+    [SVProgressHUD show];
+    
     UINavigationController* nav = (UINavigationController*)self.slideMenuController.contentViewController;
     
-    DiveEditViewController *viewController = [[DiveEditViewController alloc] initWithDiveData:nil];
-    //    viewController.delegate = self;
-    [nav setViewControllers:@[viewController]];
+    __block DiveEditViewController *viewController;
+    
+    dispatch_queue_t dqueue = dispatch_queue_create("com.diveboard.gotodivedetail", 0);
+    
+    dispatch_async(dqueue, ^{
+        
+            viewController = [[DiveEditViewController alloc] initWithDiveData:nil];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [nav setViewControllers:@[viewController]];
+            
+            [SVProgressHUD dismiss];
+            
+        });
+        
+    });
     
     
 }
@@ -368,13 +386,17 @@ static DrawerMenuViewController *sharedMenu = nil;
     [userDefault synchronize];
     [[DiveOfflineModeManager sharedManager] deleteLoginResultData];
 
-    //    if (preloadRequestManagers) {
-    //        for (AFHTTPRequestOperationManager *manager in preloadRequestManagers) {
-    //            [manager.operationQueue cancelAllOperations];
-    //        }
-    //        [preloadRequestManagers removeAllObjects];
-    //        preloadRequestManagers = nil;
-    //    }
+        if ([AppManager sharedManager].diveListVC.preloadRequestManagers) {
+            
+            for (AFHTTPRequestOperationManager *manager in [AppManager sharedManager].diveListVC.preloadRequestManagers) {
+                
+                [manager.operationQueue cancelAllOperations];
+            }
+            
+            [[AppManager sharedManager].diveListVC.preloadRequestManagers removeAllObjects];
+            
+            [AppManager sharedManager].diveListVC.preloadRequestManagers = nil;
+        }
     
     LoginViewController *loginVC;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {

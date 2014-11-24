@@ -136,11 +136,11 @@
     
     if (section == 0) {
         
-        count = m_DiveInformation.buddies.count;
+        count = (int)m_DiveInformation.buddies.count;
         
     }else if (section == 1){
         
-        count = m_OldBuddies.count;
+        count = (int)m_OldBuddies.count;
         
     }else{
         
@@ -371,7 +371,7 @@
         Buddy* buddy = [[Buddy alloc] initWithDictionary:nil];
         
         buddy.nickName = user.name;
-        buddy.fbID = user.id;
+        buddy.fbID = user.objectID;
         NSDictionary* Obj = [user objectForKey:@"picture"];
         NSDictionary* picData = [Obj objectForKey:@"data"];
         buddy.picture = [picData objectForKey:@"url"];

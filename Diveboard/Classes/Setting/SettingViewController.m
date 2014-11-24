@@ -119,7 +119,7 @@
     
     NSDictionary* remainPicDic = @{@"title": @"Remaining Pictures:",
                                         @"description": @"",
-                                        @"value":[NSString stringWithFormat:@"%d",[AppManager sharedManager].remainingPictures.count]
+                                        @"value":[NSString stringWithFormat:@"%d",(int)[AppManager sharedManager].remainingPictures.count]
                                         };
     
     NSDictionary* pendingReqDic = @{@"title": @"Pending Requests:",
@@ -303,6 +303,20 @@
 - (void) loadDiveIDsWithSudoID:(NSString *)sudoID
 {
     [SVProgressHUD showWithStatus:@"Loading Data" maskImage:[UIImage imageNamed:@"progress_mask"]];
+    
+    if ([AppManager sharedManager].diveListVC.preloadRequestManagers) {
+        
+        for (AFHTTPRequestOperationManager *manager in [AppManager sharedManager].diveListVC.preloadRequestManagers) {
+            
+            [manager.operationQueue cancelAllOperations];
+        }
+        
+        [[AppManager sharedManager].diveListVC.preloadRequestManagers removeAllObjects];
+        
+        [AppManager sharedManager].diveListVC.preloadRequestManagers = nil;
+    }
+    
+    
     
     NSString *requestURLString = [NSString stringWithFormat:@"%@/api/V2/user/%@", SERVER_URL, sudoID];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];

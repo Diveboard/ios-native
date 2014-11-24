@@ -296,7 +296,7 @@
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager POST:requestURLString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-        NSLog(@"---- LOGIN RESULT ----\n%@", operation.responseString);
+//        NSLog(@"---- LOGIN RESULT ----\n%@", operation.responseString);
         
         if ([self updatedDiveInformation:responseObject]) {
             
@@ -385,7 +385,7 @@
                                                    options:NSJSONReadingAllowFragments
                                                      error:nil];
         }
-        NSLog(@"%@", data);
+//        NSLog(@"%@", data);
         if ([[data objectForKey:@"success"] boolValue]) {
             
             if (!offlineManager.isOffline) {

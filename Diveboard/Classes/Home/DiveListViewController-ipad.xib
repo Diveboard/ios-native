@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="6250" systemVersion="13F34" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
     <dependencies>
+        <deployment identifier="iOS"/>
         <development version="5000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DiveListViewController">
             <connections>
                 <outlet property="btnMenu" destination="mst-9f-8Tf" id="f6Y-Ge-szw"/>
+                <outlet property="carousel" destination="VMj-Le-mfK" id="QxF-eY-JTl"/>
                 <outlet property="imgviewBackground" destination="8ga-49-ocE" id="65z-Ph-zMS"/>
                 <outlet property="lblBottomTitle" destination="vWc-Ny-vUk" id="K9z-XK-m4x"/>
                 <outlet property="lblCoordinate" destination="4QZ-Wx-HEU" id="jdo-KC-3mn"/>
-                <outlet property="scrviewMain" destination="5Lg-bg-pg8" id="8Ja-FE-tx3"/>
                 <outlet property="view" destination="iN0-l3-epB" id="fPZ-yX-2Cz"/>
                 <outlet property="viewBottom" destination="TRo-pq-l1i" id="lGs-HD-oNn"/>
             </connections>
@@ -69,14 +70,15 @@
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                 </view>
-                <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="5Lg-bg-pg8">
-                    <rect key="frame" x="0.0" y="90" width="768" height="700"/>
+                <view contentMode="scaleToFill" id="VMj-Le-mfK" customClass="iCarousel">
+                    <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
+                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="-90" maxX="768" maxY="790"/>
                     <connections>
-                        <outlet property="delegate" destination="-1" id="JCc-NB-T4N"/>
+                        <outlet property="dataSource" destination="-1" id="Ijb-CG-vDl"/>
+                        <outlet property="delegate" destination="-1" id="tfb-Yo-5h9"/>
                     </connections>
-                </scrollView>
+                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>

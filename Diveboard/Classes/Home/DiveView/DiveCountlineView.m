@@ -226,7 +226,7 @@
         m_lblCountryNameBubble.text = dive.spotInfo.countryName;
         m_lblTripNamBubblee.text = dive.tripName;
         
-        [self.tipView presentPointingAtView:sel_view inView:self.superview animated:NO];
+        [self.tipView presentPointingAtView:sel_view inView:self.window animated:NO];
         
         [_lblCurrentDiveNum setText:[NSString stringWithFormat:@"%d", currentValue]];
     }

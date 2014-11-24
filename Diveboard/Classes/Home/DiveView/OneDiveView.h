@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <BugSense-iOS/BugSenseController.h>
+//#import <BugSense-iOS/BugSenseController.h>
 
 #import "DiveInformation.h"
 
@@ -48,8 +48,9 @@
 
 - (void) setDiveID:(NSString *)diveID;
 - (DiveInformation *) getDiveInformation;
-- (void) setDiveInformation:(DiveInformation *)diveInfo;
+//- (void) setDiveInformation:(DiveInformation *)diveInfo;
 - (void) changeDepthUnit:(int)type;
+
 
 @end
 

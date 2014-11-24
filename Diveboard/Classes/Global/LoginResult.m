@@ -245,7 +245,7 @@
             self.flavour        = getStringValue([data objectForKey:@"flavour"]);
             self.fullPermaLink  = getStringValue([data objectForKey:@"full_permalink"]);
             self.ID             = getStringValue([data objectForKey:@"id"]);
-            [BugSenseController setUserIdentifier:self.ID];
+//            [BugSenseController setUserIdentifier:self.ID];
             self.lat            = getStringValue([data objectForKey:@"lat"]);
             self.lng            = getStringValue([data objectForKey:@"lng"]);
             self.location       = getStringValue([data objectForKey:@"location"]);

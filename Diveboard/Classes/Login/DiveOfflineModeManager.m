@@ -21,7 +21,6 @@
 {
     NSFileManager *fileManager;
     NSTimer *checkingTimer;
-    sqlite3*	m_SpotsDataBase;
     
 
 }
@@ -262,7 +261,9 @@ static DiveOfflineModeManager *_sharedManager;
                 [oneDiveData writeToFile:fileName atomically:YES];
             }
         }
-//        NSLog(@"One Dive filename : %@", fileName);
+        
+        NSLog(@"One Dive filename : %@", fileName);
+        
         return YES;
     } else {
         return NO;
@@ -916,322 +917,357 @@ static DiveOfflineModeManager *_sharedManager;
     
 }
 
-- (void)openSpotsDB {
-    if (m_SpotsDataBase == NULL) {
-        NSString* dirName = [self getCahchePathFileName:@"database"];
-        NSString* dbPath = [NSString stringWithFormat:@"%@/%@",dirName,@"mobilespots.db"];
-		
-        if (sqlite3_open([dbPath UTF8String], &m_SpotsDataBase) != SQLITE_OK) {
-            sqlite3_close(m_SpotsDataBase);
-            m_SpotsDataBase = NULL;
-            NSCAssert1(0, @"Failed to open database_list with message '%s'.", sqlite3_errmsg(m_SpotsDataBase));
-        }
-	}
-}
-- (void)closeSpotsDB {
-    
-    if(m_SpotsDataBase == NULL)
-		return;
-	
-    if(sqlite3_close(m_SpotsDataBase) != SQLITE_OK) {
-        NSCAssert1(0, @"Error: failed to close database_list with message '%s'.", sqlite3_errmsg(m_SpotsDataBase));
-    }
-    m_SpotsDataBase = NULL;
-}
 
--(NSDictionary*) offlineSearchSpotText: (NSString*)term :(NSString*) lat :(NSString*) lng :(NSString*) latSW : (NSString*)latNE :(NSString*)lngSW :(NSString*)lngNE
+- (void) offlineSearchSpotText: (NSString*)term :(NSString*) lat :(NSString*) lng :(NSString*) latSW : (NSString*)latNE :(NSString*)lngSW :(NSString*)lngNE success:(void (^)(NSDictionary* resultSpotText))success
 {
     
-    [self openSpotsDB];
-    NSMutableDictionary* resultSpotText = [[NSMutableDictionary alloc] init];
 
-    NSMutableString* condition_str = [NSMutableString stringWithString:@""];
+    dispatch_queue_t dqueue = dispatch_queue_create("com.diveboard.searchSpotText", 0);
     
-    if (term != nil && term.length > 0)
-    {
-        NSArray* strarr = [term componentsSeparatedByString:@" "];
-        NSMutableString* match_str = [NSMutableString stringWithString:@""];
-        for (int i = 0 ; i < strarr.count ; i++)
-        {
-            if (i != 0)
-                [match_str appendString:@" "];
+    dispatch_async(dqueue, ^{
+        
+        sqlite3*	spotsDataBase;
+        
+        NSString* dirName = [self getCahchePathFileName:@"database"];
+        NSString* dbPath = [NSString stringWithFormat:@"%@/%@",dirName,@"mobilespots.db"];
+        
+        if (sqlite3_open([dbPath UTF8String], &spotsDataBase) != SQLITE_OK) {
             
-            [match_str appendFormat:@"%@*",strarr[i]];
+            sqlite3_close(spotsDataBase);
+            spotsDataBase = NULL;
+            NSCAssert1(0, @"Failed to open database_list with message '%s'.", sqlite3_errmsg(spotsDataBase));
         }
         
-        if (condition_str.length == 0)
-            [condition_str appendFormat:@"spots_fts.name MATCH '%@'",match_str];
-        else
-            [condition_str appendFormat:@" AND spots_fts.name MATCH '%@'",match_str];
+        NSMutableDictionary* resultSpotText = [[NSMutableDictionary alloc] init];
         
-    }
-    if (latSW != nil && latNE != nil && lngSW != nil && lngNE != nil)
-    {
-        if ([lngSW doubleValue] >= 0 && [lngNE doubleValue] < 0)
+        NSMutableString* condition_str = [NSMutableString stringWithString:@""];
+        
+        if (term != nil && term.length > 0)
         {
-            if (condition_str.length == 0){
+            NSArray* strarr = [term componentsSeparatedByString:@" "];
+            NSMutableString* match_str = [NSMutableString stringWithString:@""];
+            for (int i = 0 ; i < strarr.count ; i++)
+            {
+                if (i != 0)
+                    [match_str appendString:@" "];
                 
-                [condition_str appendFormat:@"(spots.lng BETWEEN %@ AND 180 AND SPOTS.lng BETWEEN 0 AND %@ AND spots.lat BETWEEN %@ AND %@)",lngSW,lngNE,latSW,latNE];
-                
+                [match_str appendFormat:@"%@*",strarr[i]];
+            }
+            
+            if (condition_str.length == 0)
+                [condition_str appendFormat:@"spots_fts.name MATCH '%@'",match_str];
+            else
+                [condition_str appendFormat:@" AND spots_fts.name MATCH '%@'",match_str];
+            
+        }
+        if (latSW != nil && latNE != nil && lngSW != nil && lngNE != nil)
+        {
+            if ([lngSW doubleValue] >= 0 && [lngNE doubleValue] < 0)
+            {
+                if (condition_str.length == 0){
+                    
+                    [condition_str appendFormat:@"(spots.lng BETWEEN %@ AND 180 AND SPOTS.lng BETWEEN 0 AND %@ AND spots.lat BETWEEN %@ AND %@)",lngSW,lngNE,latSW,latNE];
+                    
+                }else{
+                    
+                    [condition_str appendFormat:@" AND (spots.lng BETWEEN %@ AND 180 AND SPOTS.lng BETWEEN 0 AND %@ AND spots.lat BETWEEN %@ AND %@)",lngSW,lngNE,latSW,latNE];
+                }
+            }
+            
+            if (condition_str.length == 0)
+            {
+                [condition_str appendFormat:@"(spots.lng BETWEEN %@ AND %@ AND spots.lat BETWEEN %@ AND %@)",lngSW,lngNE,latSW,latNE];
             }else{
-                
-                [condition_str appendFormat:@" AND (spots.lng BETWEEN %@ AND 180 AND SPOTS.lng BETWEEN 0 AND %@ AND spots.lat BETWEEN %@ AND %@)",lngSW,lngNE,latSW,latNE];
+                [condition_str appendFormat:@" AND (spots.lng BETWEEN %@ AND %@ AND spots.lat BETWEEN %@ AND %@)",lngSW,lngNE,latSW,latNE];
             }
         }
-        
-        if (condition_str.length == 0)
-        {
-            [condition_str appendFormat:@"(spots.lng BETWEEN %@ AND %@ AND spots.lat BETWEEN %@ AND %@)",lngSW,lngNE,latSW,latNE];
+        if (condition_str == 0){
+            
+            [condition_str appendFormat:@"(spots.private_user_id IS NULL OR spots.private_user_id = %@)",[AppManager sharedManager].loginResult.user.ID];
+            
         }else{
-            [condition_str appendFormat:@" AND (spots.lng BETWEEN %@ AND %@ AND spots.lat BETWEEN %@ AND %@)",lngSW,lngNE,latSW,latNE];
+            
+            [condition_str appendFormat:@" AND (spots.private_user_id IS NULL OR spots.private_user_id = %@)",[AppManager sharedManager].loginResult.user.ID];
+            
         }
-    }
-    if (condition_str == 0){
-        
-        [condition_str appendFormat:@"(spots.private_user_id IS NULL OR spots.private_user_id = %@)",[AppManager sharedManager].loginResult.user.ID];
-        
-    }else{
-        
-        [condition_str appendFormat:@" AND (spots.private_user_id IS NULL OR spots.private_user_id = %@)",[AppManager sharedManager].loginResult.user.ID];
-        
-    }
-    if (lat != nil && lng != nil)
-    {
-        
-        double lat_sqr = pow([lat doubleValue], 2.0);
-        
-        [condition_str appendFormat:@" ORDER BY ((spots.lat - %@)*(spots.lat - %@)) + (MIN((spots.lng - %@)*(spots.lng - %@), (spots.lng - %@ + 360)*(spots.lng - %@ + 360), (spots.lng - %@ - 360)*(spots.lng - %@ - 360))) * (1 - (((spots.lat * spots.lat) + %f) / 8100)) ASC",lat,lat,lng,lng,lng,lng,lng,lng,lat_sqr];
-        
-    }
-
-    NSString* strQuery = @"";
-    if (term == nil && term.length == 0)
-    {
-        
-        strQuery = [NSString stringWithFormat:@"SELECT id,name,location_name,country_name,lat,lng,private_user_id FROM spots WHERE %@ LIMIT 30",condition_str];
-        
-    }else{
-        
-        strQuery = [NSString stringWithFormat:@"SELECT spots_fts.docid, spots_fts.name, spots.location_name, spots.country_name, spots.lat, spots.lng FROM spots_fts, spots WHERE spots_fts.docid = spots.id AND %@ LIMIT 30",condition_str];
-        
-    }
-    sqlite3_stmt* statement;
-    
-    NSMutableArray* arr_Spots = [[NSMutableArray alloc] init];
-	if (sqlite3_prepare(m_SpotsDataBase, [strQuery UTF8String], -1, &statement, NULL) == SQLITE_OK)
-	{
-		while (sqlite3_step(statement) == SQLITE_ROW) {
+        if (lat != nil && lng != nil)
+        {
             
-			NSMutableDictionary* spotDic = [NSMutableDictionary dictionaryWithCapacity:9];
-
-            [spotDic setObject:[NSNumber numberWithInt:sqlite3_column_int(statement,0)] forKey:@"id"];
-            [spotDic setObject:[NSString stringWithUTF8String:(char *)sqlite3_column_text(statement,1)] forKey:@"name"];
-            [spotDic setObject:[NSString stringWithUTF8String:(char *)sqlite3_column_text(statement,2)] forKey:@"location_name"];
-            [spotDic setObject:[NSString stringWithUTF8String:(char *)sqlite3_column_text(statement,3)] forKey:@"country_name"];
-
-            [spotDic setObject:[NSNumber numberWithDouble:sqlite3_column_double(statement,4)] forKey:@"lat"];
-            [spotDic setObject:[NSNumber numberWithDouble:sqlite3_column_double(statement,5)] forKey:@"lng"];
+            double lat_sqr = pow([lat doubleValue], 2.0);
             
-			
-            [arr_Spots addObject:[NSDictionary dictionaryWithDictionary:spotDic]];
-		}
-		
-		sqlite3_step(statement);
-	}
-    sqlite3_finalize(statement);
+            [condition_str appendFormat:@" ORDER BY ((spots.lat - %@)*(spots.lat - %@)) + (MIN((spots.lng - %@)*(spots.lng - %@), (spots.lng - %@ + 360)*(spots.lng - %@ + 360), (spots.lng - %@ - 360)*(spots.lng - %@ - 360))) * (1 - (((spots.lat * spots.lat) + %f) / 8100)) ASC",lat,lat,lng,lng,lng,lng,lng,lng,lat_sqr];
+            
+        }
+        
+        NSString* strQuery = @"";
+        if (term == nil && term.length == 0)
+        {
+            
+            strQuery = [NSString stringWithFormat:@"SELECT id,name,location_name,country_name,lat,lng,private_user_id FROM spots WHERE %@ LIMIT 30",condition_str];
+            
+        }else{
+            
+            strQuery = [NSString stringWithFormat:@"SELECT spots_fts.docid, spots_fts.name, spots.location_name, spots.country_name, spots.lat, spots.lng FROM spots_fts, spots WHERE spots_fts.docid = spots.id AND %@ LIMIT 30",condition_str];
+            
+        }
+        sqlite3_stmt* statement;
+        
+        NSMutableArray* arr_Spots = [[NSMutableArray alloc] init];
+        if (sqlite3_prepare(spotsDataBase, [strQuery UTF8String], -1, &statement, NULL) == SQLITE_OK)
+        {
+            while (sqlite3_step(statement) == SQLITE_ROW) {
+                
+                NSMutableDictionary* spotDic = [NSMutableDictionary dictionaryWithCapacity:9];
+                
+                [spotDic setObject:[NSNumber numberWithInt:sqlite3_column_int(statement,0)] forKey:@"id"];
+                [spotDic setObject:[NSString stringWithUTF8String:(char *)sqlite3_column_text(statement,1)] forKey:@"name"];
+                [spotDic setObject:[NSString stringWithUTF8String:(char *)sqlite3_column_text(statement,2)] forKey:@"location_name"];
+                [spotDic setObject:[NSString stringWithUTF8String:(char *)sqlite3_column_text(statement,3)] forKey:@"country_name"];
+                
+                [spotDic setObject:[NSNumber numberWithDouble:sqlite3_column_double(statement,4)] forKey:@"lat"];
+                [spotDic setObject:[NSNumber numberWithDouble:sqlite3_column_double(statement,5)] forKey:@"lng"];
+                
+                
+                [arr_Spots addObject:[NSDictionary dictionaryWithDictionary:spotDic]];
+            }
+            
+            sqlite3_step(statement);
+        }
+        sqlite3_finalize(statement);
+        
+        [resultSpotText setObject:@YES forKey:@"success"];
+        [resultSpotText setObject:arr_Spots forKey:@"spots"];
+        
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+        
+            if(sqlite3_close(spotsDataBase) != SQLITE_OK) {
+                
+                NSCAssert1(0, @"Error: failed to close database_list with message '%s'.", sqlite3_errmsg(spotsDataBase));
+            }
+            
+            success(resultSpotText);
+            
+        });
+        
+    });
     
-    [resultSpotText setObject:@YES forKey:@"success"];
-    [resultSpotText setObject:arr_Spots forKey:@"spots"];
-    
-    
-    [self closeSpotsDB];
-    return resultSpotText;
 }
 
 
 
--(NSDictionary*) offlinesearchRegionLocaitonsLat:(NSString*)lat lng:(NSString*)lng dist:(NSString*)dist{
-    
-    [self openSpotsDB];
-    NSMutableString* condition_str_country = [NSMutableString stringWithString:@""];
-    NSMutableString* condition_str_reg = [NSMutableString stringWithString:@""];
-    NSMutableString* condition_str_loc = [NSMutableString stringWithString:@""];
-    NSString* NElat = @"";
-    NSString* SWlat = @"";
-    NSString* NElng = @"";
-    NSString* SWlng = @"";
-    double lat_d = [lat doubleValue];
-    double lng_d = [lng doubleValue];
-    double dist_d = [dist doubleValue];
-    BOOL onEdge = NO;
-    NSMutableDictionary* resultRegionLocations = [[NSMutableDictionary alloc] init];
-    
- 
-    
-    
-    
-    if(lat_d + dist_d < 90.0){
-        
-        NElat = [NSString stringWithFormat:@"%f",lat_d+dist_d];
-    }
-    else{
-        NElat = @"90.0";
-    }
-    
-    
-    if(lat_d - dist_d > -90.0){
-        SWlat = [NSString stringWithFormat:@"%f",lat_d-dist_d];
-    }
-    else{
-        SWlat = @"-90.0";
-    }
-    
-    
-    if(lng_d + dist_d < 180.0){
-        NElng =[NSString stringWithFormat:@"%f",lng_d + dist_d];
-    }
-    else{
-        onEdge = YES;
-        double add = lng_d + dist_d - 180.0;
-        
-        NElng = [NSString stringWithFormat:@"%f",(180.0 - add) * (-1)];
-    }
-    
-    if(lng_d - dist_d > -180.0){
-        SWlng = [NSString stringWithFormat:@"%f",lng_d - dist_d];
+-(void) offlinesearchRegionLocaitonsLat:(NSString*)lat lng:(NSString*)lng dist:(NSString*)dist  success:(void (^)(NSDictionary* resultRegionLocations))success{
 
-    }
-    else{
-        onEdge = YES;
-        double add = lng_d - dist_d + 180.0;
-        SWlng = [NSString stringWithFormat:@"%f",180.0 + add];
-    }
+    dispatch_queue_t dqueue = dispatch_queue_create("com.diveboard.searchRegionLocations", 0);
     
-    
-    if(!onEdge)
-    {
+    dispatch_async(dqueue, ^{
+        
+        sqlite3*	spotsDataBase;
+        
+        NSString* dirName = [self getCahchePathFileName:@"database"];
+        NSString* dbPath = [NSString stringWithFormat:@"%@/%@",dirName,@"mobilespots.db"];
+        
+        if (sqlite3_open([dbPath UTF8String], &spotsDataBase) != SQLITE_OK) {
+            
+            sqlite3_close(spotsDataBase);
+            spotsDataBase = NULL;
+            NSCAssert1(0, @"Failed to open database_list with message '%s'.", sqlite3_errmsg(spotsDataBase));
+        }
 
-        [condition_str_country appendFormat:@"(spots.lng BETWEEN %@ AND %@ AND spots.lat BETWEEN %@ AND %@)",SWlng,NElng,SWlat,NElat];
         
+        NSMutableString* condition_str_country = [NSMutableString stringWithString:@""];
+        NSMutableString* condition_str_reg = [NSMutableString stringWithString:@""];
+        NSMutableString* condition_str_loc = [NSMutableString stringWithString:@""];
+        NSString* NElat = @"";
+        NSString* SWlat = @"";
+        NSString* NElng = @"";
+        NSString* SWlng = @"";
+        double lat_d = [lat doubleValue];
+        double lng_d = [lng doubleValue];
+        double dist_d = [dist doubleValue];
+        BOOL onEdge = NO;
+        NSMutableDictionary* resultRegionLocations = [[NSMutableDictionary alloc] init];
         
-        [condition_str_reg appendFormat:@"(spots.lng BETWEEN %@ AND %@ AND spots.lat BETWEEN %@ AND %@)",SWlng,NElng,SWlat,NElat];
-        
-        
-        [condition_str_loc appendFormat:@"(spots.lng BETWEEN %@ AND %@ AND spots.lat BETWEEN %@ AND %@)",SWlng,NElng,SWlat,NElat];
-    }
-    else
-    {
      
-        [condition_str_country appendFormat:@"(spots.lng BETWEEN %@ AND 180 OR spots.lng BETWEEN -180 AND %@ AND spots.lat BETWEEN %@ AND %@)",SWlng,NElng,SWlat,NElat];
         
         
         
-        [condition_str_reg appendFormat:@"(spots.lng BETWEEN %@ AND 180 OR spots.lng BETWEEN -180 AND %@ AND spots.lat BETWEEN %@ AND %@)",SWlng,NElng,SWlat,NElat];
+        if(lat_d + dist_d < 90.0){
+            
+            NElat = [NSString stringWithFormat:@"%f",lat_d+dist_d];
+        }
+        else{
+            NElat = @"90.0";
+        }
         
         
-        [condition_str_loc appendFormat:@"(spots.lng BETWEEN %@ AND 180 OR spots.lng BETWEEN -180 AND %@ AND spots.lat BETWEEN %@ AND %@)",SWlng,NElng,SWlat,NElat];
-    }
-    
-    if (lat != nil && lng != nil)
-    {
-        double lat_sqr = pow([lat doubleValue], 2.0);
-        
-        [condition_str_country appendFormat:@" GROUP BY spots.country_id having count(*) > 2 ORDER BY MIN(MIN ((((spots.lat - %@)*(spots.lat - %@)) + ((spots.lng - %@)*(spots.lng - %@) * (1 - (((spots.lat * spots.lat) + %f) / 8100)))),(((spots.lat - %@)*(spots.lat - %@)) + ((spots.lng - %@ + 360)*(spots.lng - %@ + 360) * (1 - (((spots.lat * spots.lat) + %f) / 8100)))),(((spots.lat - %@)*(spots.lat - %@)) + ((spots.lng - %@ - 360)*(spots.lng - %@ - 360) * (1 - (((spots.lat * spots.lat) + %f) / 8100)))))) ASC ",lat,lat,lng,lng,lat_sqr,lat,lat,lng,lng,lat_sqr,lat,lat,lng,lng,lat_sqr];
+        if(lat_d - dist_d > -90.0){
+            SWlat = [NSString stringWithFormat:@"%f",lat_d-dist_d];
+        }
+        else{
+            SWlat = @"-90.0";
+        }
         
         
-        [condition_str_reg appendFormat:@" GROUP BY regions.id having count(*) > 2 ORDER BY MIN(MIN ((((spots.lat - %@)*(spots.lat - %@)) + ((spots.lng - %@)*(spots.lng - %@) * (1 - (((spots.lat * spots.lat) + %f) / 8100)))),(((spots.lat - %@)*(spots.lat - %@)) + ((spots.lng - %@ + 360)*(spots.lng - %@ + 360) * (1 - (((spots.lat * spots.lat) + %f) / 8100)))),(((spots.lat - %@ )*(spots.lat - %@)) + ((spots.lng - %@ - 360)*(spots.lng - %@ - 360) * (1 - (((spots.lat * spots.lat) + %f) / 8100)))))) ASC ",lat,lat,lng,lng,lat_sqr,lat,lat,lng,lng,lat_sqr,lat,lat,lng,lng,lat_sqr];
+        if(lng_d + dist_d < 180.0){
+            NElng =[NSString stringWithFormat:@"%f",lng_d + dist_d];
+        }
+        else{
+            onEdge = YES;
+            double add = lng_d + dist_d - 180.0;
+            
+            NElng = [NSString stringWithFormat:@"%f",(180.0 - add) * (-1)];
+        }
         
-        
-        [condition_str_loc appendFormat:@" GROUP BY spots.location_id having count(*) > 2 ORDER BY MIN(MIN ((((spots.lat - %@)*(spots.lat - %@)) + ((spots.lng - %@)*(spots.lng - %@) * (1 - (((spots.lat * spots.lat) + %f) / 8100)))),(((spots.lat - %@)*(spots.lat - %@)) + ((spots.lng - %@ + 360)*(spots.lng - %@ + 360) * (1 - (((spots.lat * spots.lat) + %f) / 8100)))),(((spots.lat - %@ )*(spots.lat - %@)) + ((spots.lng - %@ - 360)*(spots.lng - %@ - 360) * (1 - (((spots.lat * spots.lat) + %f) / 8100)))))) ASC ",lat,lat,lng,lng,lat_sqr,lat,lat,lng,lng,lat_sqr,lat,lat,lng,lng,lat_sqr];
-        
-    }
-    
-    
-    NSString* cQuery = [NSString stringWithFormat:@"SELECT sql_1.*,countries.code FROM ( SELECT country_id,country_name FROM spots WHERE %@ LIMIT 10 ) AS sql_1,countries WHERE sql_1.country_id = countries.id ",condition_str_country];
-    sqlite3_stmt* statement;
+        if(lng_d - dist_d > -180.0){
+            SWlng = [NSString stringWithFormat:@"%f",lng_d - dist_d];
 
-    NSMutableArray* arr_Countries = [[NSMutableArray alloc] init];
-	if (sqlite3_prepare(m_SpotsDataBase, [cQuery UTF8String], -1, &statement, NULL) == SQLITE_OK)
-	{
-		while (sqlite3_step(statement) == SQLITE_ROW) {
-            
-			NSMutableDictionary* countryDic = [NSMutableDictionary dictionaryWithCapacity:9];
-            
-                [countryDic setObject:[NSNumber numberWithInt:sqlite3_column_int(statement,0)] forKey:@"id"];
-                [countryDic setObject:[NSString stringWithUTF8String:(char *)sqlite3_column_text(statement,1)] forKey:@"name"];
-                [countryDic setObject:[NSString stringWithUTF8String:(char *)sqlite3_column_text(statement,2)] forKey:@"code"];
-			
-                [arr_Countries addObject:[NSDictionary dictionaryWithDictionary:countryDic]];
-		}
-		
-		sqlite3_step(statement);
-	}
-    sqlite3_finalize(statement);
-    if (arr_Countries.count == 0) {
-        return [self offlinesearchRegionLocaitonsLat:lat lng:lng dist:[NSString stringWithFormat:@"%f",dist_d*2]];
-    }
+        }
+        else{
+            onEdge = YES;
+            double add = lng_d - dist_d + 180.0;
+            SWlng = [NSString stringWithFormat:@"%f",180.0 + add];
+        }
+        
+        
+        if(!onEdge)
+        {
 
-    [resultRegionLocations setObject:arr_Countries forKey:@"countries"];
-    
-///////////////
-    NSString* rQuery = [NSString stringWithFormat:@"SELECT spots.region_id, regions.name FROM spots, regions WHERE spots.region_id = regions.id AND %@ LIMIT 10",condition_str_reg];
-    
-    NSMutableArray* arr_Regions = [[NSMutableArray alloc] init];
-	if (sqlite3_prepare(m_SpotsDataBase, [rQuery UTF8String], -1, &statement, NULL) == SQLITE_OK)
-	{
-		while (sqlite3_step(statement) == SQLITE_ROW) {
+            [condition_str_country appendFormat:@"(spots.lng BETWEEN %@ AND %@ AND spots.lat BETWEEN %@ AND %@)",SWlng,NElng,SWlat,NElat];
             
-			NSMutableDictionary* regionDic = [NSMutableDictionary dictionaryWithCapacity:9];
             
-            [regionDic setObject:[NSNumber numberWithInt:sqlite3_column_int(statement,0)] forKey:@"id"];
-            [regionDic setObject:[NSString stringWithUTF8String:(char *)sqlite3_column_text(statement,1)] forKey:@"name"];
-			
-            [arr_Regions addObject:[NSDictionary dictionaryWithDictionary:regionDic]];
-		}
-		
-		sqlite3_step(statement);
-	}
-    sqlite3_finalize(statement);
-    
-    if (arr_Regions.count == 0) {
-        return [self offlinesearchRegionLocaitonsLat:lat lng:lng dist:[NSString stringWithFormat:@"%f",dist_d*2]];
-    }
-    
-    [resultRegionLocations setObject:arr_Regions forKey:@"regions"];
-    
-////////////////
+            [condition_str_reg appendFormat:@"(spots.lng BETWEEN %@ AND %@ AND spots.lat BETWEEN %@ AND %@)",SWlng,NElng,SWlat,NElat];
+            
+            
+            [condition_str_loc appendFormat:@"(spots.lng BETWEEN %@ AND %@ AND spots.lat BETWEEN %@ AND %@)",SWlng,NElng,SWlat,NElat];
+        }
+        else
+        {
+         
+            [condition_str_country appendFormat:@"(spots.lng BETWEEN %@ AND 180 OR spots.lng BETWEEN -180 AND %@ AND spots.lat BETWEEN %@ AND %@)",SWlng,NElng,SWlat,NElat];
+            
+            
+            
+            [condition_str_reg appendFormat:@"(spots.lng BETWEEN %@ AND 180 OR spots.lng BETWEEN -180 AND %@ AND spots.lat BETWEEN %@ AND %@)",SWlng,NElng,SWlat,NElat];
+            
+            
+            [condition_str_loc appendFormat:@"(spots.lng BETWEEN %@ AND 180 OR spots.lng BETWEEN -180 AND %@ AND spots.lat BETWEEN %@ AND %@)",SWlng,NElng,SWlat,NElat];
+        }
+        
+        if (lat != nil && lng != nil)
+        {
+            double lat_sqr = pow([lat doubleValue], 2.0);
+            
+            [condition_str_country appendFormat:@" GROUP BY spots.country_id having count(*) > 2 ORDER BY MIN(MIN ((((spots.lat - %@)*(spots.lat - %@)) + ((spots.lng - %@)*(spots.lng - %@) * (1 - (((spots.lat * spots.lat) + %f) / 8100)))),(((spots.lat - %@)*(spots.lat - %@)) + ((spots.lng - %@ + 360)*(spots.lng - %@ + 360) * (1 - (((spots.lat * spots.lat) + %f) / 8100)))),(((spots.lat - %@)*(spots.lat - %@)) + ((spots.lng - %@ - 360)*(spots.lng - %@ - 360) * (1 - (((spots.lat * spots.lat) + %f) / 8100)))))) ASC ",lat,lat,lng,lng,lat_sqr,lat,lat,lng,lng,lat_sqr,lat,lat,lng,lng,lat_sqr];
+            
+            
+            [condition_str_reg appendFormat:@" GROUP BY regions.id having count(*) > 2 ORDER BY MIN(MIN ((((spots.lat - %@)*(spots.lat - %@)) + ((spots.lng - %@)*(spots.lng - %@) * (1 - (((spots.lat * spots.lat) + %f) / 8100)))),(((spots.lat - %@)*(spots.lat - %@)) + ((spots.lng - %@ + 360)*(spots.lng - %@ + 360) * (1 - (((spots.lat * spots.lat) + %f) / 8100)))),(((spots.lat - %@ )*(spots.lat - %@)) + ((spots.lng - %@ - 360)*(spots.lng - %@ - 360) * (1 - (((spots.lat * spots.lat) + %f) / 8100)))))) ASC ",lat,lat,lng,lng,lat_sqr,lat,lat,lng,lng,lat_sqr,lat,lat,lng,lng,lat_sqr];
+            
+            
+            [condition_str_loc appendFormat:@" GROUP BY spots.location_id having count(*) > 2 ORDER BY MIN(MIN ((((spots.lat - %@)*(spots.lat - %@)) + ((spots.lng - %@)*(spots.lng - %@) * (1 - (((spots.lat * spots.lat) + %f) / 8100)))),(((spots.lat - %@)*(spots.lat - %@)) + ((spots.lng - %@ + 360)*(spots.lng - %@ + 360) * (1 - (((spots.lat * spots.lat) + %f) / 8100)))),(((spots.lat - %@ )*(spots.lat - %@)) + ((spots.lng - %@ - 360)*(spots.lng - %@ - 360) * (1 - (((spots.lat * spots.lat) + %f) / 8100)))))) ASC ",lat,lat,lng,lng,lat_sqr,lat,lat,lng,lng,lat_sqr,lat,lat,lng,lng,lat_sqr];
+            
+        }
+        
+        
+        NSString* cQuery = [NSString stringWithFormat:@"SELECT sql_1.*,countries.code FROM ( SELECT country_id,country_name FROM spots WHERE %@ LIMIT 10 ) AS sql_1,countries WHERE sql_1.country_id = countries.id ",condition_str_country];
+        sqlite3_stmt* statement;
 
-    
-    
-    NSString* lQuery = [NSString stringWithFormat:@"SELECT location_id,location_name FROM spots WHERE %@ LIMIT 10",condition_str_loc];
-    NSMutableArray* arr_Locations = [[NSMutableArray alloc] init];
-    
-	if (sqlite3_prepare(m_SpotsDataBase, [lQuery UTF8String], -1, &statement, NULL) == SQLITE_OK)
-	{
-		while (sqlite3_step(statement) == SQLITE_ROW) {
+        NSMutableArray* arr_Countries = [[NSMutableArray alloc] init];
+        if (sqlite3_prepare(spotsDataBase, [cQuery UTF8String], -1, &statement, NULL) == SQLITE_OK)
+        {
+            while (sqlite3_step(statement) == SQLITE_ROW) {
+                
+                NSMutableDictionary* countryDic = [NSMutableDictionary dictionaryWithCapacity:9];
+                
+                    [countryDic setObject:[NSNumber numberWithInt:sqlite3_column_int(statement,0)] forKey:@"id"];
+                    [countryDic setObject:[NSString stringWithUTF8String:(char *)sqlite3_column_text(statement,1)] forKey:@"name"];
+                    [countryDic setObject:[NSString stringWithUTF8String:(char *)sqlite3_column_text(statement,2)] forKey:@"code"];
+                
+                    [arr_Countries addObject:[NSDictionary dictionaryWithDictionary:countryDic]];
+            }
             
-			NSMutableDictionary* locationDic = [NSMutableDictionary dictionaryWithCapacity:9];
+            sqlite3_step(statement);
+        }
+        sqlite3_finalize(statement);
+        if (arr_Countries.count == 0) {
             
-            [locationDic setObject:[NSNumber numberWithInt:sqlite3_column_int(statement,0)] forKey:@"id"];
-            [locationDic setObject:[NSString stringWithUTF8String:(char *)sqlite3_column_text(statement,1)] forKey:@"name"];
-			
-            [arr_Locations addObject:[NSDictionary dictionaryWithDictionary:locationDic]];
-		}
-		
-		sqlite3_step(statement);
-	}
-    sqlite3_finalize(statement);
+            [self offlinesearchRegionLocaitonsLat:lat lng:lng dist:[NSString stringWithFormat:@"%f",dist_d*2]success:success];
+        }
+
+        [resultRegionLocations setObject:arr_Countries forKey:@"countries"];
+        
+    ///////////////
+        NSString* rQuery = [NSString stringWithFormat:@"SELECT spots.region_id, regions.name FROM spots, regions WHERE spots.region_id = regions.id AND %@ LIMIT 10",condition_str_reg];
+        
+        NSMutableArray* arr_Regions = [[NSMutableArray alloc] init];
+        if (sqlite3_prepare(spotsDataBase, [rQuery UTF8String], -1, &statement, NULL) == SQLITE_OK)
+        {
+            while (sqlite3_step(statement) == SQLITE_ROW) {
+                
+                NSMutableDictionary* regionDic = [NSMutableDictionary dictionaryWithCapacity:9];
+                
+                [regionDic setObject:[NSNumber numberWithInt:sqlite3_column_int(statement,0)] forKey:@"id"];
+                [regionDic setObject:[NSString stringWithUTF8String:(char *)sqlite3_column_text(statement,1)] forKey:@"name"];
+                
+                [arr_Regions addObject:[NSDictionary dictionaryWithDictionary:regionDic]];
+            }
+            
+            sqlite3_step(statement);
+        }
+        sqlite3_finalize(statement);
+        
+        if (arr_Regions.count == 0) {
+            
+            [self offlinesearchRegionLocaitonsLat:lat lng:lng dist:[NSString stringWithFormat:@"%f",dist_d*2]success:success];
+        }
+        
+        [resultRegionLocations setObject:arr_Regions forKey:@"regions"];
+        
+    ////////////////
+
+        
+        
+        NSString* lQuery = [NSString stringWithFormat:@"SELECT location_id,location_name FROM spots WHERE %@ LIMIT 10",condition_str_loc];
+        NSMutableArray* arr_Locations = [[NSMutableArray alloc] init];
+        
+        if (sqlite3_prepare(spotsDataBase, [lQuery UTF8String], -1, &statement, NULL) == SQLITE_OK)
+        {
+            while (sqlite3_step(statement) == SQLITE_ROW) {
+                
+                NSMutableDictionary* locationDic = [NSMutableDictionary dictionaryWithCapacity:9];
+                
+                [locationDic setObject:[NSNumber numberWithInt:sqlite3_column_int(statement,0)] forKey:@"id"];
+                [locationDic setObject:[NSString stringWithUTF8String:(char *)sqlite3_column_text(statement,1)] forKey:@"name"];
+                
+                [arr_Locations addObject:[NSDictionary dictionaryWithDictionary:locationDic]];
+            }
+            
+            sqlite3_step(statement);
+        }
+        sqlite3_finalize(statement);
+        
+        if (arr_Locations.count == 0) {
+            
+            [self offlinesearchRegionLocaitonsLat:lat lng:lng dist:[NSString stringWithFormat:@"%f",dist_d*2]success:success];
+        }
+        
+        [resultRegionLocations setObject:arr_Locations forKey:@"locations"];
+        
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            if(sqlite3_close(spotsDataBase) != SQLITE_OK) {
+                
+                NSCAssert1(0, @"Error: failed to close database_list with message '%s'.", sqlite3_errmsg(spotsDataBase));
+            }
+            
+            success(resultRegionLocations);
+            
+        });
+        
+    });
     
-    if (arr_Locations.count == 0) {
-        return [self offlinesearchRegionLocaitonsLat:lat lng:lng dist:[NSString stringWithFormat:@"%f",dist_d*2]];
-    }
-    
-    [resultRegionLocations setObject:arr_Locations forKey:@"locations"];
-    
-    
-    
-    [self closeSpotsDB];
-    return resultRegionLocations;
+        
 }
 
 - (void)clearCache{

@@ -29,6 +29,8 @@
 
 - (void)setDivePicture:(NSIndexPath*)indexPath :(DivePicture*)divePicture{
 
+    [m_imgDivePicture setImage:nil];
+    
     if (divePicture.isLocal) {
 
         [m_imgDivePicture setImage:[[DiveOfflineModeManager sharedManager] getLocalDivePicture:divePicture.urlString]];
@@ -51,10 +53,15 @@
 {
  
     m_indexPath = indexPath;
+    
     [m_imgDivePicture setImage:nil];
     
+    [m_imgDivePicture setBackgroundColor:[UIColor clearColor]];
+    
     [m_btnAdd setBackgroundImage:[UIImage imageNamed:@"btn_add.png"] forState:UIControlStateNormal];
+    
     [m_btnAdd setHidden:NO];
+    
     [self removeGestureRecognizer:_longPressRecognizer];
     
     
