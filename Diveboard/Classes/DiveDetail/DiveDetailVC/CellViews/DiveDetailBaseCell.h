@@ -2,7 +2,7 @@
 //  DiveDetailBaseCell.h
 //  Diveboard
 //
-//  Created by SergeyPetrov on 11/3/14.
+//  Created by Vladimir Popov on 11/3/14.
 //  Copyright (c) 2014 Vladimir Popov. All rights reserved.
 //
 
