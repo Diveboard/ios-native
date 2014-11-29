@@ -23,8 +23,9 @@
 
 -(void)onBrowser:(id)sender
 {
-    NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@", SERVER_URL, [AppManager sharedManager].loginResult.user.nickName, m_DiveInformation.shakenID];
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
+//    NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@", SERVER_URL, [AppManager sharedManager].loginResult.user.nickName, m_DiveInformation.shakenID];
+    
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:m_DiveInformation.fullPermaLink]];
 
 }
 @end

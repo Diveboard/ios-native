@@ -711,6 +711,8 @@
         self.time     = getStringValue([data objectForKey:@"time"]);
         self.duration = getStringValue([data objectForKey:@"duration"]);
         
+        self.fullPermaLink = getStringValue([data objectForKey:@"fullpermalink"]);
+        
         NSMutableArray* arrSafetyStops = [[NSMutableArray alloc] init];
         NSString* strSafetyStops = getStringValue([data objectForKey:@"safetystops_unit_value"]);
         if ([data objectForKey:@"safetystops_unit_value"]) {

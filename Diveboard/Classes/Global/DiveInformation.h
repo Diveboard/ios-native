@@ -258,6 +258,9 @@
 @property (nonatomic, strong) NSMutableArray    *buddies;
 @property (nonatomic)         BOOL              isLocal;
 @property (nonatomic, strong) NSString      *localID;
+@property (nonatomic, strong) NSString      *fullPermaLink;
+
+
 
 - (id)initWithDictionary:(NSDictionary *)data;
 - (NSDictionary*)getDataDictionary;

@@ -202,6 +202,9 @@
     
     [DrawerMenuViewController sharedMenu].isShowList = YES;
     
+    [self.carousel scrollToItemAtIndex:self.carousel.currentItemIndex animated:NO];
+    
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated{

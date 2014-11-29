@@ -395,7 +395,7 @@
     CGPoint origin = [m_currentText.superview convertPoint:m_currentText.frame.origin toView:cv];
     
     
-    origin.y +=m_prevScrollPoint.y;
+//    origin.y -=m_prevScrollPoint.y;
     //    origin.y +=m_currentEditView.frame.size.height;
     
     

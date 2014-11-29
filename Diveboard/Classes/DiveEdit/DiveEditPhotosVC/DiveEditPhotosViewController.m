@@ -226,6 +226,7 @@
     
     [m_DiveInformation.divePictures removeObjectAtIndex:index];
     [m_collectionViewPhoto reloadData];
+    [DrawerMenuViewController sharedMenu].isEditedDive = YES;
 
 }
 
@@ -236,6 +237,8 @@
     [m_DiveInformation.divePictures replaceObjectAtIndex:index withObject:firstPicture];
     
     [m_collectionViewPhoto reloadData];
+    [DrawerMenuViewController sharedMenu].isEditedDive = YES;
+    
     
 }
 -(void)didClickedAddPhotoButton:(NSIndexPath *)indexPath

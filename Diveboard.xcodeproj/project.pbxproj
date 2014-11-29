@@ -204,7 +204,6 @@
 		C52794A61A070962001A1091 /* DiveBrowserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C52794A41A070962001A1091 /* DiveBrowserCell.m */; };
 		C52794A71A070962001A1091 /* DiveBrowserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C52794A51A070962001A1091 /* DiveBrowserCell.xib */; };
 		C528834B1A1EE8A400CE1F3D /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = C528834A1A1EE8A400CE1F3D /* iCarousel.m */; };
-		C528834D1A1FD97600CE1F3D /* Reveal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C528834C1A1FD97500CE1F3D /* Reveal.framework */; };
 		C53F8BA51A0A5FA9003BF842 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C53F8BA41A0A5FA9003BF842 /* FacebookSDK.framework */; };
 		C53F8BA61A0A5FA9003BF842 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C53F8BA41A0A5FA9003BF842 /* FacebookSDK.framework */; };
 		C57C31D11A0900D900B5803E /* DiveDetailViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = C57C31D01A0900D900B5803E /* DiveDetailViewController-iPad.xib */; };
@@ -594,7 +593,6 @@
 		C52794A51A070962001A1091 /* DiveBrowserCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiveBrowserCell.xib; sourceTree = "<group>"; };
 		C52883491A1EE8A400CE1F3D /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		C528834A1A1EE8A400CE1F3D /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
-		C528834C1A1FD97500CE1F3D /* Reveal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Reveal.framework; sourceTree = "<group>"; };
 		C53F8BA41A0A5FA9003BF842 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		C57C31D01A0900D900B5803E /* DiveDetailViewController-iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "DiveDetailViewController-iPad.xib"; sourceTree = "<group>"; };
 		C5B734CE19F6C1F7005FA191 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
@@ -738,7 +736,6 @@
 				3CD100E818C996A90001B625 /* MessageUI.framework in Frameworks */,
 				3CB7A19118C706FF008B66BF /* CoreLocation.framework in Frameworks */,
 				3CCD102718C5B08B001AD995 /* MapKit.framework in Frameworks */,
-				C528834D1A1FD97600CE1F3D /* Reveal.framework in Frameworks */,
 				3CD8592B18C04C7E001CC2E1 /* QuartzCore.framework in Frameworks */,
 				C53F8BA51A0A5FA9003BF842 /* FacebookSDK.framework in Frameworks */,
 				3CE0474418BCB83100FA47FF /* CoreGraphics.framework in Frameworks */,
@@ -943,7 +940,6 @@
 		3CE0473518BCB83100FA47FF = {
 			isa = PBXGroup;
 			children = (
-				C528834C1A1FD97500CE1F3D /* Reveal.framework */,
 				3CE0474718BCB83100FA47FF /* Diveboard */,
 				3CE0476618BCB83100FA47FF /* DiveboardTests */,
 				3CE0474018BCB83100FA47FF /* Frameworks */,

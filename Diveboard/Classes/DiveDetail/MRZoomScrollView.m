@@ -39,7 +39,7 @@
     imageView = [[UIImageView alloc]init];
     
     // The imageView can be zoomed largest size
-    imageView.frame = CGRectMake(0, 0, self.frame.size.width * 2.5, self.frame.size.height * 2.5);
+    imageView.frame = CGRectMake(0, 0, self.frame.size.width , self.frame.size.height );
     imageView.userInteractionEnabled = YES;
     imageView.contentMode = UIViewContentModeScaleAspectFit;
     
@@ -86,7 +86,7 @@
     return imageView;
 }
 
-- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale
+- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale
 {
     NSLog(@"%f",scale);
     [scrollView setZoomScale:scale animated:NO];

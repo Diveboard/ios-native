@@ -106,7 +106,6 @@
         }else{
             
             UIView* containerView = [[UIView alloc] initWithFrame:viewMain.frame];
-//            [containerView setBackgroundColor:[UIColor redColor]];
             [containerView setAlpha:0.0f];
             
             MRZoomScrollView *zoomView = [[MRZoomScrollView alloc] initWithFrame:viewMain.frame];
@@ -167,22 +166,9 @@
     
 }
 
-
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    MRZoomScrollView* zoomView = [mainImageView subviews][0];
-    [zoomView setZoomScale:zoomView.minimumZoomScale];
-    rootSize  = viewMain.frame.size;
-
-    [mainImageView setFrame:viewMain.frame];
-    [zoomView setFrame:mainImageView.frame];
-    [zoomView setContentSize:zoomView.imageView.frame.size];
-//    [secondImageView setFrame:viewMain.frame];
-}
-
 - (void)showPictureWithIndex:(int)index
 {
-    int picCount = divePictures.count;
+    int picCount = (int)divePictures.count;
     currentPictureIndex = picCount - 1 - index;
     prevPicIndex = currentPictureIndex + 1;
     nextPicIndex = currentPictureIndex - 1;
