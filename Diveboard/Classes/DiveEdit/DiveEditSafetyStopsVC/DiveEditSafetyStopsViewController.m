@@ -140,10 +140,6 @@
 
 -(void)onOK:(id)sender{
     
-    if (![self checkIsValid]) {
-        return;
-    }
-    
     if ([m_viewEdit isHidden]) {
     
         if (self.delegate && [self.delegate respondsToSelector:@selector(didChangeSafetyStops:)]) {
@@ -153,6 +149,10 @@
         }
         
     }else{
+        
+        if (![self checkIsValid]) {
+            return;
+        }
         
         [m_viewEdit setHidden:YES];
         

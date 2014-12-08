@@ -22,10 +22,9 @@
 
 @interface DiveListViewController () <DiveEditViewControllerDelegate>
 {
+    
     DiveCountlineView *rulerView;
 
-    int preloadDiveDataIndex;
-    
 }
 @end
 
@@ -45,7 +44,10 @@
     
     [super viewDidLoad];
 
+//    self.carousel.type = icarouseltype
+    
     self.carousel.type = iCarouselTypeLinear;
+    
     
     self.carousel.pagingEnabled = YES;
     
@@ -75,80 +77,54 @@
     
 }
 
-
-#pragma mark - Preload each Dive Information from server
-
 - (void) startPreloadDiveData
 {
-    // get dive IDs from saved data in local database
     
-    NSDictionary *tempData = [[NSUserDefaults standardUserDefaults] objectForKey:kLoadedDiveData([AppManager sharedManager].loginResult.user.ID)];
+    NSMutableArray* params_list = [[NSMutableArray alloc] init];
     
-    if (tempData && tempData.count > 0) {
-        
-        [AppManager sharedManager].loadedDives = [[NSMutableDictionary alloc] initWithDictionary:tempData];
-        
-    }
-    else {
-        
-        [AppManager sharedManager].loadedDives = [[NSMutableDictionary alloc] init];
-        
-    }
+    NSMutableArray* params;
     
-    preloadDiveDataIndex = 0;
     
-    [NSTimer scheduledTimerWithTimeInterval:3.0f
-                                     target:self
-                                   selector:@selector(preloadDiveData)
-                                   userInfo:Nil
-                                    repeats:NO];
-    
-}
-
-- (void) preloadDiveData
-{
-    // from max index - to index 0
-    int tIndex = (int)([AppManager sharedManager].loginResult.user.allDiveIDs.count - 1) - preloadDiveDataIndex;
-    
-    if (tIndex >= 0 && tIndex < [AppManager sharedManager].loginResult.user.allDiveIDs.count) {
+    for (int i = 0; i < [AppManager sharedManager].loginResult.user.allDiveIDs.count; i++) {
         
-        NSString *diveID = [[AppManager sharedManager].loginResult.user.allDiveIDs objectAtIndex:tIndex];
-        
-        NSDictionary *diveData = [[AppManager sharedManager].loadedDives objectForKey:diveID];
-        
-        if (!diveData || diveData.count == 0) {
-            // request
-            [self requestDiveData:diveID];
+        if ( i % 15 == 0) {
+            
+            params = [[NSMutableArray alloc] init];
+            
+            [params_list addObject:params];
+            
         }
         
-        [NSTimer scheduledTimerWithTimeInterval:1.0f
-                                         target:self
-                                       selector:@selector(preloadDiveData)
-                                       userInfo:Nil
-                                        repeats:NO];
+        NSDictionary* dic = @{@"id":[[AppManager sharedManager].loginResult.user.allDiveIDs objectAtIndex:i]};
         
-    } else {
-        
+        [params addObject:dic];
         
     }
-    preloadDiveDataIndex ++;
+    
+    [self preloadDiveData:params_list :0 :^{
+        
+       self.isCompletePreLoad = YES;
+        
+    }];
+    
 }
 
-- (void) requestDiveData:(NSString *)diveID
+- (void)preloadDiveData:(NSMutableArray*)params_list :(int)index :(void (^)())finish
 {
-    if (!self.preloadRequestManagers) {
-        
-        self.preloadRequestManagers = [[NSMutableArray alloc] init];
-        
-    }
     
     NSString *authToken = [AppManager sharedManager].loginResult.token;
     
-    NSString *requestURLString = [NSString stringWithFormat:@"%@/api/V2/dive/%@", SERVER_URL, diveID] ;
+    NSString *requestURLString = [NSString stringWithFormat:@"%@/api/V2/dive", SERVER_URL];
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:[params_list objectAtIndex:index] options:NSJSONWritingPrettyPrinted error:nil];
+    
+    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
     
     NSDictionary *params = @{@"auth_token": authToken,
                              @"apikey"    : API_KEY,
                              @"flavour"   : FLAVOUR,
+                             @"arg"       : jsonString
                              };
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -159,37 +135,87 @@
     
     [manager POST:requestURLString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
+        NSDictionary *data = [NSDictionary dictionaryWithDictionary:responseObject];
         
-        if (responseObject) {
+        if ([[data objectForKey:@"success"] boolValue]) {
             
+            NSArray* dive_list = [data objectForKey:@"result"];
             
-            NSDictionary *data = [NSDictionary dictionaryWithDictionary:responseObject];
-            
-            if ([[data objectForKey:@"success"] boolValue]) {
+            for (int i = 0; i < dive_list.count; i++) {
                 
-                DiveInformation* diveInfo = [[DiveInformation alloc] initWithDictionary:[data objectForKey:@"result"]];
+                NSDictionary* diveDic = [dive_list objectAtIndex:i];
                 
-                [[AppManager sharedManager].loadedDives setObject:responseObject forKey:[NSNumber numberWithLong:[diveInfo.ID integerValue]]];
+                DiveInformation  *dive = [[DiveInformation alloc] initWithDictionary:diveDic];
+                
+                NSDictionary* dic = @{
+                                      @"error"              :[data objectForKey:@"error"],
+                                      
+                                      @"result"             : diveDic,
+                                      
+                                      @"success"            :[data objectForKey:@"success"],
+                                      
+                                      @"user_authentified"  :[data objectForKey:@"user_authentified"]
+                                      
+                                      };
+                
+                [[AppManager sharedManager].loadedDives setObject:dic forKey:[NSNumber numberWithLong:[dive.ID integerValue]]];
                 
                 
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    
-                    [[DiveOfflineModeManager sharedManager] writeOneDiveInformation:responseObject overwrite:YES];
-                });
+                [[DiveOfflineModeManager sharedManager] writeOneDiveInformation:dic overwrite:YES];
                 
-                
-            } else {
                 
             }
             
         }
         
+        if (index < params_list.count-1) {
+            
+            [self preloadDiveData:params_list :index+1 :finish];
+            
+        }else{
+            
+            finish();
+            
+        }
+        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
+        NSArray* diveIDs = [params_list objectAtIndex:index];
+        
+        for (int i = 0 ; i < diveIDs.count ; i++) {
+            
+            NSString* diveID = [diveIDs objectAtIndex:i];
+            
+           id responseObject =  [[DiveOfflineModeManager sharedManager] getOneDiveInformation:diveID];
+           
+            NSDictionary *data = [NSDictionary dictionaryWithDictionary:responseObject];
+            
+            if ([[data objectForKey:@"success"] boolValue]) {
+            
+                DiveInformation* dive = [[DiveInformation alloc] initWithDictionary:[data objectForKey:@"result"]];
+                
+                [[AppManager sharedManager].loadedDives setObject:responseObject forKey:[NSNumber numberWithLong:[dive.ID integerValue]]];
+                
+                [[DiveOfflineModeManager sharedManager] writeOneDiveInformation:responseObject overwrite:NO];
+                
+            }
+            
+        }
+        
+        if (index < params_list.count-1) {
+            
+            [self preloadDiveData:params_list :index+1 :finish];
+            
+        }else{
+            
+            finish();
+            
+        }
         
     }];
     
-    [self.preloadRequestManagers addObject:manager];
+    
+    
 }
 
 

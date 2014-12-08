@@ -216,8 +216,7 @@
 }
 
 - (IBAction)facebookLoginAction:(id)sender {
-//    [self internetConnecting:YES];
-//    [NSTimer timerWithTimeInterval:0.1f target:self selector:@selector(facebookConnecting) userInfo:Nil repeats:NO];
+
     [NSTimer scheduledTimerWithTimeInterval:0.1f target:self selector:@selector(facebookConnecting) userInfo:nil repeats:NO];
 }
 
@@ -306,14 +305,13 @@
             }];
             
         } else {
-            [self internetConnecting:NO];
+            
             [self requestResultCheckingWithObject:responseObject];
+            
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"%@", error);
-        
-        [self internetConnecting:NO];
         
         offlineManager.isOffline = YES;
         
@@ -398,6 +396,8 @@
             
             [[AppManager sharedManager] getUserData:data];
             
+            [self internetConnecting:NO];
+            
             if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
                 [AppManager sharedManager].diveListVC = [[DiveListViewController alloc] initWithNibName:@"DiveListViewController" bundle:Nil];
             } else {
@@ -417,7 +417,6 @@
             slideController.slideDirection = OSBlurSlideMenuControllerSlideFromLeftToRight;
             
             [self.view.window setRootViewController:slideController];
-
             
             self.txtPassword.text = @"";
             
@@ -510,18 +509,18 @@
                              @"fbtoken": [info objectForKey:@"fbtoken"],
                              };
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
     [manager POST:fbLoginURLString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-        [self internetConnecting:NO];
-        NSLog(@"%@", operation.responseString);
         [self requestResultCheckingWithObject:responseObject];
         
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 
-        [self internetConnecting:NO];
         offlineManager.isOffline = YES;
+        
         [self requestResultCheckingWithObject:offlineManager.getLoginResultData];
 
     }];

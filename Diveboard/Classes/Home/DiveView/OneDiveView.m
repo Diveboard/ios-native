@@ -28,7 +28,8 @@
     
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        if (orien == UIInterfaceOrientationPortrait) {
+        
+        if (UIInterfaceOrientationIsPortrait(orien)) {
             if ([UIScreen mainScreen].bounds.size.height == 568) {
                 self = [[[NSBundle mainBundle] loadNibNamed:@"OneDiveView" owner:self options:Nil] objectAtIndex:0];
             } else {
@@ -39,7 +40,7 @@
         }
         
     } else {
-        if (orien == UIInterfaceOrientationPortrait) {
+        if (UIInterfaceOrientationIsPortrait(orien) ) {
             self = [[[NSBundle mainBundle] loadNibNamed:@"OneDiveView-ipad" owner:self options:Nil] objectAtIndex:0];
 
         } else {
@@ -78,7 +79,7 @@
 
     
     // layout orientation is portrate
-    if (orientation == UIInterfaceOrientationPortrait) {
+    if (UIInterfaceOrientationIsPortrait(orientation)) {
         imgviewMainPhoto.layer.cornerRadius = imgviewMainPhoto.frame.size.width / 2;
         float borderWidth = 5.0f;
         UIView *borderView = [[UIView alloc] initWithFrame:CGRectInset(imgviewMainPhoto.frame, borderWidth * 0.2f, borderWidth * 0.2f)];

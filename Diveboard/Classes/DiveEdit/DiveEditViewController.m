@@ -338,6 +338,7 @@
             [AppManager sharedManager].diveListVC = [[DiveListViewController alloc] initWithNibName:@"DiveListViewController-ipad" bundle:Nil];
         }
     }
+    
     [[AppManager sharedManager].diveListVC currentDiveViewUpdate];
     [DrawerMenuViewController sharedMenu].isEditedDive = NO;
     [self.navigationController setViewControllers:@[[AppManager sharedManager].diveListVC]];
@@ -398,6 +399,9 @@
                              @"success" : @"1",
                              @"user_authentified" : @"1",
                              };
+    
+    NSLog(@"%@",result);
+    
     return result;
 }
 

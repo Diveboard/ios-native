@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0510"
+   LastUpgradeVersion = "0610"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -17,6 +17,20 @@
                BlueprintIdentifier = "3CE0473D18BCB83100FA47FF"
                BuildableName = "Diveboard.app"
                BlueprintName = "Diveboard"
+               ReferencedContainer = "container:Diveboard.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3CE0475E18BCB83100FA47FF"
+               BuildableName = "DiveboardTests.xctest"
+               BlueprintName = "DiveboardTests"
                ReferencedContainer = "container:Diveboard.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>

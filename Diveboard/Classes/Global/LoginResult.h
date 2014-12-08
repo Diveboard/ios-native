@@ -162,6 +162,10 @@
 @property (nonatomic, strong) NSString          *adminRight;
 @property (nonatomic, strong) NSMutableArray    *walletPictureIDs;
 @property (nonatomic, strong) NSMutableArray    *walletPictures;
+@property (nonatomic, strong) NSString          *countryCode;
+@property (nonatomic, strong) NSString          *countryName;
+
+
 
 
 - (id)initWithDictionary:(NSDictionary *)data;

@@ -77,6 +77,8 @@
         [m_tableView setLayoutMargins:UIEdgeInsetsZero];
     }
     
+    [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(settingDataShow) userInfo:nil repeats:YES];
+    
     [self settingDataShow];
     
 }
@@ -117,9 +119,17 @@
     
 //////// APPLICATION INFORMATION
     
+    NSString* strRemainPic = [NSString stringWithFormat:@"%d",(int)[AppManager sharedManager].remainingPictures.count];
+    
+    if (![AppManager sharedManager].diveListVC.isCompletePreLoad) {
+        
+        strRemainPic = @"Loading...";
+        
+    }
+    
     NSDictionary* remainPicDic = @{@"title": @"Remaining Pictures:",
                                         @"description": @"",
-                                        @"value":[NSString stringWithFormat:@"%d",(int)[AppManager sharedManager].remainingPictures.count]
+                                        @"value":strRemainPic
                                         };
     
     NSDictionary* pendingReqDic = @{@"title": @"Pending Requests:",

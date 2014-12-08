@@ -19,8 +19,13 @@
 #pragma mark - AppManager class
 @interface AppManager()<CLLocationManagerDelegate>
 {
+    
     CLLocationManager*  m_LocationManager;
+    
     NSMutableArray* arrPictureDownloadOperations;
+    
+    
+    
 }
 
 @end
@@ -191,18 +196,35 @@ static AppManager *_sharedManager;
 
 
 #pragma mark - CLLocationManagerDelegate
+
+#define kUserLastLocation @"userLastLocation"
+
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
     
     self.currentLocation = [locations objectAtIndex:0];
+    
+    NSNumber *lat = [NSNumber numberWithDouble:self.currentLocation.coordinate.latitude];
+    
+    NSNumber *lng = [NSNumber numberWithDouble:self.currentLocation.coordinate.longitude];
+    
+    NSDictionary *userLocation=@{@"lat":lat,@"long":lng};
+    
+    [[NSUserDefaults standardUserDefaults] setObject:userLocation forKey:kUserLastLocation];
+    
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    
     
 }
 
 -(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
     
-    self.currentLocation = nil;
-//    NSLog(@"Error: %@", error);
-    NSLog(@"Failed to get location! :(");
-
+    NSDictionary* userLocation = [[NSUserDefaults standardUserDefaults] objectForKey:kUserLastLocation];
+    
+    CLLocation* location = [[CLLocation alloc] initWithLatitude:[[userLocation objectForKey:@"lat"] doubleValue] longitude:[[userLocation objectForKey:@"long"] doubleValue]];
+    
+    self.currentLocation = location;
+    
 }
 @end
 

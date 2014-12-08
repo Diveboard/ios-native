@@ -30,6 +30,8 @@
 @property (nonatomic, strong)  NSMutableArray *preloadRequestManagers;
 
 
+@property (nonatomic) BOOL isCompletePreLoad;
+
 - (IBAction)menuAction:(id)sender;
 
 - (void)setCoordinateValue:(DiveInformation *)diveInfoOfSelf;

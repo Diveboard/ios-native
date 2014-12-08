@@ -873,12 +873,14 @@
     if (![self.ID isEqualToString:@""]) {
         
         [dic setObject:jsonString forKey:@"safetystops"];
+        [dic setObject:jsonString forKey:@"safetystops_unit_value"];
         
     }else{
         
         if (arrSafetyStops.count > 0) {
             
             [dic setObject:jsonString forKey:@"safetystops"];
+            [dic setObject:jsonString forKey:@"safetystops_unit_value"];
         }
 
     }

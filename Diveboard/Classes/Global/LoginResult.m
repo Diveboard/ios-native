@@ -237,6 +237,9 @@
             
             self.autoPublic     = getStringValue([data objectForKey:@"auto_public"]);
             self.city           = getStringValue([data objectForKey:@"city"]);
+            self.countryCode    = getStringValue([data objectForKey:@"country_code"]);
+            self.countryName    = getStringValue([data objectForKey:@"country_name"]);
+            
             self.class_         = getStringValue([data objectForKey:@"class"]);
             self.danData        = [[DanData alloc] initWithDictionary:[data objectForKey:@"dan_data"]];
             self.dbBuddyIDs     = [data objectForKey:@"db_buddy_ids"];
@@ -296,7 +299,7 @@
 
                 [self.walletPictures addObject:[[DivePicture alloc] initWithDictionary:elem]];
             }
-
+            
             
             
         }

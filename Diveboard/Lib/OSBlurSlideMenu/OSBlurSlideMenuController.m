@@ -16,6 +16,7 @@
 @interface OSBlurSlideMenuController ()
 {
 	CGFloat _contentViewWidthWhenMenuIsOpen;
+    CGPoint startPanGesturePoint ;
 }
 
 /** Children view controllers */
@@ -413,7 +414,9 @@
 
 - (void)panGestureTriggered:(UIPanGestureRecognizer *)panGesture
 {
-	if (panGesture.state == UIGestureRecognizerStateBegan)
+
+	
+    if (panGesture.state == UIGestureRecognizerStateBegan)
 	{
 		self.menuWasOpenAtPanBegin = [self isMenuOpen];
 		
@@ -424,13 +427,17 @@
             [self.contentViewController viewWillSlideOut:YES inSlideMenuController:self]; // Content view controller is sliding out
 		}
         
-        [self showHideBlurView:YES];
+//        [self showHideBlurView:YES];
         if (!self.menuWasOpenAtPanBegin) {
 //            [self.blurView createSnapshot];
         }
+        
+        startPanGesturePoint = [panGesture locationInView:panGesture.view.window];
+        
 	}
 	
-	CGPoint translation = [panGesture translationInView:panGesture.view];
+    CGPoint translation = [panGesture translationInView:panGesture.view];
+    
     if (self.slideDirection == OSBlurSlideMenuControllerSlideFromRightToLeft) {
         translation.x *= -1.f;
     }
@@ -442,7 +449,7 @@
     if (self.menuWasOpenAtPanBegin) {
         blurDegree = 1.f - blurDegree;
     }
-    NSLog(@"blurRadius: %f", blurDegree);
+//    NSLog(@"blurRadius: %f", blurDegree);
 //    [self.blurView forceUpdate:NO blurWithDegree:blurDegree];
     
     if (self.menuWasOpenAtPanBegin) {
@@ -456,10 +463,11 @@
 	
 	if (panGesture.state == UIGestureRecognizerStateEnded)
 	{
+        
 		NSTimeInterval animationDuration = 0.1;
         BOOL changeState;
         if (self.menuWasOpenAtPanBegin) {
-            changeState = blurDegree < 0.5f;
+            changeState = blurDegree < 0.15f;
             if (!changeState) {
                 CGPoint velocity = [panGesture velocityInView:panGesture.view];
                 if (self.slideDirection == OSBlurSlideMenuControllerSlideFromLeftToRight)
@@ -469,7 +477,7 @@
             }
         }
         else {
-            changeState = blurDegree > 0.5f;
+            changeState = blurDegree > 0.15f;
         }
 				
 		if (changeState)
@@ -489,8 +497,16 @@
                 }];
 			}
             else {
+                
+                NSLog(@"%f",startPanGesturePoint.x);
+                
+                if (startPanGesturePoint.x > 50) {
+                    return;
+                }
+                
 //                [self.blurView forceUpdate:YES blurWithDegree:1.f];
                 
+                [self showHideBlurView:YES];
                 [self.menuViewController beginAppearanceTransition:NO animated:YES];
                 [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                     self.menuViewController.view.frame = [self frameForMenuView];
@@ -523,6 +539,9 @@
                 [self configurePanGesture];
             }
 		}
+        
+
+        
 	}
 }
 

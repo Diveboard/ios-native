@@ -110,20 +110,25 @@
     
     
     [vdlblNickname          setText:[AppManager sharedManager].loginResult.user.nickName];
+
     
-    if ([[AppManager sharedManager].loginResult.user.danData.address isKindOfClass:[NSArray class]]) {
-        id country = [[AppManager sharedManager].loginResult.user.danData.address lastObject];
-        if (country != [NSNull null]) {
-            [vdlblCountry           setText:(NSString *)country];
-        } else {
-            [vdlblCountry setText:@""];
-        }
+    [vdlblCountry setText:[AppManager sharedManager].loginResult.user.countryName];
         
-    }else{
-        
-        [vdlblCountry setText:@""];
-        
-    }
+    
+    
+//    if ([[AppManager sharedManager].loginResult.user.danData.address isKindOfClass:[NSArray class]]) {
+//        id country = [[AppManager sharedManager].loginResult.user.danData.address lastObject];
+//        if (country != [NSNull null]) {
+//            [vdlblCountry           setText:(NSString *)country];
+//        } else {
+//            [vdlblCountry setText:@""];
+//        }
+//        
+//    }else{
+//        
+//        [vdlblCountry setText:@""];
+//        
+//    }
     
     
     
