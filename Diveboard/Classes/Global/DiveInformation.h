@@ -259,7 +259,7 @@
 @property (nonatomic)         BOOL              isLocal;
 @property (nonatomic, strong) NSString      *localID;
 @property (nonatomic, strong) NSString      *fullPermaLink;
-
+@property (nonatomic, strong) NSString      *userID;
 
 
 - (id)initWithDictionary:(NSDictionary *)data;

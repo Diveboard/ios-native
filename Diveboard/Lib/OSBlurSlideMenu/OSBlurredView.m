@@ -136,7 +136,6 @@
 
 - (void)forceUpdate:(BOOL)forceFlag blurWithDegree:(CGFloat)degree {
     if (forceFlag || !self.updatingBlur) {
-        NSLog(@"updating blur with degree = %f", degree);
         self.updatingBlur = YES;
         dispatch_async([OSBlurredView blurringQueue], ^{
 //            UIImage *blurredImage = [self.superviewSnapshot stackBlur:(degree * self.blurLevel) tintColor:self.blurTintColor];

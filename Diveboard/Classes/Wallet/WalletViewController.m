@@ -407,13 +407,11 @@
         
         [manager POST:requestURLStr parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
             
-            NSLog(@"%@",responseObject);
             [SVProgressHUD showSuccessWithStatus:@"Success"];
             [DrawerMenuViewController sharedMenu].isEditedDive = NO;
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             
             [SVProgressHUD showErrorWithStatus:@"Failure"];
-            NSLog(@"%@",error);
             
         }];
         

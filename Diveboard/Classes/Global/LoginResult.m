@@ -221,7 +221,7 @@
 - (id)initWithDictionary:(NSDictionary *)data;
 {
     self = [super init];
-    NSLog(@"%@",data);
+
     if (self) {
         if (![data isEqual:[NSNull null]]) {
             self.about          = getStringValue([data objectForKey:@"about"]);

@@ -40,11 +40,11 @@
 - (id)initWithDiveData:(DiveInformation *)diveInfo;
 {
     NSString *nibFilename;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        nibFilename = @"DiveEditPhotosViewController";
-    } else {
-        nibFilename = @"DiveEditPhotosViewController-ipad";
-    }
+//    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+//        nibFilename = @"DiveEditPhotosViewController";
+//    } else {
+//        nibFilename = @"DiveEditPhotosViewController-ipad";
+//    }
     nibFilename = @"DiveEditPhotosViewController";
 
     self = [self initWithNibName:nibFilename bundle:nil];

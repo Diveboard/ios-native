@@ -418,6 +418,7 @@
                 
                 if (i == 0) {
                     
+                    
                     [imgviewMainPhoto setImage:[[DiveOfflineModeManager sharedManager] getLocalDivePicture:onePicInfo.urlString]];
                     
                 }
@@ -453,6 +454,7 @@
         
     } else {
         
+
         [imgviewMainPhoto setImageWithURL:[NSURL URLWithString:diveInfoOfSelf.imageURL] placeholderImage:nil];
         
     }

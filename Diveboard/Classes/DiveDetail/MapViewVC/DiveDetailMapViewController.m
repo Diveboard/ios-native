@@ -30,11 +30,11 @@
 -(id)initWithDiveInformation:(DiveInformation *)diveInfo
 {
     NSString *nibFilename;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        nibFilename = @"DiveDetailMapViewController";
-    } else {
-        nibFilename = @"DiveDetailMapViewController-ipad";
-    }
+//    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+//        nibFilename = @"DiveDetailMapViewController";
+//    } else {
+//        nibFilename = @"DiveDetailMapViewController-ipad";
+//    }
     nibFilename = @"DiveDetailMapViewController";
     self = [self initWithNibName:nibFilename bundle:nil];
     if (self) {

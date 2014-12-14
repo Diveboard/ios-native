@@ -62,6 +62,7 @@
             diveInformation.spotInfo = [[DiveSpotInfo alloc] initWithEmptySpot];
             diveInformation.isLocal = YES;
             diveInformation.localID = [NSString stringWithFormat:@"%.0f", [[NSDate date] timeIntervalSince1970]];
+            diveInformation.userID = [AppManager sharedManager].loginResult.user.ID;
         }
     }
     return self;
@@ -213,7 +214,6 @@
         [updateParams setObject:@{@"id":diveInformation.diveShop.ID} forKey:@"shop"];
         
     }
-    NSLog(@"%@",updateParams);
     
     NSError *error;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:updateParams
@@ -271,7 +271,6 @@
 
                 [manager POST:requestURLStr parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
                     
-                    NSLog(@"%@",responseObject);
                     
                     BOOL success = [[DiveOfflineModeManager sharedManager] writeOneDiveInformation:responseObject overwrite:YES];
                     if (success) {
@@ -347,7 +346,6 @@
 - (void) createDiveSuccess :(NSDictionary *)responseObject
 {
     
-    NSLog(@"%@",responseObject);
     NSDictionary *diveData = [responseObject objectForKey:@"result"];
     
     
@@ -375,6 +373,7 @@
         [[AppManager sharedManager].diveListVC diveViewsUpdate];
         [DrawerMenuViewController sharedMenu].isEditedDive = NO;
         [[DrawerMenuViewController sharedMenu] setMenuIndex:0];
+        
         [self.navigationController setViewControllers:@[[AppManager sharedManager].diveListVC]];
     }
 }
@@ -400,7 +399,6 @@
                              @"user_authentified" : @"1",
                              };
     
-    NSLog(@"%@",result);
     
     return result;
 }

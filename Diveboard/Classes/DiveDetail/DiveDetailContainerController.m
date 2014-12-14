@@ -127,9 +127,6 @@
             
         }];
         
-        
-        
-        
     }
     else {
         
@@ -142,10 +139,22 @@
             }];
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
             
-            UIImage *backgroundImage = [[DiveOfflineModeManager sharedManager] getImageWithUrl:m_DiveInformation.imageURL];
+            [DiveOfflineModeManager sharedManager].isOffline = YES;
+            NSString* imgURL = m_DiveInformation.imageURL;
+            UIImage *backgroundImage = nil;
+            if ([[imgURL lowercaseString] hasPrefix:@"http://"] || [[imgURL lowercaseString] hasPrefix:@"https://"])
+            {
+                backgroundImage = [[DiveOfflineModeManager sharedManager] getImageWithUrl:imgURL];
+                
+            }else{
+                
+                backgroundImage = [[DiveOfflineModeManager sharedManager] getLocalDivePicture:imgURL];
+            }
             [self.imgViewBackground setImageToBlur:backgroundImage blurRadius:3.0f completionBlock:^(NSError *error) {
                 
             }];
+            
+            
 
         }];
     }
@@ -156,6 +165,7 @@
 
 - (void) viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
     
     if (isFirst) {
         [viewContent addSubview:m_detailViewController.view];

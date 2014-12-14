@@ -171,7 +171,7 @@
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
     if (([[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationLandscapeLeft) || ([[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationLandscapeRight)) {
-        NSLog(@"Landscape");
+
         [UIView animateWithDuration:0.3f animations:^{
             [ self.view setFrame : CGRectMake(0, -50, self.view.frame.size.width, self.view.frame.size.height)] ;
         }];
@@ -311,7 +311,6 @@
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"%@", error);
         
         offlineManager.isOffline = YES;
         
@@ -383,7 +382,7 @@
                                                    options:NSJSONReadingAllowFragments
                                                      error:nil];
         }
-//        NSLog(@"%@", data);
+
         if ([[data objectForKey:@"success"] boolValue]) {
             
             if (!offlineManager.isOffline) {
@@ -473,14 +472,10 @@
     if ([AppManager sharedManager].fbSession.isOpen)
     {
         
-        NSLog(@"--- access token is ---: %@", [AppManager sharedManager].fbSession.accessTokenData.accessToken);
-        
         NSString *requestURL = [NSString stringWithFormat:@"https://graph.facebook.com/me?access_token=%@", [AppManager sharedManager].fbSession.accessTokenData.accessToken];
         NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:requestURL]];
         
         NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-        NSString *returnString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-        NSLog(@"FACEBOOK USER INFORMATION : %@", returnString);
 
         if (returnData) {
             NSDictionary *data = [NSJSONSerialization JSONObjectWithData:returnData
@@ -535,7 +530,6 @@
     NSString *documentsDirectory = [paths objectAtIndex:0];
     
     NSString *plistPath = [documentsDirectory stringByAppendingPathComponent:kLoginResultPlistFileName];
-    NSLog(@"filepath : %@", plistPath);
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     

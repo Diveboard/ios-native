@@ -293,7 +293,6 @@
         if (buttonIndex == 1) {
             NSString *sudoID = [alertView textFieldAtIndex:0].text;
             if ([sudoID intValue] > 0) {
-                NSLog(@"sudo ID : %@", sudoID);
                 [self loadDiveIDsWithSudoID:sudoID];
             }
         }
@@ -304,7 +303,6 @@
         }
         
     }
-    NSLog(@"alert!");
     
 }
 

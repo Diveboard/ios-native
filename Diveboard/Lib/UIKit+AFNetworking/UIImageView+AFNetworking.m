@@ -115,12 +115,6 @@
        placeholderImage:(UIImage *)placeholderImage
 {
  
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    
-        self.image = [[DiveOfflineModeManager sharedManager] getImageWithUrl:url.absoluteString];
-        
-    });
-    
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request addValue:@"image/*" forHTTPHeaderField:@"Accept"];
 
@@ -133,7 +127,21 @@
                        success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image))success
                        failure:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error))failure
 {
+    
     [self cancelImageRequestOperation];
+    
+    
+    
+        UIImage* offlineImage = [[DiveOfflineModeManager sharedManager] getImageWithUrl:urlRequest.URL.absoluteString];
+
+    
+    if (success) {
+        success(nil, nil, offlineImage);
+    } else {
+        self.image = offlineImage;
+    }
+    
+    
 
     UIImage *cachedImage = [[[self class] sharedImageCache] cachedImageForRequest:urlRequest];
     if (cachedImage) {
@@ -145,12 +153,6 @@
             self.image = cachedImage;
         }
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-            [[DiveOfflineModeManager sharedManager] writeImage:cachedImage url:urlRequest.URL.absoluteString];
-            
-        });
-
         self.af_imageRequestOperation = nil;
     } else {
         if (placeholderImage) {
@@ -164,11 +166,9 @@
             __strong __typeof(weakSelf)strongSelf = weakSelf;
             if ([[urlRequest URL] isEqual:[strongSelf.af_imageRequestOperation.request URL]]) {
 
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    
-                    [[DiveOfflineModeManager sharedManager] writeImage:strongSelf.image url:urlRequest.URL.absoluteString];
-                    
-                });
+                
+                    [[DiveOfflineModeManager sharedManager] writeImage:responseObject url:urlRequest.URL.absoluteString];
+                
                 
                 if (success) {
                     success(urlRequest, operation.response, responseObject);

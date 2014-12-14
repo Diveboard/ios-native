@@ -47,21 +47,37 @@
     NSString *diveShakenID   = m_DiveInformation.shakenID;
 
     NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@/profile.png?g=mobile_v002&u=m", SERVER_URL, myNickName, diveShakenID];
-    [vdimgviewGraph clearImageCacheForURL:[NSURL URLWithString:urlString]];
-    UIImageView *imgviewGraph = vdimgviewGraph;
     
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
     
-    [vdimgviewGraph setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+    
+    
+    if ([DiveOfflineModeManager sharedManager].isOffline) {
         
-        [imgviewGraph setImage:image];
+        [vdimgviewGraph setImage:[[DiveOfflineModeManager sharedManager] getImageWithUrl:urlString]];
         
+    }else{
+
+        [vdimgviewGraph clearImageCacheForURL:[NSURL URLWithString:urlString]];
         
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+        UIImageView *imgviewGraph = vdimgviewGraph;
         
-        [imgviewGraph setImage:[[DiveOfflineModeManager sharedManager] getImageWithUrl:urlString]];
+        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
         
-    }];
+        [vdimgviewGraph setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+            
+            [imgviewGraph setImage:image];
+            
+            
+        } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+
+            [DiveOfflineModeManager sharedManager].isOffline = YES;
+            
+            [imgviewGraph setImage:[[DiveOfflineModeManager sharedManager] getImageWithUrl:urlString]];
+            
+        }];
+        
+    }
+    
     
     // dive max depth
     [vdlblDepth setText:[DiveInformation unitOfLengthWithValue:m_DiveInformation.maxDepth

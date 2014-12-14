@@ -31,11 +31,11 @@
 - (id)initWithDiveInformation:(DiveInformation *) diveInfo
 {
     NSString *nibFilename;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        nibFilename = @"DiveDetailPhotosViewController";
-    } else {
-        nibFilename = @"DiveDetailPhotosViewController-ipad";
-    }
+//    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+//        nibFilename = @"DiveDetailPhotosViewController";
+//    } else {
+//        nibFilename = @"DiveDetailPhotosViewController-ipad";
+//    }
     
     nibFilename = @"DiveDetailPhotosViewController";
     self = [self initWithNibName:nibFilename bundle:nil];

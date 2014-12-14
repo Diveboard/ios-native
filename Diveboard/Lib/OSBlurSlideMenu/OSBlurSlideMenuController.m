@@ -498,8 +498,6 @@
 			}
             else {
                 
-                NSLog(@"%f",startPanGesturePoint.x);
-                
                 if (startPanGesturePoint.x > 50) {
                     return;
                 }

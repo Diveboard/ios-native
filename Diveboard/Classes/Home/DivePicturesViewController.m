@@ -68,6 +68,8 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    
+    [super viewDidAppear:animated];
     rootSize  = viewMain.frame.size;
     [self initMethod0303];
     
@@ -121,22 +123,36 @@
             [indicator startAnimating];
             [zoomView addSubview:indicator];
             
-            UIImageView *imgview = zoomView.imageView;
-            
-            NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:picture.urlString]];
-            
-            [zoomView.imageView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                
-                [imgview setImage:image];
+            if([DiveOfflineModeManager sharedManager].isOffline)
+            {
+                [zoomView.imageView setImage:[[DiveOfflineModeManager sharedManager] getImageWithUrl:picture.urlString]];
                 [indicator stopAnimating];
                 
                 
-            } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+            }else{
                 
-                [imgview setImage:[[DiveOfflineModeManager sharedManager] getImageWithUrl:request.URL.absoluteString]];
-                [indicator stopAnimating];
+                UIImageView *imgview = zoomView.imageView;
                 
-            }];
+                NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:picture.urlString]];
+                
+                [zoomView.imageView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                    
+                    [imgview setImage:image];
+                    [indicator stopAnimating];
+                    
+                    
+                } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                    
+                    [DiveOfflineModeManager sharedManager].isOffline = YES;
+                    
+                    [imgview setImage:[[DiveOfflineModeManager sharedManager] getImageWithUrl:request.URL.absoluteString]];
+                    [indicator stopAnimating];
+                    
+                    
+                }];
+                
+            }
+            
             
             [containerView addSubview:zoomView];
             [viewMain addSubview:containerView];
@@ -186,7 +202,6 @@
     
     CGPoint translatedPoint = [sender translationInView:self.view];
     
-//    NSLog(@"pan X:%f, Y:%f", translatedPoint.x, translatedPoint.y);
     
     if (sender.state == UIGestureRecognizerStateBegan) {
         touchStartPoint = mainImageView.center;
@@ -295,11 +310,9 @@
     }
     
     if (secondPictureIndex != index) {
-        NSLog(@"turn!");
         
         secondPictureIndex = index;
         secondImageView = [imgviewArray objectAtIndex:index];
-        NSLog(@"current index : %d, second index : %d", currentPictureIndex, secondPictureIndex);
 //        DivePicture *picture1 = [divePictures objectAtIndex:secondPictureIndex];
 //        [secondImageView setImageWithURL:[NSURL URLWithString:picture1.largeURL]];
 //                        placeholderImage:[UIImage imageNamed:@"preload"]];

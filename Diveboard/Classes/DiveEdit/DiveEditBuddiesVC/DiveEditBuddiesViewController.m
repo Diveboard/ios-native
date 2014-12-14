@@ -37,11 +37,11 @@
 - (id)initWithDiveData:(DiveInformation *)diveInfo;
 {
     NSString *nibFilename;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        nibFilename = @"DiveEditBuddiesViewController";
-    } else {
-        nibFilename = @"DiveEditBuddiesViewController-ipad";
-    }
+//    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+//        nibFilename = @"DiveEditBuddiesViewController";
+//    } else {
+//        nibFilename = @"DiveEditBuddiesViewController-ipad";
+//    }
     nibFilename = @"DiveEditBuddiesViewController";
 
     self = [self initWithNibName:nibFilename bundle:nil];
@@ -260,8 +260,6 @@
         } else {
             
             [AppManager sharedManager].loadedDives = [[NSMutableDictionary alloc] init];
-            
-            [[AppManager sharedManager].loadedDives setObject:diveInfo forKey:diveId];
             
         }
         

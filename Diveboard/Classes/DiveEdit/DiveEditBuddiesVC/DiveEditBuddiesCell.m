@@ -312,7 +312,6 @@
 #pragma mark - FBFriendPickerDelegate methods
 - (void)facebookViewControllerCancelWasPressed:(id)sender
 {
-    NSLog(@"Friend selection cancelled.");
     [self.friendPickerController dismissViewControllerAnimated:YES completion:nil];
 }
 

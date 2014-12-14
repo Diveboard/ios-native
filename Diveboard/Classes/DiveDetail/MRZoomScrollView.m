@@ -88,7 +88,6 @@
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale
 {
-    NSLog(@"%f",scale);
     [scrollView setZoomScale:scale animated:NO];
 }
 

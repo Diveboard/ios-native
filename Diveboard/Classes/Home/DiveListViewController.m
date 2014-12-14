@@ -419,6 +419,7 @@
         [self oneDiveViewDataLoadFinish:diveView diveInfo:[diveView getDiveInformation]];
         
     }
+    
     [rulerView setCurrentValue:(int)self.carousel.currentItemIndex+1];
     
     
@@ -552,11 +553,11 @@
         self.lblCoordinate.text = @"No spot assigned";
         
     }
-    
+
     if ([DiveOfflineModeManager sharedManager].isOffline) {
-        // internet is offline
         
         NSString* imgURL = diveInfoOfSelf.imageURL;
+        
         UIImage *backgroundImage = nil;
         if ([[imgURL lowercaseString] hasPrefix:@"http://"] || [[imgURL lowercaseString] hasPrefix:@"https://"])
         {
@@ -570,26 +571,46 @@
         [self.imgviewBackground setImageToBlur:backgroundImage blurRadius:3.0f completionBlock:^(NSError *error) {
             
         }];
+        
     }
     else {
         
         // internet is online
-        dispatch_queue_t dqueue = dispatch_queue_create("image.loading", 0);
-        dispatch_async(dqueue, ^{
+        
+        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:diveInfoOfSelf.imageURL]];
+        
+        [self.imgviewBackground setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             
-            NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:diveInfoOfSelf.imageURL]];
+            [self.imgviewBackground setImageToBlur:image blurRadius:3.0f completionBlock:^(NSError *error) {
+                
+            }];
             
-            UIImage *backgroundImage = [UIImage imageWithData:imageData];
-            [[DiveOfflineModeManager sharedManager] writeImage:backgroundImage url:diveInfoOfSelf.imageURL];
+        } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
             
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.imgviewBackground setImageToBlur:backgroundImage blurRadius:3.0f completionBlock:^(NSError *error) {
-                    
-                }];
-            });
+            [DiveOfflineModeManager sharedManager].isOffline = YES;
             
-        });
+            NSString* imgURL = diveInfoOfSelf.imageURL;
+            
+            UIImage *backgroundImage = nil;
+            if ([[imgURL lowercaseString] hasPrefix:@"http://"] || [[imgURL lowercaseString] hasPrefix:@"https://"])
+            {
+                backgroundImage = [[DiveOfflineModeManager sharedManager] getImageWithUrl:imgURL];
+                
+            }else{
+                
+                backgroundImage = [[DiveOfflineModeManager sharedManager] getLocalDivePicture:imgURL];
+            }
+            [self.imgviewBackground setImageToBlur:backgroundImage blurRadius:3.0f completionBlock:^(NSError *error) {
+                
+            }];
+            
+            
+            
+        }];
     }
+    
+    
+    
 }
 
 - (void)diveViewsUpdate
@@ -628,7 +649,6 @@
 
 - (void) diveCountlineView:(DiveCountlineView *)diveCountlineView Number:(int)number
 {
-    NSLog(@"%d",number);
     
     [self.carousel scrollToItemAtIndex:number-1 animated:NO];
    
@@ -641,6 +661,7 @@
 {
     NSString *diveID = [[AppManager sharedManager].loginResult.user.allDiveIDs objectAtIndex:self.carousel.currentItemIndex];
 
+    
     if ([diveInfoOfSelf.ID isEqualToString:[NSString stringWithFormat:@"%@",diveID]]) {
         
         [self setCoordinateValue:diveInfoOfSelf];

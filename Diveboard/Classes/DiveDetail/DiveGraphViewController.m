@@ -66,9 +66,18 @@
     NSString *diveShakenID   = m_DiveInformation.shakenID;
     
     NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@/profile.png?g=mobile_v003&u=m", SERVER_URL, myNickName, diveShakenID];
-    [zoomScrollView.imageView clearImageCacheForURL:[NSURL URLWithString:urlString]];
-        UIImageView *imgviewGraph = zoomScrollView.imageView;
+    
+    
+    if ([DiveOfflineModeManager sharedManager].isOffline) {
         
+        [zoomScrollView.imageView setImage:[[DiveOfflineModeManager sharedManager] getImageWithUrl:urlString]];
+
+        [SVProgressHUD dismiss];
+        
+    }else{
+        
+        [zoomScrollView.imageView clearImageCacheForURL:[NSURL URLWithString:urlString]];
+        UIImageView *imgviewGraph = zoomScrollView.imageView;
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
         
         [zoomScrollView.imageView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
@@ -78,12 +87,15 @@
             [SVProgressHUD dismiss];
             
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-
-             [imgviewGraph setImage:[[DiveOfflineModeManager sharedManager] getImageWithUrl:urlString]];
+            
+            [DiveOfflineModeManager sharedManager].isOffline = YES;
+            [imgviewGraph setImage:[[DiveOfflineModeManager sharedManager] getImageWithUrl:urlString]];
             [SVProgressHUD dismiss];
-
+            
         }];
-        
+    }
+    
+    
     
     // Do any additional setup after loading the view from its nib.
 }

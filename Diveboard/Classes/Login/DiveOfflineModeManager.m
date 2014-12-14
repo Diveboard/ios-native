@@ -262,7 +262,6 @@ static DiveOfflineModeManager *_sharedManager;
             }
         }
         
-        NSLog(@"One Dive filename : %@", fileName);
         
         return YES;
     } else {
@@ -446,7 +445,6 @@ static DiveOfflineModeManager *_sharedManager;
         
         NSMutableDictionary* newParams =[NSMutableDictionary dictionaryWithDictionary:[data objectForKey:kRequestParamKey]];
         
-        NSLog(@"%@",newParams);
         if (newParams.count > 2) {
         /// Update
             BOOL flag = YES;
@@ -568,7 +566,6 @@ static DiveOfflineModeManager *_sharedManager;
     [updateData writeToFile:fileName atomically:YES];
     
     _pendingRequestCount = (int)updateList.count;
-//    NSLog(@"update write filename : %@", fileName);
 }
 
 - (void) createNewDive:(NSDictionary *)data
@@ -746,7 +743,6 @@ static DiveOfflineModeManager *_sharedManager;
                 
                 [manager POST:urlString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
                     
-                    NSLog(@"%@",responseObject);
                     [updateList removeObject:updateItem];
                     
                     NSData *updateData = [NSKeyedArchiver archivedDataWithRootObject:updateList];
@@ -756,7 +752,7 @@ static DiveOfflineModeManager *_sharedManager;
                     [self updateLocalDiveToServer:finish];
 
                 } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                    NSLog(@"error : %@", error);
+
                     if (finish) {
                         finish();
                     }
@@ -768,8 +764,7 @@ static DiveOfflineModeManager *_sharedManager;
                 
                 AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
              [manager DELETE:urlString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                    NSLog(@"delete operation : %@", responseObject);
-                    
+                 
                     [updateList removeObject:updateItem];
                     
                     NSData *updateData = [NSKeyedArchiver archivedDataWithRootObject:updateList];
@@ -861,7 +856,6 @@ static DiveOfflineModeManager *_sharedManager;
                                                          options:NSJSONReadingAllowFragments
                                                            error:&error];
     
-//    NSLog(@"%@",jsonData);
     
     NSMutableDictionary* resultData = nil;
     
@@ -892,7 +886,6 @@ static DiveOfflineModeManager *_sharedManager;
     [self createDirectory:dirName];
     NSString *path = [NSString stringWithFormat:@"%@/%@",dirName,@"mobilespots.db.gz"];
     
-    NSLog(@"%@",path);
     
     m_requestOperation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
     [m_requestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -908,10 +901,8 @@ static DiveOfflineModeManager *_sharedManager;
         [ud setObject:[NSDate date] forKey:kSpotDBUpdateDate];
         [ud synchronize];
         
-        NSLog(@"Downloaded Spots.DB");
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
-                NSLog(@"Error: %@", error);
     }];
     [m_requestOperation start];
     

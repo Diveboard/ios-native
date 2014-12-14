@@ -88,7 +88,15 @@
 
 
         table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, btn.size.width, 0)];
-        [table setSeparatorInset:UIEdgeInsetsZero];
+        
+        if ([table respondsToSelector:@selector(setSeparatorInset:)]) {
+            [table setSeparatorInset:UIEdgeInsetsZero];
+        }
+        
+        if ([table respondsToSelector:@selector(setLayoutMargins:)]) {
+            [table setLayoutMargins:UIEdgeInsetsZero];
+        }
+        
         table.delegate = self;
         table.dataSource = self;
         //        table.layer.cornerRadius = 5;

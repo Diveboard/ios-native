@@ -703,6 +703,7 @@
         
         self.isLocal            = [[data objectForKey:@"is_local"] boolValue];
         self.localID            = getStringValue([data objectForKey:@"local_id"]);
+        self.userID    = getStringValue([data objectForKey:@"user_id"]);
         self.ID       = getStringValue([data objectForKey:@"id"]);
         self.shakenID = getStringValue([data objectForKey:@"shaken_id"]);
         self.guideName = getStringValue([data objectForKey:@"guide"]);
@@ -802,7 +803,7 @@
         
     }else{
         
-        [dic setObject:[AppManager sharedManager].loginResult.user.ID forKey:@"user_id"];
+        [dic setObject:self.userID forKey:@"user_id"];
         
     }
     
@@ -1060,7 +1061,6 @@
         
     }
     
-//    NSLog(@"%@",dic);
     
     return dic;
 }

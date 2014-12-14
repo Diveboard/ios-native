@@ -181,7 +181,6 @@ static AppManager *_sharedManager;
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             
-            NSLog(@"%@",error);
             
         }];
         
