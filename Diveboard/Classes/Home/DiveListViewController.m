@@ -184,7 +184,7 @@
         
         for (int i = 0 ; i < diveIDs.count ; i++) {
             
-            NSString* diveID = [diveIDs objectAtIndex:i];
+            NSString* diveID = [[diveIDs objectAtIndex:i] objectForKey:@"id"];
             
            id responseObject =  [[DiveOfflineModeManager sharedManager] getOneDiveInformation:diveID];
            

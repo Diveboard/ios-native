@@ -208,6 +208,7 @@
                 }
                 
             }
+            
             if (![[DiveOfflineModeManager sharedManager] isExistImageWithURL:self.smallURL]) {
                 
                 if (![[AppManager sharedManager].remainingPictures containsObject:self.smallURL]) {
@@ -742,6 +743,51 @@
         self.maxDepth = getStringValue([data objectForKey:@"maxdepth_value"]);
         self.maxDepthUnit = getStringValue([data objectForKey:@"maxdepth_unit"]);
         self.imageURL = getStringValue([data objectForKey:@"thumbnail_image_url"]);
+        
+        if (![[DiveOfflineModeManager sharedManager] isExistImageWithURL:self.imageURL]) {
+            
+            if (![[AppManager sharedManager].remainingPictures containsObject:self.imageURL]) {
+                
+                [[AppManager sharedManager].remainingPictures addObject:self.imageURL];
+                
+            }
+            
+        }
+
+        
+        
+        NSString *myNickName = [[AppManager sharedManager].loginResult.user.nickName stringByReplacingOccurrencesOfString:@" " withString:@""];
+        NSString *diveShakenID   = self.shakenID;
+        
+        NSString *graphThumbUrlString = [NSString stringWithFormat:@"%@/%@/%@/profile.png?g=mobile_v002&u=m", SERVER_URL, myNickName, diveShakenID];
+        
+        NSString *graphLargeUrlString = [NSString stringWithFormat:@"%@/%@/%@/profile.png?g=mobile_v003&u=m", SERVER_URL, myNickName, diveShakenID];
+        
+        
+        
+        if (![[DiveOfflineModeManager sharedManager] isExistImageWithURL:graphThumbUrlString]) {
+            
+            
+            if (![[AppManager sharedManager].remainingPictures containsObject:graphThumbUrlString]) {
+                
+                [[AppManager sharedManager].remainingPictures addObject:graphThumbUrlString];
+                
+            }
+            
+        }
+        
+        if (![[DiveOfflineModeManager sharedManager] isExistImageWithURL:graphLargeUrlString]) {
+            
+            
+            if (![[AppManager sharedManager].remainingPictures containsObject:graphLargeUrlString]) {
+                
+                [[AppManager sharedManager].remainingPictures addObject:graphLargeUrlString];
+                
+            }
+            
+        }
+        
+        
         self.spotInfo = [[DiveSpotInfo alloc] initWithDictionary:[data objectForKey:@"spot"]];
         NSArray *pics = [data objectForKey:@"pictures"];
         self.divePictures = [[NSMutableArray alloc] init];
