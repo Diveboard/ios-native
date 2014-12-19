@@ -101,16 +101,26 @@
         
     }
     
-    [self preloadDiveData:params_list :0 :^{
+    if(params_list.count > 0)
+    {
+        [self preloadDiveData:params_list :0 :^{
+            
+            self.isCompletePreLoad = YES;
+            
+        }];
         
-       self.isCompletePreLoad = YES;
+    }else{
         
-    }];
+        self.isCompletePreLoad = YES;
+        
+    }
     
 }
 
 - (void)preloadDiveData:(NSMutableArray*)params_list :(int)index :(void (^)())finish
 {
+    
+    
     
     NSString *authToken = [AppManager sharedManager].loginResult.token;
     
