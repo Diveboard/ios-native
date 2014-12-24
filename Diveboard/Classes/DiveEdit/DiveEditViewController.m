@@ -305,14 +305,13 @@
 
                         [DrawerMenuViewController sharedMenu].isEditedDive = NO;
                         [[AppManager sharedManager].diveListVC diveViewsUpdate];
-                        [self.navigationController popToRootViewControllerAnimated:YES];
-//                        [self.navigationController setViewControllers:@[[AppManager sharedManager].diveListVC]];
+                        [self.navigationController setViewControllers:@[[AppManager sharedManager].diveListVC]];
 
                         
                     }
                 } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                     
-                    [[DiveOfflineModeManager sharedManager] setIsOffline:YES];
+                    [DiveOfflineModeManager sharedManager].isOffline = YES;
                     [self saveDiveData];
 
                     
@@ -342,8 +341,7 @@
     
     [[AppManager sharedManager].diveListVC currentDiveViewUpdate];
     [DrawerMenuViewController sharedMenu].isEditedDive = NO;
-    [self.navigationController popToRootViewControllerAnimated:YES];
-//    [self.navigationController setViewControllers:@[[AppManager sharedManager].diveListVC]];
+    [self.navigationController setViewControllers:@[[AppManager sharedManager].diveListVC]];
     
 }
 - (void) createDiveSuccess :(NSDictionary *)responseObject
@@ -377,8 +375,7 @@
         [DrawerMenuViewController sharedMenu].isEditedDive = NO;
         [[DrawerMenuViewController sharedMenu] setMenuIndex:0];
         
-        [self.navigationController popToRootViewControllerAnimated:YES];
-//        [self.navigationController setViewControllers:@[[AppManager sharedManager].diveListVC]];
+        [self.navigationController setViewControllers:@[[AppManager sharedManager].diveListVC]];
         
     }
 }

@@ -417,6 +417,7 @@
             slideController.slideDirection = OSBlurSlideMenuControllerSlideFromLeftToRight;
             
             [self.view.window setRootViewController:slideController];
+            [DiveOfflineModeManager sharedManager].isRefresh = NO;
             
             self.txtPassword.text = @"";
             

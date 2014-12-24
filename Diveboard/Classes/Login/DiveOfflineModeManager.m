@@ -47,7 +47,7 @@ static DiveOfflineModeManager *_sharedManager;
         _isOffline      = NO;
         _isAvailable    = NO;
         _isUpdated      = NO;
-        
+        _isRefresh      = YES;
         fileManager = [NSFileManager defaultManager];
         [self updateSpotsDB];
         [self checkLocalDataExisting];
@@ -67,11 +67,11 @@ static DiveOfflineModeManager *_sharedManager;
     
     if (isOffline) {
         _isOffline = isOffline;
-        checkingTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckingOnlineReqestTime
-                                                         target:self
-                                                       selector:@selector(checkingRequestSend:)
-                                                       userInfo:nil
-                                                        repeats:YES];
+//        checkingTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckingOnlineReqestTime
+//                                                         target:self
+//                                                       selector:@selector(checkingRequestSend:)
+//                                                       userInfo:nil
+//                                                        repeats:YES];
         
     }
     else {
@@ -103,7 +103,7 @@ static DiveOfflineModeManager *_sharedManager;
               parameters:nil
                  success:^(AFHTTPRequestOperation *operation, id responseObject) {
                      
-        _isOffline = NO;
+            [self setIsOffline:NO];
                      
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
@@ -122,24 +122,27 @@ static DiveOfflineModeManager *_sharedManager;
     [reachablilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
         switch (status) {
             case AFNetworkReachabilityStatusNotReachable:
-//                NSLog(@"AFNetworkReachability Status NotReachable");
-//                reachable = NO;
-                _isOffline = YES;
+                
+                NSLog(@"AFNetworkReachability Status NotReachable");
+                [self setIsOffline:YES];
                 break;
+                
             case AFNetworkReachabilityStatusReachableViaWiFi:
-//                NSLog(@"AFNetworkReachability Status Reachable Via WiFi");
-                _isOffline = NO;
-//                reachable = YES;
+                
+                NSLog(@"AFNetworkReachability Status Reachable Via WiFi");
+                [self setIsOffline:NO];
                 break;
+                
             case AFNetworkReachabilityStatusReachableViaWWAN:
-//                NSLog(@"AFNetworkReachability Status Reachable Via WWAN");
-                _isOffline = NO;
-//                reachable = YES;
+                
+                NSLog(@"AFNetworkReachability Status Reachable Via WWAN");
+                [self setIsOffline:NO];
                 break;
+                
             default:
-//                NSLog(@"AFNetworkReachability   Unkown network status");
-                _isOffline = YES;
-//                reachable = NO;
+                
+                NSLog(@"AFNetworkReachability   Unkown network status");
+                [self setIsOffline:YES];
                 break;
         }
     }];

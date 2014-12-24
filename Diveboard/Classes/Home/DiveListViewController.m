@@ -810,7 +810,7 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
-        [[DiveOfflineModeManager sharedManager] setIsOffline:YES];
+        [DiveOfflineModeManager sharedManager].isOffline = YES;
         [self requestResultCheckingWithObject:[DiveOfflineModeManager sharedManager].getLoginResultData];
         
     }];
@@ -878,7 +878,7 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 
-        [[DiveOfflineModeManager sharedManager] setIsOffline:YES];
+        [DiveOfflineModeManager sharedManager].isOffline = YES;
         [self requestResultCheckingWithObject:[DiveOfflineModeManager sharedManager].getLoginResultData];
         
     }];
