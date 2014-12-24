@@ -132,13 +132,17 @@
     
     
     
-        UIImage* offlineImage = [[DiveOfflineModeManager sharedManager] getImageWithUrl:urlRequest.URL.absoluteString];
+    UIImage* offlineImage = [[DiveOfflineModeManager sharedManager] getImageWithUrl:urlRequest.URL.absoluteString];
 
-    
-    if (success) {
-        success(nil, nil, offlineImage);
-    } else {
-        self.image = offlineImage;
+    if(offlineImage != nil)
+    {
+        
+        if (success) {
+            success(nil, nil, offlineImage);
+        } else {
+            self.image = offlineImage;
+        }
+        
     }
     
     

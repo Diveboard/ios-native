@@ -31,7 +31,7 @@
     NSString *nameKey = @"name";
     NSString *markKey = @"mark";
     
-    NSMutableArray *arrayReviews = [[NSMutableArray alloc] init];
+    NSMutableArray *arrayReviews = [NSMutableArray array];
     
     if (m_DiveInformation.review.overall          > 0) {
         [arrayReviews addObject:@{nameKey: @"Overall:",

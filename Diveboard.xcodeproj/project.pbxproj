@@ -55,7 +55,6 @@
 		3CCD103218C5B3E2001AD995 /* UIButton+VTCustomFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCD102C18C5B3E2001AD995 /* UIButton+VTCustomFont.m */; };
 		3CCD103318C5B3E2001AD995 /* UILabel+VTCustomFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCD102E18C5B3E2001AD995 /* UILabel+VTCustomFont.m */; };
 		3CCD103418C5B3E2001AD995 /* UITextField+VTCustomFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCD103018C5B3E2001AD995 /* UITextField+VTCustomFont.m */; };
-		3CD100DE18C922B90001B625 /* TKDatePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CD100DD18C922B90001B625 /* TKDatePickerView.m */; };
 		3CD100E418C9321E0001B625 /* TKListPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CD100E318C9321E0001B625 /* TKListPickerView.m */; };
 		3CD100E618C96E020001B625 /* btn_close2.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CD100E518C96E020001B625 /* btn_close2.png */; };
 		3CD100E818C996A90001B625 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CD100E718C996A90001B625 /* MessageUI.framework */; };
@@ -343,8 +342,6 @@
 		3CCD102E18C5B3E2001AD995 /* UILabel+VTCustomFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+VTCustomFont.m"; sourceTree = "<group>"; };
 		3CCD102F18C5B3E2001AD995 /* UITextField+VTCustomFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextField+VTCustomFont.h"; sourceTree = "<group>"; };
 		3CCD103018C5B3E2001AD995 /* UITextField+VTCustomFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+VTCustomFont.m"; sourceTree = "<group>"; };
-		3CD100DC18C922B90001B625 /* TKDatePickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKDatePickerView.h; sourceTree = "<group>"; };
-		3CD100DD18C922B90001B625 /* TKDatePickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKDatePickerView.m; sourceTree = "<group>"; };
 		3CD100E218C9321E0001B625 /* TKListPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKListPickerView.h; sourceTree = "<group>"; };
 		3CD100E318C9321E0001B625 /* TKListPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKListPickerView.m; sourceTree = "<group>"; };
 		3CD100E518C96E020001B625 /* btn_close2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_close2.png; sourceTree = "<group>"; };
@@ -905,8 +902,6 @@
 				3C0B39741982B6A200A3FB6F /* DiveEditVC */,
 				E02BE41219CB501300CDB1CC /* CheckListPickerView.h */,
 				E02BE41319CB501300CDB1CC /* CheckListPickerView.m */,
-				3CD100DC18C922B90001B625 /* TKDatePickerView.h */,
-				3CD100DD18C922B90001B625 /* TKDatePickerView.m */,
 				3CD100E218C9321E0001B625 /* TKListPickerView.h */,
 				3CD100E318C9321E0001B625 /* TKListPickerView.m */,
 			);
@@ -2027,7 +2022,6 @@
 				C527947C1A06D4B4001A1091 /* DiveDetailShopGraphCell.m in Sources */,
 				C325A75619E4E86E0024BF5E /* AFURLRequestSerialization.m in Sources */,
 				C52794891A06D80D001A1091 /* DiveDetailBaseCell.m in Sources */,
-				3CD100DE18C922B90001B625 /* TKDatePickerView.m in Sources */,
 				E012565A19CFB158008D9A0B /* DiveEditTanksUsedViewController.m in Sources */,
 				3CE047E618BCBBB000FA47FF /* UIImageView+LBBlurredImage.m in Sources */,
 				E0B1D5A319C98BFC0007C481 /* DiveEditPhotosViewController.m in Sources */,
@@ -2260,17 +2254,14 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Diveboard/Diveboard-Prefix.pch";
 				INFOPLIST_FILE = "Diveboard/Diveboard-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Diveboard/Lib/UserVoiceSDK-3.2.1",
 				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lz",
-				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "5127b0d9-c68a-4d18-b94f-6555dc84b381";
+				PROVISIONING_PROFILE = "13306466-1817-4101-adf3-05485f31b208";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -2292,17 +2283,14 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Diveboard/Diveboard-Prefix.pch";
 				INFOPLIST_FILE = "Diveboard/Diveboard-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Diveboard/Lib/UserVoiceSDK-3.2.1",
 				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lz",
-				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "5127b0d9-c68a-4d18-b94f-6555dc84b381";
+				PROVISIONING_PROFILE = "13306466-1817-4101-adf3-05485f31b208";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -2327,6 +2315,7 @@
 				);
 				INFOPLIST_FILE = "DiveboardTests/DiveboardTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "13306466-1817-4101-adf3-05485f31b208";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -2347,6 +2336,7 @@
 				GCC_PREFIX_HEADER = "Diveboard/Diveboard-Prefix.pch";
 				INFOPLIST_FILE = "DiveboardTests/DiveboardTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "13306466-1817-4101-adf3-05485f31b208";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};

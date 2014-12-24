@@ -197,8 +197,6 @@
                     
                 }
                 
-                
-                
             }
             if (![[DiveOfflineModeManager sharedManager] isExistImageWithURL:self.mediumURL]) {
                 
@@ -974,27 +972,71 @@
     }
     
     if (![self.diveShop.name isEqualToString:@""]) {
+        
         [dic setObject:[self.diveShop getDataDictionary] forKey:@"shop"];
+        
+    }else{
+        
+        [dic setObject:[NSNull null] forKey:@"shop"];
+        
     }
     
     if (![self.visibility isEqualToString:@""]) {
-        [dic setObject:self.visibility forKey:@"visibility"];
+        
+        if([self.visibility isEqualToString:@"-"])
+        {
+            
+            [dic setObject:[NSNull null] forKey:@"visibility"];
+            
+        }else{
+            
+            [dic setObject:self.visibility forKey:@"visibility"];
+            
+        }
     }
+    
+    
     if (![self.water isEqualToString:@""]) {
-        [dic setObject:self.water forKey:@"water"];
+        
+        if ([self.water isEqualToString:@"-"]) {
+            
+            [dic setObject:[NSNull null] forKey:@"water"];
+            
+        }else{
+            
+            [dic setObject:self.water forKey:@"water"];
+            
+        }
     }
     
     
     if (![self.temp.bottom isEqualToString:@""]) {
+        
         [dic setObject:self.temp.bottom forKey:@"temp_bottom"];
         [dic setObject:self.temp.bottomUnit forKey:@"temp_bottom_unit"];
         [dic setObject:self.temp.bottomValue forKey:@"temp_bottom_value"];
+        
+    }else{
+        
+        [dic setObject:[NSNull null] forKey:@"temp_bottom"];
+        [dic setObject:[NSNull null] forKey:@"temp_bottom_unit"];
+        [dic setObject:[NSNull null] forKey:@"temp_bottom_value"];
+        
     }
 
     if (![self.temp.surface isEqualToString:@""]) {
+
         [dic setObject:self.temp.surface forKey:@"temp_surface"];
         [dic setObject:self.temp.surfaceUnit forKey:@"temp_surface_unit"];
         [dic setObject:self.temp.surfaceValue forKey:@"temp_surface_value"];
+        
+    }else{
+
+        [dic setObject:[NSNull null] forKey:@"temp_surface"];
+        [dic setObject:[NSNull null] forKey:@"temp_surface_unit"];
+        [dic setObject:[NSNull null] forKey:@"temp_surface_value"];
+        
+        
     }
     
     
@@ -1012,9 +1054,22 @@
 
     if (![self.number isEqualToString:@""]) {
         [dic setObject:self.number forKey:@"number"];
+    }else{
+        [dic setObject:[NSNull null] forKey:@"number"];
     }
+    
     if (![self.current isEqualToString:@""]) {
-        [dic setObject:self.current forKey:@"current"];
+        
+        if([self.current isEqualToString:@"-"])
+        {
+            
+            [dic setObject:[NSNull null] forKey:@"current"];
+            
+        }else{
+            
+            [dic setObject:self.current forKey:@"current"];
+            
+        }
     }
     
     if (![self.altitude isEqualToString:@""]) {

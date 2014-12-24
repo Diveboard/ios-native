@@ -343,6 +343,7 @@
         [m_collectionViewPhoto setFrame:frame];
         
         [UIView commitAnimations];
+        
         [m_btnRemove.titleLabel setTextColor:[UIColor whiteColor]];
         [m_imgRemove setImage:[UIImage imageNamed:@"btn_action_discard.png"]];
         
@@ -371,7 +372,22 @@
     if([activityItems count]>0){
         
         UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
-        [self presentViewController:activityViewController animated:YES completion:nil];
+        
+        if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
+            
+            [self presentViewController:activityViewController animated:YES completion:nil];
+            
+        }else{
+            
+            UIPopoverController *popover = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
+            
+            UICollectionViewCell* cell = [m_collectionViewPhoto cellForItemAtIndexPath:indexPath];
+            
+            [popover presentPopoverFromRect:CGRectMake(cell.center.x,cell.center.y+cell.frame.size.height, 0, 0) inView:self.view permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
+            
+            //self.m_currentPop = popover;
+            
+        }
         
     }
     

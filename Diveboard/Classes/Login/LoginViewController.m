@@ -369,6 +369,8 @@
 - (void) requestResultCheckingWithObject:(id)responseObject
 {
     
+    [self internetConnecting:NO];
+    
     
     if (responseObject) {
         NSDictionary *data;
@@ -395,7 +397,6 @@
             
             [[AppManager sharedManager] getUserData:data];
             
-            [self internetConnecting:NO];
             
             if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
                 [AppManager sharedManager].diveListVC = [[DiveListViewController alloc] initWithNibName:@"DiveListViewController" bundle:Nil];

@@ -313,10 +313,6 @@
 
 -(void)onOk:(id)sender{
     
-    if(![self checkIsValid]){
-        return;
-    }
-        
     
     if ([m_viewEdit isHidden]) {
         
@@ -327,6 +323,11 @@
         }
         
     }else{
+        
+        if(![self checkIsValid]){
+            return;
+        }
+        
         
         [m_viewEdit setHidden:YES];
         

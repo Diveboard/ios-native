@@ -619,7 +619,7 @@
 -(void)onChangeVisibility{
     
     TKListPickerView *listView = [[TKListPickerView alloc] initWithTitle:@"Visibility"
-                                                                     list:@[@"None",
+                                                                     list:@[
                                                                             @"Bad (under 5m / 15ft)",
                                                                             @"Average (5-10m / 15-30ft)",
                                                                             @"Good (10-25m / 40-75ft)",

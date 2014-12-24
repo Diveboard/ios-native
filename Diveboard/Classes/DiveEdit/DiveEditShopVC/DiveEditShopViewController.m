@@ -283,6 +283,7 @@
 
 - (void) setSearchState{
     
+    m_DiveInformation.diveShop = [[DiveShop alloc] initWithDictionary:nil];
     m_editShopState = DiveEditShopStateSearch;
     [m_mapViewShop removeAnnotations:m_mapViewShop.annotations];
 

@@ -92,6 +92,7 @@
 @property (nonatomic, strong) NSString *lat;
 @property (nonatomic, strong) NSString *lng;
 
+
 - (id)initWithDictionary:(NSDictionary *)data;
 - (NSDictionary*)getDataDictionary;
 

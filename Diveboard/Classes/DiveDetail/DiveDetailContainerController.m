@@ -93,7 +93,7 @@
     // trip name
     [lblTripName            setText:m_DiveInformation.tripName];
     
-     NSMutableString* strCityCountry = [[NSMutableString alloc] initWithString:@""];
+     NSMutableString* strCityCountry = [NSMutableString stringWithFormat:@""];
     
     if ([m_DiveInformation.spotInfo.ID floatValue] !=1 ) {
         
@@ -371,13 +371,13 @@
 {
     [SVProgressHUD show];
     
-    __block DiveEditViewController *viewController;
+//    __block DiveEditViewController *viewController;
     
     dispatch_queue_t dqueue = dispatch_queue_create("com.diveboard.gotodiveedit", 0);
     
     dispatch_async(dqueue, ^{
         
-        viewController = [[DiveEditViewController alloc] initWithDiveData:m_DiveInformation];
+        DiveEditViewController *viewController = [[DiveEditViewController alloc] initWithDiveData:m_DiveInformation];
 
         [viewController setEditDelegate:self];
         

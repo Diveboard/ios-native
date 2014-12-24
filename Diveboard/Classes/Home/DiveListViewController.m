@@ -588,8 +588,8 @@
         // internet is online
         
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:diveInfoOfSelf.imageURL]];
-        
-        [self.imgviewBackground setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+        UIImageView* imgBack = self.imgviewBackground;
+        [imgBack setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             
             [self.imgviewBackground setImageToBlur:image blurRadius:3.0f completionBlock:^(NSError *error) {
                 
@@ -693,13 +693,13 @@
     
     [SVProgressHUD show];
     
-    __block DiveDetailContainerController *viewController;
+//    __block DiveDetailContainerController *viewController;
     
     dispatch_queue_t dqueue = dispatch_queue_create("com.diveboard.gotodivedetail", 0);
     
     dispatch_async(dqueue, ^{
         
-        viewController = [[DiveDetailContainerController alloc] initWithDiveInformation:diveInfoOfSelf];
+        DiveDetailContainerController* viewController = [[DiveDetailContainerController alloc] initWithDiveInformation:diveInfoOfSelf];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             

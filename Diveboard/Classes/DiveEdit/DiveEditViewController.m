@@ -271,6 +271,7 @@
 
                 [manager POST:requestURLStr parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
                     
+//                    NSLog(@"%@",responseObject);
                     
                     BOOL success = [[DiveOfflineModeManager sharedManager] writeOneDiveInformation:responseObject overwrite:YES];
                     if (success) {
@@ -304,7 +305,8 @@
 
                         [DrawerMenuViewController sharedMenu].isEditedDive = NO;
                         [[AppManager sharedManager].diveListVC diveViewsUpdate];
-                        [self.navigationController setViewControllers:@[[AppManager sharedManager].diveListVC]];
+                        [self.navigationController popToRootViewControllerAnimated:YES];
+//                        [self.navigationController setViewControllers:@[[AppManager sharedManager].diveListVC]];
 
                         
                     }
@@ -340,7 +342,8 @@
     
     [[AppManager sharedManager].diveListVC currentDiveViewUpdate];
     [DrawerMenuViewController sharedMenu].isEditedDive = NO;
-    [self.navigationController setViewControllers:@[[AppManager sharedManager].diveListVC]];
+    [self.navigationController popToRootViewControllerAnimated:YES];
+//    [self.navigationController setViewControllers:@[[AppManager sharedManager].diveListVC]];
     
 }
 - (void) createDiveSuccess :(NSDictionary *)responseObject
@@ -374,7 +377,9 @@
         [DrawerMenuViewController sharedMenu].isEditedDive = NO;
         [[DrawerMenuViewController sharedMenu] setMenuIndex:0];
         
-        [self.navigationController setViewControllers:@[[AppManager sharedManager].diveListVC]];
+        [self.navigationController popToRootViewControllerAnimated:YES];
+//        [self.navigationController setViewControllers:@[[AppManager sharedManager].diveListVC]];
+        
     }
 }
 
