@@ -143,7 +143,6 @@
                     
                 } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
                     
-                    [DiveOfflineModeManager sharedManager].isOffline = YES;
                     
                     [imgview setImage:[[DiveOfflineModeManager sharedManager] getImageWithUrl:request.URL.absoluteString]];
                     [indicator stopAnimating];

@@ -26,6 +26,12 @@
     NSArray* m_viewTitleArr;
     BOOL m_isEdit;
     
+    DiveEditDetailViewController *detailController;
+    DiveEditSpotViewController* spotsController;
+    DiveEditShopViewController* shopController;
+    DiveEditBuddiesViewController* buddiesController;
+    DiveEditPhotosViewController* photosController;
+    DiveEditNotesViewController* noteController;
 }
 @end
 
@@ -67,6 +73,48 @@
     }
     return self;
 }
+-(void)setDiveInformation:(DiveInformation *)diveInfo
+{
+    
+    if (diveInfo) {
+        m_isEdit = YES;
+        diveInformation = diveInfo;
+        oldDiveInfo = [[DiveInformation alloc] initWithDictionary:[diveInfo getDataDictionary]];
+    }else{
+        m_isEdit = NO;
+        diveInformation = [[DiveInformation alloc] initWithDictionary:[NSDictionary dictionary]];
+        diveInformation.spotInfo = [[DiveSpotInfo alloc] initWithEmptySpot];
+        diveInformation.isLocal = YES;
+        diveInformation.localID = [NSString stringWithFormat:@"%.0f", [[NSDate date] timeIntervalSince1970]];
+        diveInformation.userID = [AppManager sharedManager].loginResult.user.ID;
+    }
+    
+    
+    
+    [detailController setDiveInformation:diveInformation];
+    [spotsController setDiveInformation:diveInformation];
+    [shopController setDiveInformation:diveInformation];
+    [buddiesController setDiveInformation:diveInformation];
+    [photosController setDiveInformation:diveInformation];
+    [noteController setDiveInformation:diveInformation];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+
+        if (m_isEdit) {
+            [m_btnBack setHidden:NO];
+            [m_btnDrawer setHidden:YES];
+        }else{
+            [m_btnBack setHidden:YES];
+            [m_btnDrawer setHidden:NO];
+            
+        }
+        
+        [self selectTabNum:0];
+        
+    });
+
+    
+}
 
 - (void)viewDidLoad
 {
@@ -77,29 +125,29 @@
     m_viewTitleArr = @[@"DIVE DETAILS",@"SPOT",@"SHOP",@"BUDDIES",@"PHOTOS",@"NOTE"];
     
     //// Dive Detail ///
-    DiveEditDetailViewController *detailController = [[DiveEditDetailViewController alloc] initWithDiveData:diveInformation];
+    detailController = [[DiveEditDetailViewController alloc] initWithDiveData:diveInformation];
     [detailController setTitle:m_viewTitleArr[0]];
     
     
     /// Spots //
-    DiveEditSpotViewController* spotsController = [[DiveEditSpotViewController alloc] initWithDiveData:diveInformation];
+    spotsController = [[DiveEditSpotViewController alloc] initWithDiveData:diveInformation];
     [spotsController setTitle:m_viewTitleArr[1]];
     
     // Shop ////
-    DiveEditShopViewController* shopController = [[DiveEditShopViewController alloc] initWithDiveData:diveInformation];
+     shopController = [[DiveEditShopViewController alloc] initWithDiveData:diveInformation];
     [shopController setTitle:m_viewTitleArr[2]];
 
     //  Buddies //
-    DiveEditBuddiesViewController* buddiesController = [[DiveEditBuddiesViewController alloc] initWithDiveData:diveInformation];
+    buddiesController = [[DiveEditBuddiesViewController alloc] initWithDiveData:diveInformation];
     [buddiesController setTitle:m_viewTitleArr[3]];
     
     // Photos
-    DiveEditPhotosViewController* photosController = [[DiveEditPhotosViewController alloc] initWithDiveData:diveInformation];
+    photosController = [[DiveEditPhotosViewController alloc] initWithDiveData:diveInformation];
     photosController.delegate = self;
     [photosController setTitle:m_viewTitleArr[4]];
     
     // Note ////
-    DiveEditNotesViewController* noteController = [[DiveEditNotesViewController alloc] initWithDiveData:diveInformation];
+    noteController = [[DiveEditNotesViewController alloc] initWithDiveData:diveInformation];
     [noteController setTitle:m_viewTitleArr[5]];
     
     [self setControllers:@[detailController,spotsController,shopController,buddiesController,photosController,noteController]];
@@ -311,7 +359,7 @@
                     }
                 } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                     
-                    [DiveOfflineModeManager sharedManager].isOffline = YES;
+                    [[DiveOfflineModeManager sharedManager] setIsOffline:YES];
                     [self saveDiveData];
 
                     

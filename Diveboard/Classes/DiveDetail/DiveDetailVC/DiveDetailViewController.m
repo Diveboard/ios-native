@@ -24,6 +24,13 @@
 {
     DiveInformation *m_DiveInformation;
     NSMutableArray *m_tableData;
+    DiveDetailShopGraphCell* graphShopCell;
+    DiveDetailDateCell* dateCell;
+    DiveDetailNoteCell* noteCell;
+    DiveDetailReviewCell* reviewCell;
+    DiveDetailTankUsedCell* tankUsedCell;
+    DiveDetailBuddiesCell* buddiesCell;
+    DiveBrowserCell* browserCell;
     
 }
 
@@ -74,6 +81,59 @@
         [m_tableView setLayoutMargins:UIEdgeInsetsZero];
     }
     
+    NSString* strNibCell;
+    
+    
+    strNibCell = @"DiveDetailShopGraphCell";
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:strNibCell owner:self options:nil];
+    graphShopCell = (DiveDetailShopGraphCell*)[nib objectAtIndex:0];
+    graphShopCell.delegate = self;
+    [graphShopCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    
+    
+    
+    strNibCell = @"DiveDetailDateCell";
+    nib = [[NSBundle mainBundle] loadNibNamed:strNibCell owner:self options:nil];
+    dateCell = (DiveDetailDateCell*)[nib objectAtIndex:0];
+    [dateCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    
+    
+    
+    strNibCell = @"DiveDetailNoteCell";
+    nib = [[NSBundle mainBundle] loadNibNamed:strNibCell owner:self options:nil];
+    noteCell = (DiveDetailNoteCell*)[nib objectAtIndex:0];
+    [noteCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    
+    strNibCell = @"DiveDetailReviewCell";
+    nib = [[NSBundle mainBundle] loadNibNamed:strNibCell owner:self options:nil];
+    reviewCell = (DiveDetailReviewCell*)[nib objectAtIndex:0];
+    [reviewCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    
+    
+    strNibCell = @"DiveDetailTankUsedCell";
+    nib = [[NSBundle mainBundle] loadNibNamed:strNibCell owner:self options:nil];
+    tankUsedCell = (DiveDetailTankUsedCell*)[nib objectAtIndex:0];
+    [tankUsedCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    
+        
+    
+    
+    strNibCell = @"DiveDetailBuddiesCell";
+    nib = [[NSBundle mainBundle] loadNibNamed:strNibCell owner:self options:nil];
+    buddiesCell = (DiveDetailBuddiesCell*)[nib objectAtIndex:0];
+    [buddiesCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    
+        
+    strNibCell = @"DiveBrowserCell";
+    nib = [[NSBundle mainBundle] loadNibNamed:strNibCell owner:self options:nil];
+    browserCell = (DiveBrowserCell*)[nib objectAtIndex:0];
+    [browserCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    
+    
+    
+    
+    
+    
     m_tableData = [[NSMutableArray alloc] init];
 
     // Do any additional setup after loading the view from its nib.
@@ -96,6 +156,13 @@
 {
     m_DiveInformation = diveInfo;
     
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [self showDetailData];
+        
+    });
+
+    
 }
 
 - (void) showDetailData
@@ -116,79 +183,31 @@
         
     
     
-//    if ([[AppManager sharedManager].loginResult.user.danData.address isKindOfClass:[NSArray class]]) {
-//        id country = [[AppManager sharedManager].loginResult.user.danData.address lastObject];
-//        if (country != [NSNull null]) {
-//            [vdlblCountry           setText:(NSString *)country];
-//        } else {
-//            [vdlblCountry setText:@""];
-//        }
-//        
-//    }else{
-//        
-//        [vdlblCountry setText:@""];
-//        
-//    }
     
     
-    
-    NSString* strNibCell;
-    strNibCell = @"DiveDetailShopGraphCell";
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:strNibCell owner:self options:nil];
-    DiveDetailShopGraphCell* graphShopCell = (DiveDetailShopGraphCell*)[nib objectAtIndex:0];
-    graphShopCell.delegate = self;
-    [graphShopCell setSelectionStyle:UITableViewCellSelectionStyleNone];
     [m_tableData addObject:graphShopCell];
     
     
-    
-    strNibCell = @"DiveDetailDateCell";
-    nib = [[NSBundle mainBundle] loadNibNamed:strNibCell owner:self options:nil];
-    DiveDetailDateCell* dateCell = (DiveDetailDateCell*)[nib objectAtIndex:0];
-    [dateCell setSelectionStyle:UITableViewCellSelectionStyleNone];
     [m_tableData addObject:dateCell];
 
     
-    
-    strNibCell = @"DiveDetailNoteCell";
-    nib = [[NSBundle mainBundle] loadNibNamed:strNibCell owner:self options:nil];
-    DiveDetailNoteCell* noteCell = (DiveDetailNoteCell*)[nib objectAtIndex:0];
-    [noteCell setSelectionStyle:UITableViewCellSelectionStyleNone];
     [m_tableData addObject:noteCell];
 
-    strNibCell = @"DiveDetailReviewCell";
-    nib = [[NSBundle mainBundle] loadNibNamed:strNibCell owner:self options:nil];
-    DiveDetailReviewCell* reviewCell = (DiveDetailReviewCell*)[nib objectAtIndex:0];
-    [reviewCell setSelectionStyle:UITableViewCellSelectionStyleNone];
     [m_tableData addObject:reviewCell];
 
     if (m_DiveInformation.tanksUsed.count > 0) {
 
-        strNibCell = @"DiveDetailTankUsedCell";
-        nib = [[NSBundle mainBundle] loadNibNamed:strNibCell owner:self options:nil];
-        DiveDetailTankUsedCell* tankUsedCell = (DiveDetailTankUsedCell*)[nib objectAtIndex:0];
-        [tankUsedCell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [m_tableData addObject:tankUsedCell];
-
         
     }
 
     if (m_DiveInformation.buddies.count > 0) {
         
-        strNibCell = @"DiveDetailBuddiesCell";
-        nib = [[NSBundle mainBundle] loadNibNamed:strNibCell owner:self options:nil];
-        DiveDetailBuddiesCell* buddiesCell = (DiveDetailBuddiesCell*)[nib objectAtIndex:0];
-        [buddiesCell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [m_tableData addObject:buddiesCell];
         
-        
     }
-    strNibCell = @"DiveBrowserCell";
-    nib = [[NSBundle mainBundle] loadNibNamed:strNibCell owner:self options:nil];
-    DiveBrowserCell* browserCell = (DiveBrowserCell*)[nib objectAtIndex:0];
-    [browserCell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    [m_tableData addObject:browserCell];
     
+    [m_tableData addObject:browserCell];
     
     
     [m_tableView reloadData];

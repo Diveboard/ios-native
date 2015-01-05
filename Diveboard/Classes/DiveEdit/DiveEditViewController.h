@@ -30,4 +30,6 @@
 
 - (id)initWithDiveData:(DiveInformation *)diveInfo;
 
+- (void)setDiveInformation:(DiveInformation *)diveInfo;
+
 @end

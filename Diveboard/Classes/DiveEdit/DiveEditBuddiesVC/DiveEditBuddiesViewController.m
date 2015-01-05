@@ -53,7 +53,21 @@
     return self;
 }
 
-
+-(void)setDiveInformation:(DiveInformation *)diveInfo
+{
+    m_DiveInformation = diveInfo;
+    
+    [self getOldBuddies];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+    
+        [m_CollectionViewBuddies reloadData];
+        
+        [m_CollectionViewBuddies setContentOffset:CGPointMake(0, 0)];
+        
+    });
+    
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -66,6 +80,8 @@
     
     m_AutoCompleteList = [[XDPopupListView alloc] initWithBoundView:nil dataSource:self delegate:self popupType:XDPopupListViewDropDown];
     
+    m_OldBuddies = [[NSMutableArray alloc] init];
+
 
     [self getOldBuddies];
     // Do any additional setup after loading the view from its nib.
@@ -237,7 +253,8 @@
 
 - (void)getOldBuddies {
     
-    m_OldBuddies = [[NSMutableArray alloc] init];
+    
+    [m_OldBuddies removeAllObjects];
     
     for (NSString* diveId in [AppManager sharedManager].loginResult.user.allDiveIDs) {
         

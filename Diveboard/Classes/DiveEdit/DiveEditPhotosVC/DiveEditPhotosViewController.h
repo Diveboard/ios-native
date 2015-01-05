@@ -34,5 +34,5 @@
 
 - (IBAction)onTakePicture:(id)sender;
 - (IBAction)onSelectPictureFromGallery:(id)sender;
-
+- (void)setDiveInformation:(DiveInformation *)diveInfo;
 @end

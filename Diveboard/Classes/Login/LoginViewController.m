@@ -312,7 +312,7 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
-        offlineManager.isOffline = YES;
+        [offlineManager setIsOffline:YES];
         
         [self requestResultCheckingWithObject:offlineManager.getLoginResultData];
         
@@ -516,7 +516,7 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 
-        offlineManager.isOffline = YES;
+        [offlineManager setIsOffline:YES];
         
         [self requestResultCheckingWithObject:offlineManager.getLoginResultData];
 

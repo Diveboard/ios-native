@@ -52,4 +52,7 @@ typedef NSUInteger DiveEditSpotState;
 - (IBAction)onAddManualSpot:(id)sender;
 - (IBAction)onDropDown:(id)sender;
 - (IBAction)onAddConfirm:(id)sender;
+
+- (void)setDiveInformation:(DiveInformation *)diveInfo;
+
 @end

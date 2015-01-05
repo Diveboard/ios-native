@@ -55,6 +55,21 @@
     
     return self;
 }
+
+-(void)setDiveInformation:(DiveInformation *)diveInfo{
+    
+    m_DiveInformation = diveInfo;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [m_collectionViewPhoto reloadData];
+        
+        [m_collectionViewPhoto scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
+        
+
+    });
+
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -69,6 +84,7 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+    
     // Dispose of any resources that can be recreated.
 }
 -(DiveEditPhotoCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath

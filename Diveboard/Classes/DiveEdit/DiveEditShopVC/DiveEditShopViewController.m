@@ -50,6 +50,28 @@
     return self;
 }
 
+-(void)setDiveInformation:(DiveInformation *)diveInfo
+{
+    m_DiveInformation = diveInfo;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+    
+        if (![m_DiveInformation.diveShop.ID isEqualToString:@""]) {
+            
+            
+            [self setAssignState];
+            
+            
+        }else{
+            
+            [self onSetCurrentLocation:nil];
+            [self setSearchState];
+            
+        }
+    });
+    
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -86,6 +108,19 @@
     m_txtSearch.inputAccessoryView = numberToolbar;
     
     
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    
+    if ([m_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+        [m_tableView setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    if ([m_tableView respondsToSelector:@selector(setLayoutMargins:)]) {
+        [m_tableView setLayoutMargins:UIEdgeInsetsZero];
+    }
+    
+    
     if (![m_DiveInformation.diveShop.ID isEqualToString:@""]) {
         
         
@@ -99,16 +134,6 @@
         
     }
     
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    
-    if ([m_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
-        [m_tableView setSeparatorInset:UIEdgeInsetsZero];
-    }
-    
-    if ([m_tableView respondsToSelector:@selector(setLayoutMargins:)]) {
-        [m_tableView setLayoutMargins:UIEdgeInsetsZero];
-    }
     // Do any additional setup after loading the view from its nib.
 }
 

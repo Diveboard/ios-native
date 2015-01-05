@@ -80,6 +80,12 @@
 -(void)setDiveInformation:(DiveInformation *)diveInfo
 {
     m_DiveInformation = diveInfo;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+    
+        [self showPhotoData];
+        
+    });
 }
 
 - (void)showPhotoData{
@@ -97,7 +103,14 @@
         [self.view setBackgroundColor:[UIColor whiteColor]];
         
     }
+    
     [m_collectionViewPhoto reloadData];
+    
+    if(m_DiveInformation.divePictures.count > 0)
+    {
+        [m_collectionViewPhoto scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
+        
+    }
 }
 
 -(DiveEditPhotoCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath

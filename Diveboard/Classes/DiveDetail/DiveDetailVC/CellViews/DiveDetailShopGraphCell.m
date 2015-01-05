@@ -70,7 +70,6 @@
             
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
 
-            [DiveOfflineModeManager sharedManager].isOffline = YES;
             
             [imgviewGraph setImage:[[DiveOfflineModeManager sharedManager] getImageWithUrl:urlString]];
             

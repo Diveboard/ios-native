@@ -267,6 +267,9 @@
 }
 -(NSString *)urlString{
     
+    
+    return self.smallURL;
+    
     if ([AppManager sharedManager].userSettings.pictureQuality == UserSettingPictureQualityTypeHigh) {
         
         return self.largeURL;
@@ -867,11 +870,19 @@
         
         [dic setObject:self.guideName forKey:@"guide"];
         
+    }else{
+        
+        [dic setObject:[NSNull null] forKey:@"guide"];
+        
     }
     
     if (![self.tripName isEqualToString:@""]) {
         
         [dic setObject:self.tripName forKey:@"trip_name"];
+        
+    }else{
+        
+        [dic setObject:[NSNull null] forKey:@"trip_name"];
         
     }
     
@@ -1073,7 +1084,13 @@
     }
     
     if (![self.altitude isEqualToString:@""]) {
+        
         [dic setObject:self.altitude forKey:@"altitude"];
+        
+    }else{
+        
+        [dic setObject:[NSNull null] forKey:@"altitude"];
+        
     }
     
     [dic setObject:self.privacy forKey:@"privacy"];

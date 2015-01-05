@@ -23,7 +23,8 @@ CGFloat const   kLBBlurredImageDefaultBlurRadius    = 20.0;
        completionBlock: (LBBlurredImageCompletionBlock) completion
 
 {
-    CIContext *context   = [CIContext contextWithOptions:nil];
+    
+    CIContext *context   = [CIContext contextWithOptions:@{kCIContextUseSoftwareRenderer : @(NO)}];
     CIImage *sourceImage = [CIImage imageWithCGImage:image.CGImage];
     
     // Apply clamp filter:

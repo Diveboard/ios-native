@@ -24,6 +24,7 @@
 {
     
     DiveCountlineView *rulerView;
+    DiveDetailContainerController* detailViewController;
 
 }
 @end
@@ -589,15 +590,14 @@
         
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:diveInfoOfSelf.imageURL]];
         UIImageView* imgBack = self.imgviewBackground;
-        [imgBack setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+        [self.imgviewBackground setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             
-            [self.imgviewBackground setImageToBlur:image blurRadius:3.0f completionBlock:^(NSError *error) {
+            [imgBack setImageToBlur:image blurRadius:3.0f completionBlock:^(NSError *error) {
                 
             }];
             
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
             
-            [DiveOfflineModeManager sharedManager].isOffline = YES;
             
             NSString* imgURL = diveInfoOfSelf.imageURL;
             
@@ -610,7 +610,7 @@
                 
                 backgroundImage = [[DiveOfflineModeManager sharedManager] getLocalDivePicture:imgURL];
             }
-            [self.imgviewBackground setImageToBlur:backgroundImage blurRadius:3.0f completionBlock:^(NSError *error) {
+            [imgBack setImageToBlur:backgroundImage blurRadius:3.0f completionBlock:^(NSError *error) {
                 
             }];
             
@@ -691,25 +691,32 @@
 - (void)oneDiveViewDetailClick:(OneDiveView *)diveView diveInfo:(DiveInformation *)diveInfoOfSelf
 {
     
-    [SVProgressHUD show];
+        [SVProgressHUD show];
     
-//    __block DiveDetailContainerController *viewController;
     
-    dispatch_queue_t dqueue = dispatch_queue_create("com.diveboard.gotodivedetail", 0);
-    
-    dispatch_async(dqueue, ^{
+        dispatch_queue_t dqueue = dispatch_queue_create("com.diveboard.gotodivedetail", 0);
         
-        DiveDetailContainerController* viewController = [[DiveDetailContainerController alloc] initWithDiveInformation:diveInfoOfSelf];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async(dqueue, ^{
             
-            [self.navigationController pushViewController:viewController animated:YES];
+            if (detailViewController != nil) {
+                
+                [detailViewController setDiveInformation:diveInfoOfSelf];
+                
+            }else{
+                
+                detailViewController = [[DiveDetailContainerController alloc] initWithDiveInformation:diveInfoOfSelf];
+                
+            }
             
-            [SVProgressHUD dismiss];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [self.navigationController pushViewController:detailViewController animated:YES];
+                
+                [SVProgressHUD dismiss];
+                
+            });
             
         });
-        
-    });
     
 }
 
@@ -810,7 +817,7 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
-        [DiveOfflineModeManager sharedManager].isOffline = YES;
+        [[DiveOfflineModeManager sharedManager] setIsOffline:YES];
         [self requestResultCheckingWithObject:[DiveOfflineModeManager sharedManager].getLoginResultData];
         
     }];
@@ -878,7 +885,7 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 
-        [DiveOfflineModeManager sharedManager].isOffline = YES;
+        [[DiveOfflineModeManager sharedManager] setIsOffline:YES];
         [self requestResultCheckingWithObject:[DiveOfflineModeManager sharedManager].getLoginResultData];
         
     }];

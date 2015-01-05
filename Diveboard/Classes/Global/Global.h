@@ -12,7 +12,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "LoginResult.h"
 #import "DiveListViewController.h"
-
+#import "DiveEditViewController.h"
 
 
 #define AUTH_TOKEN              @"9P+7PrBkhMBfrYrqk03g362xiwe8ETL0bJCubq7V8Bs="
@@ -109,6 +109,7 @@ typedef NSUInteger UserSettingDownloadType;
 @property (nonatomic, strong) NSMutableArray* remainingPictures;
 @property (nonatomic, strong) UserSettings* userSettings;
 @property (nonatomic, strong) DiveListViewController* diveListVC;
+@property (nonatomic, strong) DiveEditViewController* diveEditVC;
 
 -(void) getUserData:(NSDictionary*)loginResultData;
 

@@ -58,6 +58,17 @@
     return self;
 }
 
+-(void)setDiveInformation:(DiveInformation *)diveInfo
+{
+    m_DiveInformation = diveInfo;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+    
+        [self diveDataShow];
+        
+    });
+
+}
 
 - (void)viewDidLoad
 {
@@ -288,6 +299,9 @@
     
     
     [m_tableView reloadData];
+    
+    [m_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    
 }
 
 

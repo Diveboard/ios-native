@@ -216,7 +216,7 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
         // 13/May/2014
-        [DiveOfflineModeManager sharedManager].isOffline = YES;
+        [[DiveOfflineModeManager sharedManager] setIsOffline:YES];
         [self loadDiveData:diveID];
         
 //        [lblLoadingError setHidden:NO];

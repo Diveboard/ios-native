@@ -56,11 +56,21 @@
 -(void)setDiveInformation:(DiveInformation *)diveInfo
 {
     m_DiveInformation = diveInfo;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+
+        [self updateMapview];
+        
+    });
+
 }
 
 - (void) updateMapview
 {
     CLLocationCoordinate2D zoomLocation;
+    
+    [m_mapViewSpot removeAnnotations:m_mapViewSpot.annotations];
+    
     if ([m_DiveInformation.spotInfo.ID integerValue] != 1) {
         [m_btnMapType setHidden:NO];
         [m_viewZoomCtrl setHidden:NO];

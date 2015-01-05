@@ -131,22 +131,6 @@
     [self cancelImageRequestOperation];
     
     
-    
-    UIImage* offlineImage = [[DiveOfflineModeManager sharedManager] getImageWithUrl:urlRequest.URL.absoluteString];
-
-    if(offlineImage != nil)
-    {
-        
-        if (success) {
-            success(nil, nil, offlineImage);
-        } else {
-            self.image = offlineImage;
-        }
-        
-    }
-    
-    
-
     UIImage *cachedImage = [[[self class] sharedImageCache] cachedImageForRequest:urlRequest];
     if (cachedImage) {
         
@@ -158,48 +142,85 @@
         }
         
         self.af_imageRequestOperation = nil;
+        
     } else {
         if (placeholderImage) {
             self.image = placeholderImage;
         }
         
+        
+        
         __weak __typeof(self)weakSelf = self;
-        self.af_imageRequestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:urlRequest];
-        self.af_imageRequestOperation.responseSerializer = self.imageResponseSerializer;
-        [self.af_imageRequestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-            __strong __typeof(weakSelf)strongSelf = weakSelf;
-            if ([[urlRequest URL] isEqual:[strongSelf.af_imageRequestOperation.request URL]]) {
-
+        
+        dispatch_queue_t dqueue = dispatch_queue_create("com.diveboard.loadOfflineImage", 0);
+        
+        dispatch_async(dqueue, ^{
+            
+            UIImage* offlineImage = [[DiveOfflineModeManager sharedManager] getImageWithUrl:urlRequest.URL.absoluteString];
+            
+                if(offlineImage != nil)
+                {
+                    
+                    if (success) {
+                        
+                        success(nil, nil, offlineImage);
+                        
+                    } else {
+                        
+                        weakSelf.image = offlineImage;
+                        
+                    }
+                    
+                    [[[weakSelf class] sharedImageCache] cacheImage:offlineImage forRequest:urlRequest];
+                    
+                }
+            dispatch_async(dispatch_get_main_queue(), ^{
                 
-                    [[DiveOfflineModeManager sharedManager] writeImage:responseObject url:urlRequest.URL.absoluteString];
+                
+                self.af_imageRequestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:urlRequest];
+                self.af_imageRequestOperation.responseSerializer = self.imageResponseSerializer;
+                [self.af_imageRequestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+                    __strong __typeof(weakSelf)strongSelf = weakSelf;
+                    if ([[urlRequest URL] isEqual:[strongSelf.af_imageRequestOperation.request URL]]) {
+                        
+                        
+                        [[DiveOfflineModeManager sharedManager] writeImage:responseObject url:urlRequest.URL.absoluteString];
+                        
+                        
+                        if (success) {
+                            success(urlRequest, operation.response, responseObject);
+                        } else if (responseObject) {
+                            strongSelf.image = responseObject;
+                        }
+                        
+                        if (operation == strongSelf.af_imageRequestOperation){
+                            strongSelf.af_imageRequestOperation = nil;
+                        }
+                    }
+                    
+                    [[[strongSelf class] sharedImageCache] cacheImage:responseObject forRequest:urlRequest];
+                } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                    __strong __typeof(weakSelf)strongSelf = weakSelf;
+                    if ([[urlRequest URL] isEqual:[strongSelf.af_imageRequestOperation.request URL]]) {
+                        if (failure) {
+                            failure(urlRequest, operation.response, error);
+                        }
+                        
+                        if (operation == strongSelf.af_imageRequestOperation){
+                            strongSelf.af_imageRequestOperation = nil;
+                        }
+                    }
+                }];
+                
+                [[[self class] af_sharedImageRequestOperationQueue] addOperation:self.af_imageRequestOperation];
                 
                 
-                if (success) {
-                    success(urlRequest, operation.response, responseObject);
-                } else if (responseObject) {
-                    strongSelf.image = responseObject;
-                }
+            });
+            
+        });
+        
+        
 
-                if (operation == strongSelf.af_imageRequestOperation){
-                        strongSelf.af_imageRequestOperation = nil;
-                }
-            }
-
-            [[[strongSelf class] sharedImageCache] cacheImage:responseObject forRequest:urlRequest];
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            __strong __typeof(weakSelf)strongSelf = weakSelf;
-            if ([[urlRequest URL] isEqual:[strongSelf.af_imageRequestOperation.request URL]]) {
-                if (failure) {
-                    failure(urlRequest, operation.response, error);
-                }
-
-                if (operation == strongSelf.af_imageRequestOperation){
-                        strongSelf.af_imageRequestOperation = nil;
-                }
-            }
-        }];
-
-        [[[self class] af_sharedImageRequestOperationQueue] addOperation:self.af_imageRequestOperation];
     }
 }
 

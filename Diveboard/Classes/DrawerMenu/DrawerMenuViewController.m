@@ -274,19 +274,31 @@ static DrawerMenuViewController *sharedMenu = nil;
     
     [SVProgressHUD show];
     
-    UINavigationController* nav = (UINavigationController*)self.slideMenuController.contentViewController;
     
-    __block DiveEditViewController *viewController;
     
     dispatch_queue_t dqueue = dispatch_queue_create("com.diveboard.gotodivedetail", 0);
     
     dispatch_async(dqueue, ^{
         
-            viewController = [[DiveEditViewController alloc] initWithDiveData:nil];
+        if ([AppManager sharedManager].diveEditVC != nil) {
+            
+            [[AppManager sharedManager].diveEditVC setDiveInformation:nil];
+
+            
+        }else{
+            
+            [AppManager sharedManager].diveEditVC = [[DiveEditViewController alloc] initWithDiveData:nil];
+            
+        }
+        
+        [[AppManager sharedManager].diveEditVC setEditDelegate:nil];
+        
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            [nav setViewControllers:@[viewController]];
+            UINavigationController* nav = (UINavigationController*)self.slideMenuController.contentViewController;
+            
+            [nav setViewControllers:@[[AppManager sharedManager].diveEditVC]];
             
             [SVProgressHUD dismiss];
             

@@ -50,6 +50,18 @@
     
 }
 
+-(void)setDiveInformation:(DiveInformation *)diveInfo
+{
+    m_DiveInformation = diveInfo;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+
+        [m_txtDiveNote setText:m_DiveInformation.note];
+        
+    });
+    
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -91,6 +103,8 @@
 -(void)textViewDidChange:(UITextView *)textView{
     
     m_DiveInformation.note = m_txtDiveNote.text;
+    [DrawerMenuViewController sharedMenu].isEditedDive = YES;
+
     CGRect line = [textView caretRectForPosition:
                    textView.selectedTextRange.start];
     CGFloat overflow = line.origin.y + line.size.height

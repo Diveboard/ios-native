@@ -139,7 +139,6 @@
             }];
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
             
-            [DiveOfflineModeManager sharedManager].isOffline = YES;
             NSString* imgURL = m_DiveInformation.imageURL;
             UIImage *backgroundImage = nil;
             if ([[imgURL lowercaseString] hasPrefix:@"http://"] || [[imgURL lowercaseString] hasPrefix:@"https://"])
@@ -332,7 +331,6 @@
                     
                 } else {
                     
-                    [[DiveOfflineModeManager sharedManager] deleteDiveID:m_DiveInformation.ID];
                     
                     [self deleteDiveSuccess];
                 }
@@ -341,7 +339,7 @@
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             
-            [DiveOfflineModeManager sharedManager].isOffline = YES;
+            [[DiveOfflineModeManager sharedManager] setIsOffline:YES];
             
             [self diveDeleteRequest];
             
@@ -361,6 +359,8 @@
         }
     }
     
+    [[DiveOfflineModeManager sharedManager] deleteDiveID:m_DiveInformation.ID];
+    
     [SVProgressHUD showSuccessWithStatus:@"Success!"];
     [self.navigationController popViewControllerAnimated:YES];
     
@@ -371,39 +371,65 @@
 {
     [SVProgressHUD show];
     
-//    __block DiveEditViewController *viewController;
-    
-    dispatch_queue_t dqueue = dispatch_queue_create("com.diveboard.gotodiveedit", 0);
-    
-    dispatch_async(dqueue, ^{
-        
-        DiveEditViewController *viewController = [[DiveEditViewController alloc] initWithDiveData:m_DiveInformation];
 
-        [viewController setEditDelegate:self];
+    
+        dispatch_queue_t dqueue = dispatch_queue_create("com.diveboard.gotodiveedit", 0);
         
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async(dqueue, ^{
             
-            viewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
             
-            [self.navigationController pushViewController:viewController animated:YES];
+            if ([AppManager sharedManager].diveEditVC != nil) {
+                
+                [[AppManager sharedManager].diveEditVC setDiveInformation:m_DiveInformation];
+                
+                
+            }else{
             
-            [SVProgressHUD dismiss];
+                [AppManager sharedManager].diveEditVC = [[DiveEditViewController alloc] initWithDiveData:m_DiveInformation];
+                
+            }
+            
+            [[AppManager sharedManager].diveEditVC setEditDelegate:self];
+
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [AppManager sharedManager].diveEditVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+                
+                [self.navigationController pushViewController:[AppManager sharedManager].diveEditVC animated:YES];
+                
+                [SVProgressHUD dismiss];
+                
+            });
             
         });
         
-    });
+    
     
     
 }
 -(void)diveEditFinish:(DiveInformation *)diveInfo{
  
+    [self setDiveInformation:diveInfo];
+    
+}
+
+-(void)setDiveInformation:(DiveInformation *)diveInfo
+{
+    
     m_DiveInformation = diveInfo;
     [m_detailViewController setDiveInformation:m_DiveInformation];
     [m_photosViewController setDiveInformation:m_DiveInformation];
     [m_mapViewController setDiveInformation:m_DiveInformation];
     
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+    
+        [self clickButtonWithName:btnDetails];
+        
+    });
+    
 }
-
 
 
 @end

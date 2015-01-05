@@ -49,5 +49,7 @@ typedef NSUInteger DiveEditShopState;
 
 - (IBAction)setSearchState;
 
+- (void)setDiveInformation:(DiveInformation *)diveInfo;
+
 
 @end

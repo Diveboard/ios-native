@@ -65,6 +65,29 @@
     return self;
 }
 
+-(void)setDiveInformation:(DiveInformation *)diveInfo
+{
+    m_DiveInformation = diveInfo;
+    
+    //    if ([m_DiveInformation.spotInfo.lat floatValue] == 0 && [m_DiveInformation.spotInfo.lng floatValue] == 0 ) {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+    
+        if ([m_DiveInformation.spotInfo.ID floatValue] != 1) {
+            
+            [self setAssignState];
+            
+        }else{
+            
+            
+            [self onSetCurrentLocation:nil];
+            [self setSearchState];
+            
+            
+        }
+    });
+    
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -111,19 +134,6 @@
     }
 
     
-//    if ([m_DiveInformation.spotInfo.lat floatValue] == 0 && [m_DiveInformation.spotInfo.lng floatValue] == 0 ) {
-    if ([m_DiveInformation.spotInfo.ID floatValue] != 1) {
-        
-        [self setAssignState];
-        
-    }else{
-        
-        
-        [self onSetCurrentLocation:nil];
-        [self setSearchState];
-        
-        
-    }
     
     UIToolbar* numberToolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, 44)];
     numberToolbar.items = [NSArray arrayWithObjects:
@@ -151,6 +161,19 @@
         [m_tableView setLayoutMargins:UIEdgeInsetsZero];
     }
     
+    //    if ([m_DiveInformation.spotInfo.lat floatValue] == 0 && [m_DiveInformation.spotInfo.lng floatValue] == 0 ) {
+    if ([m_DiveInformation.spotInfo.ID floatValue] != 1) {
+        
+        [self setAssignState];
+        
+    }else{
+        
+        
+        [self onSetCurrentLocation:nil];
+        [self setSearchState];
+        
+        
+    }
     
     // Do any additional setup after loading the view from its nib.
 }
