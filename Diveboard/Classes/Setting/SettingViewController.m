@@ -328,6 +328,7 @@
     
     NSString *requestURLString = [NSString stringWithFormat:@"%@/api/V2/user/%@", SERVER_URL, sudoID];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager.requestSerializer setTimeoutInterval:REQUEST_TIME_OUT];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     [manager GET:requestURLString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"%@", responseObject);

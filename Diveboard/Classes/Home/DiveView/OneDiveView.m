@@ -206,6 +206,7 @@
                              @"flavour"   : FLAVOUR,
                              };
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager.requestSerializer setTimeoutInterval:REQUEST_TIME_OUT];
     [manager.requestSerializer setValue:@"multipart/form-data"  forHTTPHeaderField:@"Content-Type"];
     [manager.requestSerializer setValue:@"application/json"     forHTTPHeaderField:@"Accept"];
     [manager POST:requestURLString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {

@@ -140,6 +140,8 @@
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
+    [manager.requestSerializer setTimeoutInterval:REQUEST_TIME_OUT];
+    
     [manager.requestSerializer setValue:@"multipart/form-data"  forHTTPHeaderField:@"Content-Type"];
     
     [manager.requestSerializer setValue:@"application/json"     forHTTPHeaderField:@"Accept"];
@@ -791,6 +793,8 @@
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
+    [manager.requestSerializer setTimeoutInterval:REQUEST_TIME_OUT];
+    
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     
     [manager POST:requestURLString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -878,6 +882,7 @@
                              @"fbtoken": [info objectForKey:@"fbtoken"],
                              };
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager.requestSerializer setTimeoutInterval:REQUEST_TIME_OUT];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager POST:fbLoginURLString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
 

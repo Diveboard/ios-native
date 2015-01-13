@@ -321,6 +321,7 @@
     else {
         
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        [manager.requestSerializer setTimeoutInterval:REQUEST_TIME_OUT];
         [manager DELETE:requestURLString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
             
             if ([responseObject isKindOfClass:[NSDictionary class]]) {

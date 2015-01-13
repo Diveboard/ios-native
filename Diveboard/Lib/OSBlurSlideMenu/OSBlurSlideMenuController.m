@@ -452,15 +452,21 @@
 //    NSLog(@"blurRadius: %f", blurDegree);
 //    [self.blurView forceUpdate:NO blurWithDegree:blurDegree];
     
-    if (self.menuWasOpenAtPanBegin) {
+    if (panGesture.state == UIGestureRecognizerStateChanged) {
+
+        if (!self.menuWasOpenAtPanBegin && startPanGesturePoint.x > 50) {
+            return;
+        }
         CGRect startFrame = [self frameForMenuView];
         CGRect endFrame = [self frameForMenuViewDisappeared];
         
         CGRect menuFrame = startFrame;
         menuFrame.origin.x = (1.f - blurDegree) * endFrame.origin.x + blurDegree * startFrame.origin.x;
         self.menuViewController.view.frame = menuFrame;
+        
     }
 	
+    
 	if (panGesture.state == UIGestureRecognizerStateEnded)
 	{
         

@@ -344,6 +344,7 @@
     [SVProgressHUD showWithStatus:@"Uploading..." maskType:SVProgressHUDMaskTypeBlack];
     
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        [manager.requestSerializer setTimeoutInterval:REQUEST_TIME_OUT];
         manager.responseSerializer = [AFHTTPResponseSerializer serializer];
 
         [manager POST:requestURLStr parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {

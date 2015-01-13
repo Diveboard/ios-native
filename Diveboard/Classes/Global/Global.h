@@ -51,6 +51,8 @@
 
 #define kLoginResultPlistFileName @"loginResult.plist"
 
+#define REQUEST_TIME_OUT 15.0
+
 
 #pragma mark -
 

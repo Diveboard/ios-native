@@ -183,9 +183,20 @@
                 sel_view = ruler;
                 
                 if (maxValue > rulerCount) {
-                    float dt = (rulersRect.size.width + rulerPixelWidth) / maxValue;
-                    float xx = point.x - rulersRect.origin.x;
-                    currentValue = (xx / dt + 1);
+//                    float dt = (rulersRect.size.width + rulerPixelWidth) / maxValue;
+//                    float xx = point.x - rulersRect.origin.x;
+//                    currentValue = (xx / dt + 1);
+                    if (index == 1) {
+                        
+                        currentValue = index;
+                        
+                    }else{
+                        
+                        currentValue = floor(index * (maxValue - 1) / (rulerCount - 1)) ;
+                        
+                    }
+                    
+                    
                     if (currentValue > maxValue) currentValue = maxValue;
                 } else {
                     currentValue = index;
@@ -253,16 +264,24 @@
     }
 
     if (maxValue > rulerCount) {
-        float dt = rulersRect.size.width / maxValue;
-        float xx = (currentValue - 1) * dt + rulerPixelWidth;
-        CGPoint point = CGPointMake(rulersRect.origin.x + xx, self.frame.size.height / 2);
-        for (UIView *ruler in rulerPixels) {
-            CGRect rulerRect = CGRectInset(ruler.frame, -rulerPixelWidth * 1.37 * 0.5, -rulerPixelHeight * 0.6);
-            if (CGRectContainsPoint(rulerRect, point)) {
-                [ruler setFrame:CGRectMake(ruler.frame.origin.x, 5, ruler.frame.size.width, ruler.frame.size.height)];
-                [ruler setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:1.0f]];
-            }
-        }
+//        float dt = rulersRect.size.width / maxValue;
+//        float xx = (currentValue - 1) * dt + rulerPixelWidth;
+//        CGPoint point = CGPointMake(rulersRect.origin.x + xx, self.frame.size.height / 2);
+//        for (UIView *ruler in rulerPixels) {
+//            CGRect rulerRect = CGRectInset(ruler.frame, -rulerPixelWidth * 1.37 * 0.5, -rulerPixelHeight * 0.6);
+//            if (CGRectContainsPoint(rulerRect, point)) {
+//                [ruler setFrame:CGRectMake(ruler.frame.origin.x, 5, ruler.frame.size.width, ruler.frame.size.height)];
+//                [ruler setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:1.0f]];
+//            }
+//        }
+        int index =  floor(currentValue * (rulerCount -1)/(maxValue-1));
+        
+        
+        UIView *ruler = [rulerPixels objectAtIndex:index];
+        [ruler setFrame:CGRectMake(ruler.frame.origin.x, 5, ruler.frame.size.width, ruler.frame.size.height)];
+        [ruler setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:1.0f]];
+
+        
     } else {
         
         UIView *ruler = [rulerPixels objectAtIndex:(currentValue - 1)];

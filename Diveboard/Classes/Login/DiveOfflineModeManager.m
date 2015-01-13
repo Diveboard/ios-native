@@ -97,6 +97,8 @@ static DiveOfflineModeManager *_sharedManager;
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
+    [manager.requestSerializer setTimeoutInterval:REQUEST_TIME_OUT];
+    
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     
     [manager         GET:SERVER_URL
@@ -744,6 +746,8 @@ static DiveOfflineModeManager *_sharedManager;
                 
                 AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
                 
+                [manager.requestSerializer setTimeoutInterval:REQUEST_TIME_OUT];
+                
                 [manager POST:urlString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
                     
                     [updateList removeObject:updateItem];
@@ -766,6 +770,7 @@ static DiveOfflineModeManager *_sharedManager;
             } else {  // delete dive
                 
                 AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+                [manager.requestSerializer setTimeoutInterval:REQUEST_TIME_OUT];
              [manager DELETE:urlString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
                  
                     [updateList removeObject:updateItem];

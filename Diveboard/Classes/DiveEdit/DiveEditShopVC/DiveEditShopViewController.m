@@ -360,6 +360,7 @@
     NSString *requestURLString = [NSString stringWithFormat:@"%@/api/search_shop_text", SERVER_URL];
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager.requestSerializer setTimeoutInterval:REQUEST_TIME_OUT];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager POST:requestURLString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
@@ -387,6 +388,17 @@
                 
             }
             
+            if (m_txtSearch.text.length > 2) {
+                
+                NSDictionary* fShop = [m_arrShop firstObject];
+                
+                CLLocationCoordinate2D firstShoptLocation = CLLocationCoordinate2DMake(getDoubleValue([fShop objectForKey:@"lat"]), getDoubleValue([fShop objectForKey:@"lng"]));
+                
+                [m_mapViewShop setCenterCoordinate:firstShoptLocation zoomLevel:2 animated:NO];
+                
+            }
+
+            
             [m_tableView reloadData];
             [SVProgressHUD dismiss];
             
@@ -413,8 +425,8 @@
     
     [self.view endEditing:YES];
     NSDictionary *params = @{@"term": m_txtSearch.text,
-                             @"lat": [NSNumber numberWithDouble:m_mapViewShop.centerCoordinate.latitude],
-                             @"lng": [NSNumber numberWithDouble:m_mapViewShop.centerCoordinate.longitude],
+//                             @"lat": [NSNumber numberWithDouble:m_mapViewShop.centerCoordinate.latitude],
+//                             @"lng": [NSNumber numberWithDouble:m_mapViewShop.centerCoordinate.longitude],
                              @"apikey" : API_KEY,
                              @"auth_token" : [AppManager sharedManager].loginResult.token,
                              };

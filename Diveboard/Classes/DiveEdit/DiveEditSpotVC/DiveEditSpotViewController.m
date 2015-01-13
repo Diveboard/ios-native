@@ -407,6 +407,7 @@
         NSString *requestURLString = [NSString stringWithFormat:@"%@/api/search_spot_text", SERVER_URL];
         
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        [manager.requestSerializer setTimeoutInterval:REQUEST_TIME_OUT];
         manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         [manager POST:requestURLString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
             
@@ -471,15 +472,28 @@
 
 - (void) filterSearchResult:(NSDictionary *)data
 {
+    
+    double minLat = 0;
+    double maxLat = 0;
+    double minLng = 0;
+    double maxLng = 0;
+    
     if (!spotSearchResultArray) {
         spotSearchResultArray = [[NSMutableArray alloc] init];
     }
+    
     [spotSearchResultArray removeAllObjects];
+    
     [m_arrAnnotations removeAllObjects];
+    
     if ([[data objectForKey:@"success"] boolValue]) {
+        
         NSArray *results = [data objectForKey:@"spots"];
+        
         int index = 0;
+        
         for (NSDictionary *elem in results) {
+            
             index++;
             DiveSpotInfo *spotInfo = [[DiveSpotInfo alloc] initWithDictionary:elem];
             [spotSearchResultArray addObject:spotInfo];
@@ -494,6 +508,34 @@
             [m_mapViewSpot addAnnotation:annotation];
             
             [m_arrAnnotations addObject:annotation];
+            
+            
+            if (minLat > [spotInfo.lat doubleValue]) {
+                
+                minLat = [spotInfo.lat doubleValue];
+                
+            }
+            
+            
+            if (maxLat < [spotInfo.lat doubleValue]) {
+                
+                maxLat = [spotInfo.lat doubleValue];
+                
+            }
+            
+            if (minLng > [spotInfo.lng doubleValue]) {
+                
+                minLng = [spotInfo.lng doubleValue];
+                
+            }
+            
+            if (maxLng < [spotInfo.lng doubleValue]) {
+                
+                maxLng = [spotInfo.lng doubleValue];
+                
+            }
+            
+            
             
             
         }
@@ -511,7 +553,7 @@
             DiveSpotInfo* fObj = [spotSearchResultArray firstObject];
             CLLocationCoordinate2D firstSpotLocation = CLLocationCoordinate2DMake([fObj.lat doubleValue], [fObj.lng doubleValue]);
             
-            [m_mapViewSpot setCenterCoordinate:firstSpotLocation zoomLevel:10 animated:NO];
+            [m_mapViewSpot setCenterCoordinate:firstSpotLocation zoomLevel:2 animated:NO];
 
         }
         [m_lblNoResult setHidden:YES];
@@ -713,6 +755,7 @@
     }else{
         
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        [manager.requestSerializer setTimeoutInterval:REQUEST_TIME_OUT];
         manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         [manager POST:requestURLString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
             

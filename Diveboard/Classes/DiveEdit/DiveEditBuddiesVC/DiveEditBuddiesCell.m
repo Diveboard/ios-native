@@ -193,6 +193,7 @@
     NSString *requestURLString = [NSString stringWithFormat:@"%@/api/search/user.json", SERVER_URL];
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager.requestSerializer setTimeoutInterval:REQUEST_TIME_OUT];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager POST:requestURLString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         

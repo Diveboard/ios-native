@@ -150,6 +150,7 @@
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [manager.requestSerializer setTimeoutInterval:REQUEST_TIME_OUT];
     [manager POST:requestURLString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseObject

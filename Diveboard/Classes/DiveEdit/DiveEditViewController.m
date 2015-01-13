@@ -317,6 +317,7 @@
             else {
                 AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
 
+                [manager.requestSerializer setTimeoutInterval:REQUEST_TIME_OUT];
                 [manager POST:requestURLStr parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
                     
 //                    NSLog(@"%@",responseObject);
