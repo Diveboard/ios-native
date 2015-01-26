@@ -231,12 +231,28 @@
 
 - (void) updatePendingRequestAction
 {
+    
     DiveOfflineModeManager *offlineManager = [DiveOfflineModeManager sharedManager];
-    if (offlineManager.pendingRequestCount) {
-        [offlineManager updateLocalDiveToServer:^{
-            [self settingDataShow];
-        }];
+    
+    if (offlineManager.isOffline) {
+        
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Please check your internet connection" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        
+        [alert show];
+        
+    }else{
+        
+        if (offlineManager.pendingRequestCount) {
+            
+            [[AppManager sharedManager].diveListVC refreshAction];
+//            [offlineManager updateLocalDiveToServer:^{
+//                [self settingDataShow];
+//            }];
+        }
+        
     }
+    
+    
 }
 
 - (void) accessSudoAction

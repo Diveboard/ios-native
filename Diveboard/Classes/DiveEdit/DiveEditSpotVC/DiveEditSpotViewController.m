@@ -473,11 +473,6 @@
 - (void) filterSearchResult:(NSDictionary *)data
 {
     
-    double minLat = 0;
-    double maxLat = 0;
-    double minLng = 0;
-    double maxLng = 0;
-    
     if (!spotSearchResultArray) {
         spotSearchResultArray = [[NSMutableArray alloc] init];
     }
@@ -509,35 +504,6 @@
             
             [m_arrAnnotations addObject:annotation];
             
-            
-            if (minLat > [spotInfo.lat doubleValue]) {
-                
-                minLat = [spotInfo.lat doubleValue];
-                
-            }
-            
-            
-            if (maxLat < [spotInfo.lat doubleValue]) {
-                
-                maxLat = [spotInfo.lat doubleValue];
-                
-            }
-            
-            if (minLng > [spotInfo.lng doubleValue]) {
-                
-                minLng = [spotInfo.lng doubleValue];
-                
-            }
-            
-            if (maxLng < [spotInfo.lng doubleValue]) {
-                
-                maxLng = [spotInfo.lng doubleValue];
-                
-            }
-            
-            
-            
-            
         }
         
         
@@ -550,10 +516,12 @@
     } else {
         
         if (m_txtSearch.text.length > 2) {
-            DiveSpotInfo* fObj = [spotSearchResultArray firstObject];
-            CLLocationCoordinate2D firstSpotLocation = CLLocationCoordinate2DMake([fObj.lat doubleValue], [fObj.lng doubleValue]);
+//            DiveSpotInfo* fObj = [spotSearchResultArray firstObject];
+//            CLLocationCoordinate2D firstSpotLocation = CLLocationCoordinate2DMake([fObj.lat doubleValue], [fObj.lng doubleValue]);
+//            
+//            [m_mapViewSpot setCenterCoordinate:firstSpotLocation zoomLevel:2 animated:NO];
             
-            [m_mapViewSpot setCenterCoordinate:firstSpotLocation zoomLevel:2 animated:NO];
+            [m_mapViewSpot showAnnotations:[m_mapViewSpot annotations] animated:YES];
 
         }
         [m_lblNoResult setHidden:YES];

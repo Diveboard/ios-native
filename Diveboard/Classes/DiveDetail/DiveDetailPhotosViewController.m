@@ -77,6 +77,16 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+- (void)viewWillLayoutSubviews
+{
+ 
+    [super viewWillLayoutSubviews];
+    
+    [m_collectionViewPhoto reloadData];
+
+    
+    
+}
 -(void)setDiveInformation:(DiveInformation *)diveInfo
 {
     m_DiveInformation = diveInfo;

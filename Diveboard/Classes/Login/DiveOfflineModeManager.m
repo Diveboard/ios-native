@@ -56,7 +56,7 @@ static DiveOfflineModeManager *_sharedManager;
         NSString *dirName = [self getCahchePathFileName:@"images/"];
         [self createDirectory:dirName];
         
-//        [self startCheckingInternetConnection];
+        [self startCheckingInternetConnection];
         
     }
     return self;
@@ -65,31 +65,31 @@ static DiveOfflineModeManager *_sharedManager;
 - (void)setIsOffline:(BOOL)isOffline
 {
     
+    _isOffline = isOffline;
+    
     if (isOffline) {
-        _isOffline = isOffline;
+        
         checkingTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckingOnlineReqestTime
                                                          target:self
                                                        selector:@selector(checkingRequestSend:)
                                                        userInfo:nil
                                                         repeats:YES];
         
-    }
-    else {
+    }else {
+        
         [checkingTimer invalidate];
         checkingTimer = nil;
         [self updateSpotsDB];
-        if ([self checkUpdateDive] && !self.isRefresh) {
-            
-            [self updateLocalDiveToServer:^{
-                _isOffline = isOffline;
-                
-            }];
-            
-        }
-        else {
-            _isOffline = isOffline;
-        }
+//        if ([self checkUpdateDive] && !self.isRefresh) {
+//            
+//            [self updateLocalDiveToServer:^{
+//                _isOffline = isOffline;
+//                
+//            }];
+//            
+//        }
     }
+    
 }
 
 - (void) checkingRequestSend:(NSTimer *)dt
@@ -115,40 +115,40 @@ static DiveOfflineModeManager *_sharedManager;
     
 }
 
-//- (void) startCheckingInternetConnection
-//{
-//    AFNetworkReachabilityManager *reachablilityManager = [AFNetworkReachabilityManager sharedManager];
-//    
-//    [reachablilityManager startMonitoring];
-//    
-//    [reachablilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
-//        switch (status) {
-//            case AFNetworkReachabilityStatusNotReachable:
-//                
-//                NSLog(@"AFNetworkReachability Status NotReachable");
-//                [self setIsOffline:YES];
-//                break;
-//                
-//            case AFNetworkReachabilityStatusReachableViaWiFi:
-//                
-//                NSLog(@"AFNetworkReachability Status Reachable Via WiFi");
-//                [self setIsOffline:NO];
-//                break;
-//                
-//            case AFNetworkReachabilityStatusReachableViaWWAN:
-//                
-//                NSLog(@"AFNetworkReachability Status Reachable Via WWAN");
-//                [self setIsOffline:NO];
-//                break;
-//                
-//            default:
-//                
-//                NSLog(@"AFNetworkReachability   Unkown network status");
-//                [self setIsOffline:YES];
-//                break;
-//        }
-//    }];
-//}
+- (void) startCheckingInternetConnection
+{
+    AFNetworkReachabilityManager *reachablilityManager = [AFNetworkReachabilityManager sharedManager];
+    
+    [reachablilityManager startMonitoring];
+    
+    [reachablilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        switch (status) {
+            case AFNetworkReachabilityStatusNotReachable:
+                
+                NSLog(@"AFNetworkReachability Status NotReachable");
+                [self setIsOffline:YES];
+                break;
+                
+            case AFNetworkReachabilityStatusReachableViaWiFi:
+                
+                NSLog(@"AFNetworkReachability Status Reachable Via WiFi");
+                [self setIsOffline:NO];
+                break;
+                
+            case AFNetworkReachabilityStatusReachableViaWWAN:
+                
+                NSLog(@"AFNetworkReachability Status Reachable Via WWAN");
+                [self setIsOffline:NO];
+                break;
+                
+            default:
+                
+                NSLog(@"AFNetworkReachability   Unkown network status");
+                [self setIsOffline:YES];
+                break;
+        }
+    }];
+}
 
 - (BOOL) checkLocalDataExisting
 {
@@ -860,21 +860,26 @@ static DiveOfflineModeManager *_sharedManager;
     
 //    NSString* jsonString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
     
-    NSDictionary *jsonData = [NSJSONSerialization JSONObjectWithData:responseData
-                                                         options:NSJSONReadingAllowFragments
-                                                           error:&error];
-    
     
     NSMutableDictionary* resultData = nil;
     
-    if ([[jsonData objectForKey:@"success"] boolValue]) {
+    if (responseData != nil) {
         
-        NSDictionary *picData = [jsonData objectForKey:@"picture"];
+        NSDictionary *jsonData = [NSJSONSerialization JSONObjectWithData:responseData
+                                                                 options:NSJSONReadingAllowFragments
+                                                                   error:&error];
         
-        resultData = [NSMutableDictionary dictionaryWithDictionary: [jsonData objectForKey:@"result"]];
         
-        [resultData setObject:[picData objectForKey:@"id"] forKey:@"id"];
-
+        if ([[jsonData objectForKey:@"success"] boolValue]) {
+            
+            NSDictionary *picData = [jsonData objectForKey:@"picture"];
+            
+            resultData = [NSMutableDictionary dictionaryWithDictionary: [jsonData objectForKey:@"result"]];
+            
+            [resultData setObject:[picData objectForKey:@"id"] forKey:@"id"];
+            
+            
+        }
         
     }
     

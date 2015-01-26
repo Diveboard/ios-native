@@ -262,10 +262,19 @@
 {
     
     
-    
-    
     CGSize deviceSize = [UIScreen mainScreen].bounds.size;
-
+    
+    if (SYSTEM_VERSION_LESS_THAN(@"8.0") && !isPortrateScreen)
+    {
+        
+        float w = deviceSize.width;
+        
+        deviceSize.width = deviceSize.height;
+        
+        deviceSize.height = w;
+        
+    }
+    
     
      int diveCount = (int)[AppManager sharedManager].loginResult.user.allDiveIDs.count;
     
@@ -282,17 +291,17 @@
         
         if (deviceSize.height == 568) {  // iPhone 5
             
-            rect = CGRectMake(0, 45, deviceSize.width, 420);
+            rect = CGRectMake(20, 45, deviceSize.width-20, 420);
             
         }
         else if (deviceSize.height == 480) {  // iPhone 4
             
-            rect = CGRectMake(0, 35, deviceSize.width, 360);
+            rect = CGRectMake(20, 35, deviceSize.width-20, 360);
             
         }
         else {  // iPad
             
-            rect = CGRectMake(0, 90, deviceSize.width, 700);
+            rect = CGRectMake(2, 90, deviceSize.width-4, 700);
             
         }
         
@@ -447,13 +456,24 @@
 
     CGSize deviceSize = [UIScreen mainScreen].bounds.size;
     
+    if (SYSTEM_VERSION_LESS_THAN(@"8.0") && !isPortrateScreen)
+    {
+        
+        float w = deviceSize.width;
+        
+        deviceSize.width = deviceSize.height;
+        
+        deviceSize.height = w;
+        
+    }
+    
     CGRect rect;
 
     if (isPortrateScreen) {
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
             
-            rect = CGRectMake(20 , 0, 280, self.carousel.frame.size.height);
+            rect = CGRectMake(0 , 0, 280, self.carousel.frame.size.height);
             
         } else {
             
@@ -492,6 +512,18 @@
     CGRect rect;
     
     CGSize deviceSize = [UIScreen mainScreen].bounds.size;
+    
+    if (SYSTEM_VERSION_LESS_THAN(@"8.0") && !isPortrateScreen)
+    {
+        
+        float w = deviceSize.width;
+        
+        deviceSize.width = deviceSize.height;
+        
+        deviceSize.height = w;
+        
+    }
+    
     
     if (isPortrateScreen) {
         

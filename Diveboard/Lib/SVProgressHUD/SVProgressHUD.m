@@ -882,6 +882,7 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
     if (_maskImageView == nil) {
         
         _maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
+        [_maskImageView setContentMode:UIViewContentModeScaleAspectFill];
         [self insertSubview:_maskImageView belowSubview:self.hudView];
     }
     return _maskImageView;

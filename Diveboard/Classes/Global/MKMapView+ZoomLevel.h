@@ -17,4 +17,6 @@
                   zoomLevel:(float)zoomLevel
                    animated:(BOOL)animated;
 
+-(void)setZoomAnnotationsBounds;
+
 @end
