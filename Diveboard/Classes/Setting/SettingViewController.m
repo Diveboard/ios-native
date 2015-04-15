@@ -416,9 +416,14 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
+    @try {
+        NSArray* arrData = [m_arrSettingData objectAtIndex:section];
+        return arrData.count;
+    }
+    @catch (NSException *exception) {
+        return 0;
+    }
 
-    NSArray* arrData = [m_arrSettingData objectAtIndex:section];
-    return arrData.count;
     
 }
 
