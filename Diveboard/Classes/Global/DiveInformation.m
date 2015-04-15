@@ -22,11 +22,11 @@
         self.class_             = @"Spot";
         self.countryID          = @"";
         self.countryCode        = @"BLANK";
-        self.countryFlagBig     = @"http://stage.diveboard.com/img/flags/hd/blank.png";
-        self.countryFlagSmall   = @"http://stage.diveboard.com/img/flags/blank.gif";
+        self.countryFlagBig     = @"http://www.diveboard.com/img/flags/hd/blank.png";
+        self.countryFlagSmall   = @"http://www.diveboard.com/img/flags/blank.gif";
         self.countryName        = @"";
         self.flavour            = @"public";
-        self.fullPermalink      = @"http://stage.diveboard.com/explore/spots/country/new-location-L3eegT/new-dive-S3eegT";
+        self.fullPermalink      = @"http://www.diveboard.com/explore/spots/country/new-location-L3eegT/new-dive-S3eegT";
         self.ID                 = @"1";
         self.lat                = @"0";
         self.lng                = @"0";
