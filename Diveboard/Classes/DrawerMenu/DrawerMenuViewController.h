@@ -21,7 +21,9 @@
 @property (nonatomic, assign) BOOL isEditedDive;
 @property (nonatomic, assign) BOOL isShowList;
 
--(void) toggleDrawerMenu;
+- (void) toggleDrawerMenu;
 - (void) setMenuIndex:(int)menuIndex;
+- (void) refreshAction;
+
 + (DrawerMenuViewController*)sharedMenu;
 @end

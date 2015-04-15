@@ -369,7 +369,27 @@
                                                                error:nil];
         if ([[data objectForKey:@"success"] boolValue]) {
             
-            [m_arrShop addObjectsFromArray:(NSArray *)[data objectForKey:@"shops"]];
+            
+            NSArray* arr = [NSArray arrayWithArray:[data objectForKey:@"shops"]];
+            
+            for (int i = 0 ; i < arr.count; i++) {
+                
+                NSDictionary* shop = arr[i];
+                CLLocationCoordinate2D shopLocation;
+                
+                shopLocation = CLLocationCoordinate2DMake(getDoubleValue([shop objectForKey:@"lat"]), getDoubleValue([shop objectForKey:@"lng"]));
+                
+                
+                if (shopLocation.latitude != 0 && shopLocation.longitude != 0) {
+                    
+                    [m_arrShop addObject:shop];
+                    
+                }
+                
+                
+            }
+            
+            
             for (int i = 0 ; i < m_arrShop.count; i++) {
                 
                 
@@ -378,23 +398,25 @@
                 
                 shopLocation = CLLocationCoordinate2DMake(getDoubleValue([shop objectForKey:@"lat"]), getDoubleValue([shop objectForKey:@"lng"]));
                 
-                MKPointAnnotation *annotation = [[MKPointAnnotation alloc] init];
-                [annotation setTitle:[NSString stringWithFormat:@"%d: %@",i+1,getStringValue([shop objectForKey:@"name"])]];
-                [annotation setCoordinate:shopLocation];
                 
-                [m_mapViewShop addAnnotation:annotation];
-                [m_arrAnnotations addObject:annotation];
-             
+                
+                    MKPointAnnotation *annotation = [[MKPointAnnotation alloc] init];
+                    [annotation setTitle:[NSString stringWithFormat:@"%d: %@",i+1,getStringValue([shop objectForKey:@"name"])]];
+                    [annotation setCoordinate:shopLocation];
+                    
+                    [m_mapViewShop addAnnotation:annotation];
+                    [m_arrAnnotations addObject:annotation];
                 
             }
             
             if (m_txtSearch.text.length > 2) {
                 
-                NSDictionary* fShop = [m_arrShop firstObject];
+//                NSDictionary* fShop = [m_arrShop firstObject];
+//                
+//                CLLocationCoordinate2D firstShoptLocation = CLLocationCoordinate2DMake(getDoubleValue([fShop objectForKey:@"lat"]), getDoubleValue([fShop objectForKey:@"lng"]));
                 
-                CLLocationCoordinate2D firstShoptLocation = CLLocationCoordinate2DMake(getDoubleValue([fShop objectForKey:@"lat"]), getDoubleValue([fShop objectForKey:@"lng"]));
-                
-                [m_mapViewShop setCenterCoordinate:firstShoptLocation zoomLevel:2 animated:NO];
+//                [m_mapViewShop setCenterCoordinate:firstShoptLocation zoomLevel:2 animated:NO];
+                [m_mapViewShop showAnnotations:[m_mapViewShop annotations] animated:YES];
                 
             }
 
