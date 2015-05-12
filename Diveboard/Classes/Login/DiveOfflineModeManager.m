@@ -177,9 +177,32 @@ static DiveOfflineModeManager *_sharedManager;
     return self.isUpdated;
 }
 
+- (BOOL)addSkipBackupAttributeToItemAtPath:(NSString *) filePathString
+{
+    NSURL* URL= [NSURL fileURLWithPath: filePathString];
+    
+    NSFileManager *fileManager= [NSFileManager defaultManager];
+    NSError *error = nil;
+    if(![fileManager createDirectoryAtPath:filePathString withIntermediateDirectories:YES attributes:nil error:&error]) {
+        // An error has occurred, do something to handle it
+        NSLog(@"Failed to create directory \"%@\". Error: %@", filePathString, error);
+    }
+    
+    assert([[NSFileManager defaultManager] fileExistsAtPath: [URL path]]);
+    
+    BOOL success = [URL setResourceValue: [NSNumber numberWithBool: YES]
+                                  forKey: NSURLIsExcludedFromBackupKey error: &error];
+    if(!success){
+        NSLog(@"Error excluding %@ from backup %@", [URL lastPathComponent], error);
+    }
+    return success;
+}
+
 - (NSString*) getCahchePathFileName:(NSString *)filename
 {
-    return  [self getFullpathFilename:[NSString stringWithFormat:@"cache/%@",filename]];
+    NSString *path =  [self getFullpathFilename:[NSString stringWithFormat:@"cache/%@",filename]];
+    [self addSkipBackupAttributeToItemAtPath:path];
+    return path;
 }
 
 - (NSString *) getFullpathFilename:(NSString *)filename

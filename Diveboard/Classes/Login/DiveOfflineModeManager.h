@@ -101,6 +101,7 @@ typedef enum _diveUpdateType
 
 - (BOOL) checkUpdateDive;
 
+- (BOOL)addSkipBackupAttributeToItemAtPath:(NSString *) filePathString;
 
 
 @end
