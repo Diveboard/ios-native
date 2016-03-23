@@ -18,7 +18,7 @@
 #define AUTH_TOKEN              @"9P+7PrBkhMBfrYrqk03g362xiwe8ETL0bJCubq7V8Bs="
 #define API_KEY                 @"vr7J6gUuy4ChTUUp2TJybFk"
 #define FLAVOUR                 @"mobile"
-#define SERVER_URL              @"http://www.diveboard.com"
+#define SERVER_URL              @"https://www.diveboard.com"
 //#define SERVER_URL              @"http://stage.diveboard.com"
 
 #define kLoginMode              @"loginMode"

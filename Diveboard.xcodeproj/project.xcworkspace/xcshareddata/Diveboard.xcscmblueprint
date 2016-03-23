@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "2776E86CE564810D287E54E385CAB8B3F8EF48FD",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "2776E86CE564810D287E54E385CAB8B3F8EF48FD" : 0,
+    "9D2EEFDF-1DF3-4A62-A11D-A044D9B799FA" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "461116EC-A4E6-43B5-BF8B-E1684EE6F29B",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "2776E86CE564810D287E54E385CAB8B3F8EF48FD" : "diveboard-iphone",
+    "9D2EEFDF-1DF3-4A62-A11D-A044D9B799FA" : "Diveboard"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Diveboard",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Diveboard.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "diveboard.plan.io:diveboard-iphone.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "2776E86CE564810D287E54E385CAB8B3F8EF48FD"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "ssh:\/\/diveboard.plan.io\/diveboard-iphone.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "9D2EEFDF-1DF3-4A62-A11D-A044D9B799FA"
+    }
+  ]
+}
