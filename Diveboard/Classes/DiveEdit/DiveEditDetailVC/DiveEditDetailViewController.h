@@ -12,6 +12,7 @@
 @interface DiveEditDetailViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>
 {
     IBOutlet UITableView* m_tableView;
+    float verticalContentOffset;
     
 }
 

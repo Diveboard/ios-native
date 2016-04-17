@@ -171,7 +171,8 @@ static AppManager *_sharedManager;
                     if (![DiveOfflineModeManager sharedManager].isOffline) {
                         [[DiveOfflineModeManager sharedManager] writeLoginResultData:loginResult];
                     }
-                    
+                    [[DiveOfflineModeManager sharedManager] writeLoginResultData:loginResult];
+                  
                     self.loginResult = [[LoginResult alloc] initWithDictionary:loginResult];
                     self.loginResult.user.allDiveIDs = [NSMutableArray arrayWithArray:[[self.loginResult.user.allDiveIDs reverseObjectEnumerator] allObjects]];
                 

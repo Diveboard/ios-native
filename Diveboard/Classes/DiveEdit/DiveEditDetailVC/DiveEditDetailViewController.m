@@ -706,8 +706,8 @@
         
     }
 
+    verticalContentOffset  = m_tableView.contentOffset.y;
     [self showPopupView:m_editValueVC.view];
-    
     
 }
 -(void)onChangeDate{
@@ -835,13 +835,14 @@
     
     [DrawerMenuViewController sharedMenu].isEditedDive = YES;
     [self diveDataShow];
+    [m_tableView setContentOffset:CGPointMake(0, verticalContentOffset)];
     [m_KLCPopup dismissPresentingPopup];
     
     
 }
 
 -(void)didCancelValueForDiveEdit{
-    
+    [m_tableView setContentOffset:CGPointMake(0, verticalContentOffset)];
     [m_KLCPopup dismissPresentingPopup];
 }
 

@@ -217,6 +217,7 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
         // 13/May/2014
+        NSLog(@"loadDiveRequest has failed : %@", operation.responseString);
         [[DiveOfflineModeManager sharedManager] setIsOffline:YES];
         [self loadDiveData:diveID];
         

@@ -57,7 +57,7 @@ static DiveOfflineModeManager *_sharedManager;
         [self createDirectory:dirName];
         
         [self startCheckingInternetConnection];
-        
+        NSLog(@"initing of OfflineManager");
     }
     return self;
 }
@@ -68,7 +68,7 @@ static DiveOfflineModeManager *_sharedManager;
     _isOffline = isOffline;
     
     if (isOffline) {
-        
+        NSLog(@"Now Offline");
         checkingTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckingOnlineReqestTime
                                                          target:self
                                                        selector:@selector(checkingRequestSend:)
@@ -105,8 +105,8 @@ static DiveOfflineModeManager *_sharedManager;
               parameters:nil
                  success:^(AFHTTPRequestOperation *operation, id responseObject) {
                      
-            [self setIsOffline:NO];
-                     
+        [self setIsOffline:NO];
+        NSLog(@"checking online timer : online now --------");
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
         NSLog(@"checking online timer : offline yet --------");
@@ -154,6 +154,7 @@ static DiveOfflineModeManager *_sharedManager;
 {
     NSString *loginResultFilepath = [self getFullpathFilename:kLoginResultFilename];
     self.isAvailable = [fileManager fileExistsAtPath:loginResultFilepath];
+    NSLog(@"isAvailable : %d", self.isAvailable);
     return self.isAvailable;
 }
 
@@ -181,7 +182,7 @@ static DiveOfflineModeManager *_sharedManager;
 {
     NSURL* URL= [NSURL fileURLWithPath: filePathString];
     
-    NSFileManager *fileManager= [NSFileManager defaultManager];
+    //NSFileManager *fileManager= [NSFileManager defaultManager];
     NSError *error = nil;
     if(![fileManager createDirectoryAtPath:filePathString withIntermediateDirectories:YES attributes:nil error:&error]) {
         // An error has occurred, do something to handle it
@@ -196,6 +197,9 @@ static DiveOfflineModeManager *_sharedManager;
         NSLog(@"Error excluding %@ from backup %@", [URL lastPathComponent], error);
     }
     return success;
+    
+    // "/var/mobile/Containers/Data/Application/C78FE954-CD9A-4009-99CA-94190FAAF92D/Documents/cache/310721/diveInfo.dat"
+    // "/var/mobile/Containers/Data/Application/2B6CC6E0-9C9E-4E6E-8E54-47D5ACCA09A8/Documents/cache/1460506516/diveInfo.dat
 }
 
 - (NSString*) getCahchePathFileName:(NSString *)filename

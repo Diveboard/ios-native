@@ -292,11 +292,12 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
 
     [manager.requestSerializer setTimeoutInterval:REQUEST_TIME_OUT];
-  
+    
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [offlineManager checkUpdateDive];
     [manager POST:requestURLString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-//        NSLog(@"---- LOGIN RESULT ----\n%@", operation.responseString);
+        NSLog(@"---- LOGIN RESULT ----\n%@", operation.responseString);
         
         if ([self updatedDiveInformation:responseObject]) {
             
@@ -312,7 +313,7 @@
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
+        NSLog(@"faliled login request : %@", operation.responseString);
         [offlineManager setIsOffline:YES];
         
         [self requestResultCheckingWithObject:offlineManager.getLoginResultData];
@@ -322,9 +323,13 @@
 
 - (BOOL) updatedDiveInformation:(id)responseObject
 {
+//    if (![offlineManager getLoginResultData]) {
+//        return NO;
+//    }
     if (![offlineManager getLoginResultData]) {
         return NO;
     }
+
     if (!offlineManager.isUpdated) {
         return NO;
     }
@@ -348,7 +353,7 @@
             
             LoginResult *nowLoginResult = [[LoginResult alloc] initWithDictionary:data];
             LoginResult *oldLoginResult = [[LoginResult alloc] initWithDictionary:[offlineManager getLoginResultData]];
-            
+            NSLog(@"Old : %@, New : %@", oldLoginResult.ID, nowLoginResult.ID);
             if ([nowLoginResult.ID isEqualToString:oldLoginResult.ID]) {
                 
                 return YES;

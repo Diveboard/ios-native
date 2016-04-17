@@ -396,7 +396,7 @@ static DrawerMenuViewController *sharedMenu = nil;
     }
     [userDefault removeObjectForKey:kLoginMode];
     [userDefault synchronize];
-    [[DiveOfflineModeManager sharedManager] deleteLoginResultData];
+//    [[DiveOfflineModeManager sharedManager] deleteLoginResultData];
 
         if ([AppManager sharedManager].diveListVC.preloadRequestManagers) {
             
