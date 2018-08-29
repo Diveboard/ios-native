@@ -266,10 +266,7 @@
     
 }
 -(NSString *)urlString{
-    
-    
-    return self.smallURL;
-    
+
     if ([AppManager sharedManager].userSettings.pictureQuality == UserSettingPictureQualityTypeHigh) {
         
         return self.largeURL;
