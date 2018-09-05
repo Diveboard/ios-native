@@ -43,6 +43,7 @@
     
     m_indexPath = indexPath;
     [m_btnAdd setHidden:YES];
+    [m_btnYoutube setHidden:YES];
     
      _longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressDetected:)];
     [self addGestureRecognizer:_longPressRecognizer];
@@ -67,6 +68,21 @@
     
 }
 
+-(void)setYoutubeButton:(NSIndexPath *)indexPath :(NSString *)youtubeVideoId
+{
+    
+    m_indexPath = indexPath;
+    self.youtubeVideoId = youtubeVideoId;
+
+    [m_btnYoutube setBackgroundImage:[UIImage imageNamed:@"btn_youtube.png"] forState:UIControlStateNormal];
+    
+    [m_btnYoutube setHidden:NO];
+    
+    [self removeGestureRecognizer:_longPressRecognizer];
+    
+    
+}
+
 -(void) longPressDetected:(UIGestureRecognizer*) gestureRecognizer{
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(didLongPressedPhoto:::)]) {
@@ -83,4 +99,12 @@
         [self.delegate didClickedAddPhotoButton:m_indexPath];
     }
 }
+- (void)onYoutubeButton:(id)sender {
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(didClickedYoutubeButton::)]) {
+        
+        [self.delegate didClickedYoutubeButton:m_indexPath :self.youtubeVideoId];
+    }
+}
+
 @end

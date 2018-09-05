@@ -238,6 +238,22 @@
         }
      
     }
+    //Check if Youtube Video
+    if ([self.media rangeOfString:@"video"].location != NSNotFound && [self.player rangeOfString:@"youtube.com"].location != NSNotFound) {
+        NSError *error = NULL;
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"src\\=\\'http\\:\\/\\/www\\.youtube\\.com\\/embed\\/([a-zA-Z0-9]+)\\?wmode\\=opaque\\&autoplay\\=0\\'"
+                                                                               options:NSRegularExpressionCaseInsensitive
+                                                                                 error:&error];
+        NSArray *matches = [regex matchesInString:self.player options:0 range:NSMakeRange(0, [self.player length])];
+        NSString *youtubeVideoId = NULL;
+        if (matches.count>0) {
+            //NSRange matchRange = [match range];
+            NSRange matchRange = [matches[0] rangeAtIndex:1];
+            self.youtubeVideoId = [self.player substringWithRange:matchRange];
+            self.isYoutube = true;
+        }
+    }
+    
     return self;
 }
 

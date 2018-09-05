@@ -15,7 +15,7 @@
 {
     IBOutlet UIView *viewMain;
     IBOutlet UIButton *btnClose;
-    
+    IBOutlet UIImageView *btnYoutube;
 }
 
 //@property (nonatomic) int startIndex;

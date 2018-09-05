@@ -25,7 +25,7 @@
 @property (nonatomic, strong) id<DiveDetailPhotosViewDelegate> delegate;
 
 - (id)initWithDiveInformation:(DiveInformation *) diveInfo;
-- (void)setDiveInformation:(DiveInformation *)diveInfo;
-
+- (void)setDiveInformation:(DiveInformation *) diveInfo;
+- (void)didClickedYoutubeButton:(NSIndexPath *) indexPath :(NSString*)youtubeVideoId;
 
 @end

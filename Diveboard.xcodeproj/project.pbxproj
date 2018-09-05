@@ -123,6 +123,7 @@
 		3CF3378318BD48FE001D2DF0 /* DiveCountlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF3378218BD48FE001D2DF0 /* DiveCountlineView.m */; };
 		3CF3378518BD591F001D2DF0 /* DiveCountlineView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3CF3378418BD591F001D2DF0 /* DiveCountlineView.xib */; };
 		3CF3780718DD22CD00D832B3 /* DiveEditViewController-ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3CF3780618DD22CD00D832B3 /* DiveEditViewController-ipad.xib */; };
+		6AB050AD213F672F00DC40BB /* btn_youtube.png in Resources */ = {isa = PBXBuildFile; fileRef = 6AB050AC213F672E00DC40BB /* btn_youtube.png */; };
 		C313798519DEDC2600F4B3DD /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C313798419DEDC2600F4B3DD /* libsqlite3.0.dylib */; };
 		C31B7AA019DE465700BE6239 /* GZIP.m in Sources */ = {isa = PBXBuildFile; fileRef = C31B7A9F19DE465700BE6239 /* GZIP.m */; };
 		C31CC26B19E5903B001CA1F7 /* progress_mask.png in Resources */ = {isa = PBXBuildFile; fileRef = C31CC26A19E5903B001CA1F7 /* progress_mask.png */; };
@@ -432,6 +433,7 @@
 		3CF3378218BD48FE001D2DF0 /* DiveCountlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiveCountlineView.m; sourceTree = "<group>"; };
 		3CF3378418BD591F001D2DF0 /* DiveCountlineView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiveCountlineView.xib; sourceTree = "<group>"; };
 		3CF3780618DD22CD00D832B3 /* DiveEditViewController-ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "DiveEditViewController-ipad.xib"; sourceTree = "<group>"; };
+		6AB050AC213F672E00DC40BB /* btn_youtube.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_youtube.png; sourceTree = "<group>"; };
 		C313798419DEDC2600F4B3DD /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		C31B7A9B19DE42FB00BE6239 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
 		C31B7A9E19DE465700BE6239 /* GZIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GZIP.h; sourceTree = "<group>"; };
@@ -1042,10 +1044,10 @@
 				3C13084618F3E1DC00D51AC7 /* DataRequestManager.m */,
 				3CE7FA4E1933731700D72A34 /* DiveBoardNavigationController.h */,
 				3CE7FA4F1933731700D72A34 /* DiveBoardNavigationController.m */,
+				E0B1D5AC19C9BE150007C481 /* DiveDatePicker.m */,
 				3C66AB0118F538C7000AB0D6 /* DiveOfflineModeManager.h */,
 				3C66AB0218F538C7000AB0D6 /* DiveOfflineModeManager.m */,
 				E0B1D5AB19C9BE150007C481 /* DiveDatePicker.h */,
-				E0B1D5AC19C9BE150007C481 /* DiveDatePicker.m */,
 				E0B1D5B219C9EE740007C481 /* DiveDatePicker.xib */,
 				E035C3C819D0D17700FE5266 /* MKMapView+ZoomLevel.h */,
 				E035C3C919D0D17700FE5266 /* MKMapView+ZoomLevel.m */,
@@ -1128,6 +1130,7 @@
 		3CE047BA18BCBB4C00FA47FF /* button */ = {
 			isa = PBXGroup;
 			children = (
+				6AB050AC213F672E00DC40BB /* btn_youtube.png */,
 				C36D415119DB04B8003CBFE5 /* no_picture.png */,
 				C3A1675719D9BEB300D29509 /* btn_checked.png */,
 				C3A1675819D9BEB300D29509 /* btn_unchecked.png */,
@@ -1919,6 +1922,7 @@
 				C3A92DBE19E098C9003C9B58 /* WalletViewController.xib in Resources */,
 				3C539E2018EA46C200470897 /* icon58.png in Resources */,
 				3C539E2218EA46C200470897 /* icon76.png in Resources */,
+				6AB050AD213F672F00DC40BB /* btn_youtube.png in Resources */,
 				C5B7350619F6C1F7005FA191 /* uv_idea.png in Resources */,
 				E0A25C9119C62C300043A849 /* full_diveboard_grey.png in Resources */,
 				E0A25C9819C716FE0043A849 /* btn_back_black.png in Resources */,
