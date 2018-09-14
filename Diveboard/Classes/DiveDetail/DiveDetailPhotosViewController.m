@@ -9,7 +9,7 @@
 #import "DiveDetailPhotosViewController.h"
 #import "DiveEditPhotoCell.h"
 #import "Global.h"
-@interface DiveDetailPhotosViewController ()
+@interface DiveDetailPhotosViewController () <DiveEditPhotoCellDelegate>
 {
     DiveInformation* m_DiveInformation;
 }
@@ -127,10 +127,12 @@
 {
     DiveEditPhotoCell *cell=[collectionView dequeueReusableCellWithReuseIdentifier:@"PhotoCell" forIndexPath:indexPath];
     
-    
         DivePicture* divePicture = [m_DiveInformation.divePictures objectAtIndex:indexPath.row];
         [cell setDivePicture:indexPath:divePicture];
-        
+        if (divePicture.isYoutube) {
+            [cell setYoutubeButton:indexPath:divePicture.youtubeVideoId];
+            cell.delegate = self;
+        }
     return cell;
     
     
@@ -161,6 +163,11 @@
     
     
     return size;
+}
+
+-(void)didClickedYoutubeButton:(NSIndexPath *)indexPath :(NSString*)youtubeVideoId
+{
+    [GlobalMethods launchYoutubeVideo:youtubeVideoId];
 }
 
 @end

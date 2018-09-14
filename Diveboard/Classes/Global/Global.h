@@ -127,7 +127,7 @@ typedef NSUInteger UserSettingDownloadType;
 
 + (NSString *) encodeValueToFloat:(NSString *)value;
 + (void)setBorderView:(UIView*)view borderColor:(UIColor *)color borderWidth:(float)borderWidth position:(NSString*)position;
-
++ (void)launchYoutubeVideo:(NSString*)youtubeVideoId;
 
 @end
 

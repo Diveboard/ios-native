@@ -67,6 +67,8 @@
 @property (nonatomic, strong) NSString *permaLink;
 @property (nonatomic, strong) NSString *player;
 @property (nonatomic, strong) NSString *thumbnail;
+@property (nonatomic) BOOL isYoutube;
+@property (nonatomic, strong) NSString *youtubeVideoId;
 
 @property (nonatomic, strong) NSString *urlString;
 @property (nonatomic) BOOL isLocal;

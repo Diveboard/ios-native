@@ -290,6 +290,18 @@ static AppManager *_sharedManager;
     
 }
 
++(void)launchYoutubeVideo:(NSString*)youtubeVideoId {
+    NSURL *linkToApp = [NSURL URLWithString:[NSString stringWithFormat:@"youtube://watch?v=%@",youtubeVideoId]];
+    NSURL *linkToWeb = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.youtube.com/watch?v=%@",youtubeVideoId]];
+    
+    if ([[UIApplication sharedApplication] canOpenURL:linkToApp]) {
+        [[UIApplication sharedApplication] openURL:linkToApp];
+    }
+    else{
+        [[UIApplication sharedApplication] openURL:linkToWeb];
+    }
+    return;
+}
 
 @end
 

@@ -48,6 +48,11 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    [btnYoutube setHidden:YES];
+    UITapGestureRecognizer *singleFingerTap =
+    [[UITapGestureRecognizer alloc] initWithTarget:self
+                                            action:@selector(handleSingleTap:)];
+    [self.view addGestureRecognizer:singleFingerTap];
 }
 
 - (void)didReceiveMemoryWarning
@@ -397,12 +402,27 @@
             prevImageView = nil;
         }
     }
+    DivePicture *picture = [divePictures objectAtIndex:(int)divePictures.count - 1 - currentPictureIndex];
+    if (picture.isYoutube) {
+        [btnYoutube setHidden:NO];
+    } else {
+        [btnYoutube setHidden:YES];
+    }
 }
 
 - (IBAction)closeAction:(id)sender {
     [self dismissViewControllerAnimated:YES completion:^{
         
     }];
+}
+
+- (void)handleSingleTap:(UITapGestureRecognizer *)recognizer
+{
+    //CGPoint location = [recognizer locationInView:[recognizer.view superview]];
+    DivePicture *picture = [divePictures objectAtIndex:(int)divePictures.count - 1 - currentPictureIndex];
+    if (picture.isYoutube) {
+        [GlobalMethods launchYoutubeVideo:picture.youtubeVideoId];
+    }
 }
 
 @end
